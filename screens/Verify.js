@@ -114,16 +114,12 @@ const requestOtp = async () => {
       Alert.alert("OK", response.data.message)
       setLoading(false)
     
-    } else {
-      setLoading(false)
-      throw new Error(`Request failed with status ${response.status}`);
-    }
+    } 
   } catch (error) {
     // handle the error
-    Alert.alert("Error", error)
-    console.error(error);
+    Alert.alert("Error", error.response.data.message)
     setLoading(false)
-    return null;
+    
   }
 };
 
@@ -189,10 +185,11 @@ const handleRegistration = async () => {
         </View>
 
         <View style={styles.inputParentContainer}>
-       <TouchableOpacity onPress={requestOtp}>
+       <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
          <Text style={styles.otp}>Request for OTP</Text>
+         {loading && <ActivityIndicator size={24} color="#6200ee"/>}
           </TouchableOpacity>
-          {loading && <ActivityIndicator size={24} color="#6200ee"/>}
+          
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.input,errors.otp && touched.otp && styles.inputError]}

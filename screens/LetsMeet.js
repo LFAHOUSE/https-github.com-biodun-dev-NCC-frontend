@@ -25,8 +25,8 @@ const LetsMeet= ({route,navigation}) => {
     const goBack = () => {
         navigation.goBack()
     }
-   const {phoneNumber,emailAddress} = route.params
-   console.log("Phone Number: " + phoneNumber,"Email: " + emailAddress)
+  //  const {phoneNumber,emailAddress} = route.params
+  //  console.log("Phone Number: " + phoneNumber,"Email: " + emailAddress)
   const [firstname, setfirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [nccCenter,setNccCentre] = useState(["Lekki","Ajah","Ikeja","Shomolu","Ilorin","Ibadan","Oworonshoki","Port-Harcourt","Jos","Abuja"])
@@ -43,12 +43,8 @@ const handleSelectedCenter = (centerSelected) => {
 }
   const handleRegistration = () => {
     // Handle the registration logic here
-    navigation.navigate("Setpassword",{
-      phoneNumber:phoneNumber,
-    emailAddress:emailAddress,
-    firstname:firstname,
-    lastname:lastname});
-  };
+    navigation.navigate("Dashboard");
+  }
 
   const handleNameBlur = (name) => {
     const error = validateName(name)

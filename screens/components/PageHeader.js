@@ -51,7 +51,7 @@ import {
     },
 
     title: {
-      fontSize: 22,
+      fontSize: 15,
       fontWeight: 'bold',
       color: '#000',
     },

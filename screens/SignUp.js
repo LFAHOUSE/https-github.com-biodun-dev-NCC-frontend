@@ -20,6 +20,7 @@ import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios.js";
 import axios from 'axios'
 
+
 const useForm = (initialValues,validate) => {
   const [values,setValues] = useState(initialValues)
   const [errors,setErrors] = useState({})
@@ -102,15 +103,16 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
               phoneNumber: countryCode + values.phoneNumber,
             });
             if (response.status === 201) {
+              setLoading(true)
               setButtonText("Next")
               Alert.alert("OK",response.data.message);
                navigation.navigate("Verify",{phoneNumber: values.phoneNumber,countryCode:countryCode})
             }
           } catch (error) {
-            console.log(JSON.stringify(error))
+           setLoading(false)
             console.log(error)
              setButtonText("Try Again")
-            Alert.alert('Sign up failed', error.message);
+            Alert.alert('Sign up failed', error.response.data.message);
           }
         
           setLoading(false);

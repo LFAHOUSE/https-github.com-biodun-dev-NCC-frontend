@@ -99,12 +99,12 @@ const Setpasssword = ({route,navigation}) => {
   };
   
   // Determine if all input fields are touched for enabling the button
-   const isButtonActive = confirmPassword
+   const isButtonActive = values.password === values.confirmPassword
  return(
    <SafeAreaView style={styles.safeArea}>
     <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="always">
         <View style={styles.pageHeaderContainer}>
-         <PageHeader onBack={goBack} pageTitle="Let's Meet You" />
+         <PageHeader onBack={goBack} pageTitle="Create password" />
        </View>
 
           <View style={styles.inputParentContainer}>
@@ -121,7 +121,7 @@ const Setpasssword = ({route,navigation}) => {
             placeholder="Password"
             value={values.password}
             onChangeText={(value) => handleInputChange("password",value)}
-            onBlur={handleBlur("password")}
+            onBlur={() => handleBlur("password")}
             secureTextEntry
       />
          {errors.password && touched.password && (
@@ -142,7 +142,7 @@ const Setpasssword = ({route,navigation}) => {
             placeholder="Confirm Password"
             onChangeText={(value) => handleInputChange("confirmPassword", value)}
             value={values.confirmPassword}
-            onBlur={handleBlur("confirmPassword")}
+            onBlur={() =>handleBlur("confirmPassword")}
             secureTextEntry
           />
           {errors.confirmPassword && touched.confirmPassword && (
