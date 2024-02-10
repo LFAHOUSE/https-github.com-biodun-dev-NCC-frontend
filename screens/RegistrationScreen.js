@@ -12,6 +12,7 @@ import {
   StatusBar,
 } from "react-native";
 import { Button } from "react-native-paper";
+import { FontAwesome } from '@expo/vector-icons';
 
 const RegistrationScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -20,6 +21,7 @@ const RegistrationScreen = ({ navigation }) => {
   const handleRegistration = () => {
     // Handle the registration logic here
     console.log("Full phone number:", countryCode + phoneNumber);
+    navigation.navigate("Dashboard")
   };
 
   // Determine if the phone number is 11 digits for enabling the button
@@ -42,7 +44,9 @@ const RegistrationScreen = ({ navigation }) => {
           <Text style={styles.inputLabel}>Phone number</Text>
           <View style={styles.phoneNumberContainer}>
             <TouchableOpacity style={styles.countryCodeSelector}>
+            <FontAwesome name="phone" size={24} color="black" />
               <Text style={styles.countryCodeText}>{countryCode}</Text>
+
             </TouchableOpacity>
             <TextInput
               style={styles.phoneNumberInput}
@@ -155,7 +159,10 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   countryCodeSelector: {
+  flexDirection: "row",
     backgroundColor: "#fff",
+    alignItems:'center',
+    gap:10,
     paddingHorizontal: 15,
     paddingVertical: 10,
     paddingTop: 20,

@@ -10,50 +10,160 @@ import {
   Image,
   Platform,
   StatusBar,
+  Alert,
 } from "react-native";
 import { Button } from "react-native-paper";
+import { FontAwesome } from '@expo/vector-icons';
+import PageHeader from "./components/PageHeader";
+import PageFooter from "./components/PageFooter";
+import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
+import axiosInstance from "../axios_services/axios.js";
+import axios from 'axios'
 
-const SignUp = ({ navigation }) => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [countryCode, setCountryCode] = useState('+234'); 
+const useForm = (initialValues,validate) => {
+  const [values,setValues] = useState(initialValues)
+  const [errors,setErrors] = useState({})
+  const [touched,setTouched] = useState({})
 
-  const handleRegistration = () => {
-    // Handle the registration logic here
-    console.log('Full phone number:', countryCode + phoneNumber);
-    navigation.navigate("Verify")
-  };
+  const handleInputChange = (name,value) => {
+    setValues({
+      ...values,
+      [name]:value
+    })
 
+    const validationErrors = validate(values)
+setErrors({
+  ...errors,
+  [name]:validationErrors[name],
+})
+  }
+
+
+
+
+const handleBlur = (name) => {
+  setTouched(({
+    ...touched,
+    [name]: true
+  }))
+}
+
+
+const isValid = () => {
+  Object.values(errors).every((error) => error === null)
+}
+
+
+return {
+  values,errors,touched,handleInputChange,handleBlur,isValid
+}
+}
+
+
+const SignUp = ({props, navigation }) => {
+
+    //  const [phoneNumber, setPhoneNumber] = useState("");
+     const [countryCode, setCountryCode] = useState('+234'); 
+     const [showPickerModal,setShowPickerModal] = useState(false)
+     const [loading,setLoading] = useState(false)
+     const [buttonText, setButtonText] = useState("Register")
+
+const initialValues = {
+  phoneNumber:""
+}
+
+const validate = (values) => {
+    const errors = {}
+
+    if(!values.name) {
+      errors.phoneNumber = "*Phone number is required"
+    }
+
+    return errors
+
+}
+
+const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(initialValues,validate)
+
+    const goBack = () => {
+      navigation.goBck()
+      }
+
+      const openCodePicker = () => {
+          setShowPickerModal(true)
+      }
+
+      
+        const handleRegistration = async () => {
+          console.log(countryCode+values.phoneNumber)
+          setLoading(true);
+          try {
+            ;
+            const response = await axios.post('http://20.84.147.6:8080/api/users/initiate-registration', {
+              phoneNumber: countryCode + values.phoneNumber,
+            });
+            if (response.status === 201) {
+              setButtonText("Next")
+              Alert.alert("OK",JSON.stringify(response.data.message));
+              // navigation.navigate("Verify",{phoneNumber: values.phoneNumber,countryCode:countryCode})
+            }
+          } catch (error) {
+            console.log(JSON.stringify(error))
+            console.log(error)
+             setButtonText("Try Again")
+            Alert.alert('Sign up failed', error.message);
+          }
+        
+          setLoading(false);
+          navigation.navigate("Verify",{phoneNumber: values.phoneNumber,countryCode:countryCode})
+
+         
+        };
+      
   // Determine if the phone number is 11 digits for enabling the button
-  const isButtonActive = phoneNumber.length === 10;
+  const isButtonActive = values.phoneNumber.length === 10 || loading
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../assets/logo.png")} // Make sure the path to your logo image is correct
-            resizeMode="contain"
-            style={styles.logo}
-          />
-           <Text style={styles.logoText}>New Covenant Church</Text>
+      <ScrollView contentContainerStyle={styles.container} >
+       <View style={styles.pageHeaderContainer}>
+       <PageHeader pageTitle="Registration" onBack={goBack}/>
         </View>
-        <Text style={styles.welcomeText}>Sign Up</Text>
+          
+        <Text style={styles.signText}>Sign Up</Text>
         <Text style={styles.loginText}>Please provide your phone number to create account</Text>
+        <View style={styles.inputParentContainer}>
+        <Text style={styles.inputLabel}>Phone number</Text>
         <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Phone number</Text>
-          <View style={styles.phoneNumberContainer}>
-            <TouchableOpacity style={styles.countryCodeSelector}>
+           <View style={styles.phoneNumberContainer}>
+            <TouchableOpacity style={styles.countryCodeSelector} onPress={openCodePicker}>
+            <FontAwesome name="phone" size={24} color="#6200ee" />
               <Text style={styles.countryCodeText}>{countryCode}</Text>
+              <FontAwesome name="angle-down" size={40} color="#6200ee" />
             </TouchableOpacity>
+            <View>
             <TextInput
-              style={styles.phoneNumberInput}
-              onChangeText={setPhoneNumber}
-              value={phoneNumber}
+              style={[styles.input,errors.phoneNumber && touched.phoneNumber && styles.inputError]}
               placeholder="9082000150"
-              keyboardType="phone-pad"
+              value={values.phoneNumber}
+              onChangeText={(value) => {handleInputChange("phoneNumber",value)} }
+              onBlur={() => handleBlur("phoneNumber")}
+              keyboardType="number-pad"
               maxLength={10}
             />
+            {errors.phoneNumber && touched.phoneNumber && (
+              <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+            )}
           </View>
+
+          <CountryPicker
+          style={styles.picker}
+          show={showPickerModal}
+          pickerButtonOnPress={(item) =>{setCountryCode(item.dial_code),setShowPickerModal(false)}}
+          
+        />
+        </View>
+        </View>
         </View>
         <Button
           mode="contained"
@@ -65,7 +175,7 @@ const SignUp = ({ navigation }) => {
           disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
           labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
         >
-          Next
+         {buttonText}
         </Button>
         <View style={styles.signUpContainer}>
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
@@ -79,23 +189,7 @@ const SignUp = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-       <View style={styles.footerView}>
-       <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            ©2024 All rights reserved. v.1.0.1
-          </Text>
-          <TouchableOpacity>
-            <Text style={styles.footerLink}>Term Policy - Privacy Policy</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.footerText}>
-            <Image
-              source={require("../assets/footerimage.png")} // Make sure the path to your logo image is correct
-              resizeMode="contain"
-              style={styles.footerImage}
-            />
-          </TouchableOpacity>
-       </View>
+      <PageFooter/>
       </ScrollView>
     </SafeAreaView>
   );
@@ -124,12 +218,16 @@ const styles = StyleSheet.create({
       width: 70,
       height: 70,
     },
+    pageHeaderContainer:{
+      marginBottom:20
+    },
     logoText: {
       width: 65,
       height: 75,
       marginTop: 20,
     },
-    welcomeText: {
+    signText: {
+      marginTop:15,
       fontSize: 20,
       fontWeight: "bold",
       textAlign: "left",
@@ -140,46 +238,72 @@ const styles = StyleSheet.create({
       marginBottom: 30,
       color: "#000",
     },
+    inputParentContainer:{
+      marginBottom:20
+    },
     inputContainer: {
-      alignSelf: "stretch",
-      marginBottom: 20,
+    alignSelf: "stretch",
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'flex-start',
+    height:70,
+    borderWidth:1,
+    borderRadius: 10,
+    borderColor: "#ddd",
+    },
+    inputError:{
+      borderColor:"red"
+    },
+    errorText:{
+      color: 'red',
+    fontSize: 12,
+    marginLeft: 10,
+    marginRight:5,
     },
     inputLabel: {
       fontSize: 16,
       color: "#000",
       marginBottom: 5,
     },
-    phoneNumberContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 7,
+
+      phoneNumberContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        // marginBottom: 10,
+   
+    
     },
     countryCodeSelector: {
-      backgroundColor: "#fff",
+      alignItems:'center',
+      flexDirection:'row',
+      gap:5,
+      backgroundColor: "transparent",
       paddingHorizontal: 15,
       paddingVertical: 10,
       paddingTop: 20,
-      borderColor: "transparent",
-  
-      borderRadius: 5,
+      borderColor: "black",
+      borderRadius: 10,
+      
     },
     countryCodeText: {
       fontSize: 16,
       color: "#000",
-      height: 30,
     },
-    phoneNumberInput: {
-      flex: 1,
-      backgroundColor: "#fff",
-      paddingHorizontal: 15,
-      paddingVertical: 10,
+   
+      input: {
+        borderColor: "#ddd",
+       flex:1,
+       backgroundColor: "transparent",
+       paddingHorizontal: 5,
+       paddingVertical: 5,
+       fontSize: 16,
+       height: 70,
+       padding:10,
+       borderColor:'#fff',
+       marginTop:10,
+     },
   
-      fontSize: 16,
-      borderColor: "transparent",
-      height: 60,
-      borderTopRightRadius: 7,
-      borderBottomRightRadius: 7,
-    },
     button: {
       paddingVertical: 12,
       marginBottom: 40,
@@ -203,31 +327,17 @@ const styles = StyleSheet.create({
       color: "#000",
       marginVertical: 10,
     },
-    footer: {
-      marginTop: 40,
-      alignItems: "center",
+    picker: {
+      width: '80%',
+      height: 40,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 5,
+      marginBottom: 10,
     },
-    footerText: {
-      fontSize: 14,
-      color: "#000",
-      marginBottom: 5,
-    },
-    footerLink: {
-      fontSize: 14,
-      color: "#0000FF",
-      marginBottom: 40,
-    },
-    footerView: {
-      display: "flex",
-      flexDirection: "row",
-      gap: 10,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    footerImage: {
-      marginTop: 12,
-      height: 30,
-      width: 33,
+    code: {
+      fontSize: 18,
+      marginBottom: 10,
     },
   });
   
