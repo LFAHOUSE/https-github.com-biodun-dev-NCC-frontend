@@ -135,7 +135,7 @@ const handleRegistration = async () => {
   })
 }
   // Determine if the phone number is 11 digits for enabling the button
-  
+  const isButtonActive = values.otp.length === 4
  
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -215,7 +215,7 @@ const handleRegistration = async () => {
             styles.button,
             { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
           ]}
-           // Optionally disable the button when the phone number is not 11 digits
+          disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
           labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
         >
           Next
