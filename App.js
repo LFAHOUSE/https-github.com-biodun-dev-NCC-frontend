@@ -35,8 +35,9 @@ export default function App() {
            <Stack.Screen name="Verify" component={Verify}
                    options={{ headerShown: false}} // This hides the header
            />
+            <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/>
            <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/>
-           <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/>
+          
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

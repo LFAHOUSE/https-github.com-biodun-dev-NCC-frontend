@@ -18,25 +18,85 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { Foundation } from '@expo/vector-icons';
 
+
+const useForm = (initialValues,validate) => {
+  const [values,setValues] = useState(initialValues)
+  const [errors,setErrors] = useState({})
+  const [touched,setTouched] = useState({})
+
+  const handleInputChange = (name,value) => {
+    setValues({
+      ...values,
+      [name]:value
+    })
+
+    const validationErrors = validate(values)
+setErrors({
+  ...errors,
+  [name]:validationErrors[name],
+})
+  }
+
+
+
+
+const handleBlur = (name) => {
+  setTouched(({
+    ...touched,
+    [name]: true
+  }))
+}
+
+
+const isValid = () => {
+  Object.values(errors).every((error) => error === null)
+}
+
+
+return {
+  values,errors,touched,handleInputChange,handleBlur,isValid
+}
+}
+
+
 const Setpasssword = ({route,navigation}) => {
+
+    const validate = (values) => {
+      const errors = {}
+  
+      if(!values.password) {
+        errors.password = "*Password is required"
+      } else if (
+       values.password < 8
+      ) {
+        errors.password = "**Password must be at least 8 characcters"
+      }
+  
+      if (!values.confirmPassword) {
+        errors.confirmPassword = "**Confirm password is required"
+      }else if (values.password !== values.confirmPassword) {
+        errors.confirmPassword = "**Password do no match"
+      }
+   
+      return errors
+  
+  }
+
+  const initialValues = {
+    password:"",
+    confirmPassword:""
+  }
+  const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(initialValues,validate)
+  //To navigate backward on the pageHeader component
     const goBack = () => {
         navigation.goBack()
     }
-   const {phoneNumber,emailAddress,firstname,lastname,nccCenter} = route.params
-
-  const [password, setpassword] = useState("");
-  const [confirmPassword, setconfirmPassword] = useState("");
+   const {email,otp} = route.params
  
   const handleRegistration = () => {
     // Handle the registration logic here
-    navigation.navigate("Setpasssword");
+    navigation.navigate("LetsMeet");
   };
-
-//   const handleNameBlur = (name) => {
-//     const error = validateName(name)
-//     setNameError
-//   }
-
   
   // Determine if all input fields are touched for enabling the button
    const isButtonActive = confirmPassword
@@ -57,12 +117,16 @@ const Setpasssword = ({route,navigation}) => {
             </View>
 
            <TextInput
-           style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setpassword}
+            style={[styles.input,errors.emailAddress && touched.emailAddress && styles.inputError]}
+            placeholder="Password"
+            value={values.password}
+            onChangeText={(value) => handleInputChange("password",value)}
+            onBlur={handleBlur("password")}
+            secureTextEntry
       />
-         
+         {errors.password && touched.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
         </View>
         </View>
         <View style={styles.inputParentContainer}>
@@ -74,10 +138,16 @@ const Setpasssword = ({route,navigation}) => {
             </TouchableOpacity>
             </View>
           <TextInput
+            style={[styles.input,errors.emailAddress && touched.emailAddress && styles.inputError]}
             placeholder="Confirm Password"
-            onChangeText={setconfirmPassword}
-            value={confirmPassword}
+            onChangeText={(value) => handleInputChange("confirmPassword", value)}
+            value={values.confirmPassword}
+            onBlur={handleBlur("confirmPassword")}
+            secureTextEntry
           />
+          {errors.confirmPassword && touched.confirmPassword && (
+              <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+            )}
         </View>
         </View>
 
@@ -156,29 +226,14 @@ const styles = StyleSheet.create({
   inputLogo:{
    marginHorizontal:10
   },
-  centerinputContainer: {
-    flex:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'flex-start',
-    marginBottom: 10,
-    borderWidth:1,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
+  inputError:{
+    borderColor:"red"
   },
-  picker: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    opacity: 0,
-  },
-  pickerItem:{
-    // backgroundColor:'grey',
-    // padding:10,
-    // borderBottomColor:'black',
-    // borderWidth:2,
-    // gap:30
+  errorText:{
+    color: 'red',
+  fontSize: 12,
+  marginLeft: 10,
+  marginRight:5,
   },
   inputLabel: {
     fontSize: 16,

@@ -98,14 +98,13 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
           console.log(countryCode+values.phoneNumber)
           setLoading(true);
           try {
-            ;
-            const response = await axios.post('http://20.84.147.6:8080/api/users/initiate-registration', {
+            const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/initiate-registration', {
               phoneNumber: countryCode + values.phoneNumber,
             });
             if (response.status === 201) {
               setButtonText("Next")
-              Alert.alert("OK",JSON.stringify(response.data.message));
-              // navigation.navigate("Verify",{phoneNumber: values.phoneNumber,countryCode:countryCode})
+              Alert.alert("OK",response.data.message);
+               navigation.navigate("Verify",{phoneNumber: values.phoneNumber,countryCode:countryCode})
             }
           } catch (error) {
             console.log(JSON.stringify(error))

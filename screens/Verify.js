@@ -7,18 +7,15 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Image,
+  ActivityIndicator,
   Platform,
   StatusBar,
-  ImageBackground,
-  Keyboard
+  Alert
 } from "react-native";
 import { Button } from "react-native-paper";
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { FontAwesome } from '@expo/vector-icons';
-import { validateEmail } from "../utils/utils";
-import axios from "axios";
 import axiosInstance from "../axios_services/axios";
 
 
@@ -68,8 +65,10 @@ const Verify = ({ route, navigation }) => {
     emailAddress:"",
     otp:""
   }
-  
-
+  const [loading,setLoading] = useState(false)
+ const goBack = () => {
+  navigation.goBack()
+ }
   const validate = (values) => {
     const errors = {}
 
@@ -97,41 +96,46 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
   const complete_phone_number = countryCode+phoneNumber
  
 
-
- 
-  const handleOtp = (otp) => {
-    setOtp(otp)
-  }
-
-  const goBack = () => {
-    navigation.goBack()
-  }
-
-
 // define the requestOtp function
-const requestOtp = async (email, phone) => {
+const requestOtp = async () => {
   console.log("emailAddress: ", values.emailAddress)
+  setLoading(true)
   // create a data object with email and phone
-  const data = { "phoneNumber":complete_phone_number, "email":values.emailAddress };
+  const data = { 
+    phoneNumber:complete_phone_number,
+    email:values.emailAddress
+   };
 
   try {
-    // make a post request to the api endpoint with the data object
-    const response = await axiosInstance.post("/add-email-request-otp", data);
-    if (response.status === 201) {
+    const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/add-email-request-otp", data);
+    console.log(response.status)
+    if (response.status === 200) {
       // return the response data
-      return response.data;
+      Alert.alert("OK", response.data.message)
+      setLoading(false)
+    
     } else {
+      setLoading(false)
       throw new Error(`Request failed with status ${response.status}`);
     }
   } catch (error) {
     // handle the error
+    Alert.alert("Error", error)
     console.error(error);
+    setLoading(false)
     return null;
   }
 };
 
+
+const handleRegistration = async () => {
+  navigation.navigate("Setpassword",{
+    email: values.emailAddress,
+    otp:values.otp
+  })
+}
   // Determine if the phone number is 11 digits for enabling the button
-  const isButtonActive = values.otp.length === 10 
+  
  
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -185,9 +189,10 @@ const requestOtp = async (email, phone) => {
         </View>
 
         <View style={styles.inputParentContainer}>
-       <TouchableOpacity>
+       <TouchableOpacity onPress={requestOtp}>
          <Text style={styles.otp}>Request for OTP</Text>
           </TouchableOpacity>
+          {loading && <ActivityIndicator size={24} color="#6200ee"/>}
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.input,errors.otp && touched.otp && styles.inputError]}
@@ -205,12 +210,12 @@ const requestOtp = async (email, phone) => {
         </View>
         <Button
           mode="contained"
-         
+          onPress={handleRegistration}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
           ]}
-          disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
+           // Optionally disable the button when the phone number is not 11 digits
           labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
         >
           Next
