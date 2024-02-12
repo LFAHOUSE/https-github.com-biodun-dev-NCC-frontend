@@ -188,7 +188,7 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
           onPress={handleRegistration}
           style={[
             styles.button,
-            { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
+            { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
           ]}
           disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
           labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
       
     },
     signupText: {
-      width:'29px',
+      width:291,
       height:'34',
       paddingTop:10,
       paddingRight:10,
@@ -415,11 +415,10 @@ const styles = StyleSheet.create({
    
       
     signUpContainer: {
-      marginBottom: 80,
       width:187,
       height:86,
-      left:32
-      //top:144,
+      left:32,
+      //top:'144',
       
     },
     signUpText: {
