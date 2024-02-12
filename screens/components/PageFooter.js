@@ -5,6 +5,8 @@ import {
     StyleSheet,
     Text,
     Image, 
+    SafeAreaView,
+    ScrollView
 } from 'react-native'
 
 
@@ -39,6 +41,7 @@ const PageFooter = () => {
           </View>
 
         </View>
+    
     )
 }
 

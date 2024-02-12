@@ -201,15 +201,17 @@ const handleRegistration = () => {
           onPress={handleSubmit(handleRegistration)}
           style={[
             styles.button,
-            { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
+            { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
           ]}
           disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
           labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
         >
           Next
         </Button>
-
-       <PageFooter/>
+          <View style={styles.footerContainer}>
+          <PageFooter/>
+          </View>
+     
       </ScrollView>
     </SafeAreaView>
   );
@@ -224,7 +226,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: "space-between",
-    padding: 20,
+    padding: 5,
     // gap:30,
   },
   arrowDown:{
@@ -335,7 +337,8 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:"row",
     alignItems:"center",
-    //justifyContent:'space-between',
+    justifyContent:'space-between',
+    alignSelf:'center',
     right:10,
     width:101,
     height:36
@@ -428,10 +431,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
   },
-  button: {
-    paddingVertical: 12,
-    marginBottom: 40,
-    borderRadius: 7,
+  button:{
+    marginTop:20,
+    width:290,
+    height:'40',
+    padding:'10',
+    gap:10,
+    borderRadius:10,
+    left:32,
   },
   signUpContainer: {
     marginBottom: 80,
@@ -457,7 +464,15 @@ const styles = StyleSheet.create({
 
     marginBottom: 5,
   },
+  footerContainer:{
+    width: '247',
+    height: '50',
+    top: '728',
+    //left: 86,
+    padding: 10,
+    gap: 10
 
+  }
 });
 
 export default Verify;

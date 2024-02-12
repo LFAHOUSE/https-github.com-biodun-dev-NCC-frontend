@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useController } from 'react-hook-form';
 
-const Input = ({ logo,label,placeholder, secureTextEntry,control, name, rules, error, ...props }) => {
+const Input = ({ logo,label,placeholder, style,secureTextEntry,control, name, rules, error, ...props }) => {
   // Use useController to connect the input component to the form state and validation rules
   const {
     field: { ref, value, onChange, onBlur },
@@ -12,6 +12,7 @@ const Input = ({ logo,label,placeholder, secureTextEntry,control, name, rules, e
     control,
     rules,
     defaultValue: '',
+    
   });
 
   return (
@@ -46,13 +47,18 @@ const styles = StyleSheet.create({
     //marginBottom: 5,
   },
   input: {
-    
-      width:'74',
-      height:'15',
-      paddingTop:5,
-      paddingRight:'10',
-      paddingBottom:'10',
-      paddingLeft:'26',
+     borderColor: "#ddd",
+    backgroundColor: "transparent",
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    fontSize: 16,
+    height: 60,
+    padding:10,
+    width:'240',
+    height:'15',
+    paddingRight:'10',
+    paddingBottom:'10',
+    paddingLeft:'26',
     
   },
   error: {

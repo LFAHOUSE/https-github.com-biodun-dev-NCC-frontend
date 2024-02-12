@@ -20,8 +20,11 @@ import PageFooter from "./components/PageFooter";
 import axiosInstance from "../axios_services/axios";
 import { useForm,useWatch} from "react-hook-form";
 import Input from "./components/Input";
+
+
 const Setpasssword = ({route,navigation}) => {
- const {phoneNumber,email,otp} = route.params
+//  const {phoneNumber,email,otp} = route.param
+
  const [loading,setLoading] = useState(false)
 
  const {
@@ -50,36 +53,36 @@ const Setpasssword = ({route,navigation}) => {
           value === watch('password') || 'Passwords do not match',
       },
     };
-  const handleRegistration = async () => {
-    console.log("PhoneNumber: " + phoneNumber)
-    setLoading(true)
+  const handleRegistration =  () => {
+    // console.log("PhoneNumber: " + phoneNumber)
+    // setLoading(true)
 
-    const data = { 
-      email:email,
-      otp:otp,
-      password:password
-     };
+    // const data = { 
+    //   email:email,
+    //   otp:otp,
+    //   password:password
+    //  };
   
-    try {
-      const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/verify-otp-set-password", data);
-      console.log(response.status)
-      if (response.status === 200 || response.status ===201) {
-        // return the response data
-        Alert.alert("OK", response.data.message)
-        navigation.navigate("LetsMeet",{
-          phoneNumber:phoneNumber
-        });
-        setLoading(false)
+    // try {
+    //   const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/verify-otp-set-password", data);
+    //   console.log(response.status)
+    //   if (response.status === 200 || response.status ===201) {
+    //     // return the response data
+    //     Alert.alert("OK", response.data.message)
+    //     navigation.navigate("VerificationComplete",{
+    //       phoneNumber:phoneNumber
+    //     });
+    //     setLoading(false)
       
-      } 
-    } catch (error) {
-      // handle the error
-      Alert.alert("Error", error.response.data.message)
-      setLoading(false)
+    //   } 
+    // } catch (error) {
+    //   // handle the error
+    //   Alert.alert("Error", error.response.data.message)
+    //   setLoading(false)
       
-    }
+    // }
     // Handle the registration logic here
-    navigation.navigate("LetsMeet");
+    navigation.navigate("VerificationComplete");
   };
   
   // Determine if all input fields are touched for enabling the button
@@ -99,9 +102,7 @@ const Setpasssword = ({route,navigation}) => {
    </View>
 
     <View style={styles.inputContainer}>
-      <View style={styles.inputAccessory}>
-        
-       </View>
+
        <View style={styles.textInputContainer}>
        <Input
         control={control}
@@ -125,8 +126,9 @@ const Setpasssword = ({route,navigation}) => {
   <View style={styles.labelContainer}>
   <Text style={styles.inputLabel}>Retype Password</Text>
  </View>
-
+   
   <View style={styles.inputContainer}>
+    <View style={styles.textInputContainer}>
      <Input
       control={control}
       name="confirmPassword"
@@ -139,14 +141,14 @@ const Setpasssword = ({route,navigation}) => {
   
   </View>
   </View>
-
+  </View>
   
     <Button
       mode="contained"
-      onPress={handleSubmit(handleRegistration)}
+      onPress={handleRegistration}
       style={[
         styles.button,
-        { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
+        { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
       ]}
       disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
       labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
@@ -169,7 +171,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: "space-between",
-    padding: 20,
+    padding: 5,
     // gap:30,
   },
   arrowDown:{
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     display:"flex",
     flexDirection:"row",
-    alignItems: 'center',
+    //alignItems: 'center',
     justifyContent: 'space-around',
     width:290,
     height:40,
@@ -373,10 +375,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
   },
-  button: {
-    paddingVertical: 12,
-    marginBottom: 40,
-    borderRadius: 7,
+  button:{
+    marginTop:20,
+    width:290,
+    height:'40',
+    padding:'10',
+    gap:10,
+    borderRadius:10,
+    left:32,
   },
   signUpContainer: {
     marginBottom: 80,

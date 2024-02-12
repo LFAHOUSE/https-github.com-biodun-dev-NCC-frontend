@@ -172,7 +172,10 @@ const SignUp = ({props, navigation }) => {
           </View>
 
         </View>
-      <PageFooter/>
+        <View style={styles.footerContainer}>
+        <PageFooter/>
+        </View>
+      
       </ScrollView>
     </SafeAreaView>
   );
@@ -187,8 +190,8 @@ const styles = StyleSheet.create({
     container: {
       flexGrow: 1,
       justifyContent: "space-between",
-      padding: 20,
-      // gap:30,
+      padding: 5,
+     //  gap:10,
     },
     logoContainer: {
       alignItems: "center",
@@ -438,6 +441,15 @@ const styles = StyleSheet.create({
       fontSize: 18,
       marginBottom: 10,
     },
+    footerContainer:{
+      width: '247',
+      height: '50',
+      top: '728',
+      //left: 86,
+      padding: 10,
+      gap: 10
+
+    }
   });
   
 

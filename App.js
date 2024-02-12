@@ -8,9 +8,7 @@ import SignUp from './screens/SignUp';
 import Verify from './screens/Verify';
 import LetsMeet from './screens/LetsMeet';
 import Setpasssword from './screens/SetpasswordScreen';
-import {Logs} from 'expo'
-
-Logs.enableExpoCliLogging()
+import VerificationComplete from './screens/VerificationComplete';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +34,7 @@ export default function App() {
                    options={{ headerShown: false}} // This hides the header
            />
             <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/>
+            <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/>
            <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/>
           
         </Stack.Navigator>

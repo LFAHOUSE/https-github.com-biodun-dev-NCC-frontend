@@ -20,47 +20,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import PageFooter from "./components/PageFooter";
 import { validateName } from "../utils/utils";
+import Input from "./components/Input";
+import { useForm,useWatch ,Controller} from "react-hook-form";
 
 
-
-const useForm = (initialValues,validate) => {
-  const [values,setValues] = useState(initialValues)
-  const [errors,setErrors] = useState({})
-  const [touched,setTouched] = useState({})
-
-  const handleInputChange = (name,value) => {
-    setValues({
-      ...values,
-      [name]:value
-    })
-
-    const validationErrors = validate(values)
-setErrors({
-  ...errors,
-  [name]:validationErrors[name],
-})
-  }
-
-
-
-
-const handleBlur = (name) => {
-  setTouched(({
-    ...touched,
-    [name]: true
-  }))
-}
-
-
-const isValid = () => {
-  Object.values(errors).every((error) => error === null)
-}
-
-
-return {
-  values,errors,touched,handleInputChange,handleBlur,isValid
-}
-}
 
 
 const LetsMeet= ({route,navigation}) => {
@@ -69,36 +32,48 @@ const LetsMeet= ({route,navigation}) => {
         navigation.goBack()
     }
 
-
-    const validate = (values) => {
-      const errors = {}
-  
-      if(!values.firstname) {
-        errors.emailAddress = "*Firstname is required"
-      } else if (
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.emailAddress)
-      ) {
-        errors.emailAddress = "**Email is invalid"
-      }
-  
-      if (!values.otp) {
-        errors.otp = "**otp is required"
-      }
+    const {
+      control,
+      handleSubmit,
+      formState: { errors },
+    } = useForm();
    
-      return errors
+
+    const rules = {
+      firstname: {
+        required: 'Email is required',
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: 'Invalid email address',
+        },
+      },
+      password: {
+        required: 'Password is required',
+        minLength: {
+          value: 8,
+          message: 'Password must be at least 8 characters',
+        },
+      },
+      confirm: {
+        required: 'Confirm password is required',
+        validate: value =>
+          value === watch('password') || 'Passwords do not match',
+      },
+    };
+
+    const firstname = useWatch({control, name:"firstname"})
+    const lastname = useWatch({control, name:"lastname"})
+    //const sex = useWatch({control, name:"sex"})
+    const center = useWatch({control, name:"center"})
+    const dob = useWatch({control, name:"dob"})
   
-  }
-  const initialValues = {
-    firstname:"",
-    lastname:"",
-    nccCenter:"",
-  }
-  const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(initialValues,validate)
   //  const {phoneNumber,emailAddress} = route.params
   //  console.log("Phone Number: " + phoneNumber,"Email: " + emailAddress)
-  const [firstname, setfirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+  // const [firstname, setfirstname] = useState("");
+  // const [lastname, setLastname] = useState("");
+  
   const [nccCenter,setNccCentre] = useState(["Lekki","Ajah","Ikeja","Shomolu","Ilorin","Ibadan","Oworonshoki","Port-Harcourt","Jos","Abuja"])
+  const [sex,setSex] = useState(["Male","Female"])
   const [selectedCenter,setSelectedCenter] = useState("")
   const [centerValue,setCenterValue] = useState("")
   const [centerSelected,setCenterSelected] = useState(false)
@@ -115,10 +90,7 @@ const handleSelectedCenter = (centerSelected) => {
     navigation.navigate("Dashboard");
   }
 
-  const handleNameBlur = (name) => {
-    const error = validateName(name)
-    setNameError
-  }
+  
 
   console.log(Array.isArray(nccCenter))
   // Determine if all input fields are touched for enabling the button
@@ -130,52 +102,99 @@ const handleSelectedCenter = (centerSelected) => {
          <PageHeader onBack={goBack} pageTitle="Let's Meet You" />
        </View>
 
-          <View style={styles.inputParentContainer}>
-          <Text style={styles.inputLabel}>First name</Text>
-          <View style={styles.inputContainer}>
-            <View style={styles.phoneNumberContainer}>
-            <TouchableOpacity style={styles.countryCodeSelector}>
-          <Ionicons name="person" size={30} color="#6200ee" />
-            </TouchableOpacity>
-            </View>
+       <View style={styles.inputParentContainer}>
 
-           <TextInput
-           style={styles.input}
-        placeholder="First Name"
-        value={firstname}
-        onChangeText={setfirstname}
-      />
-         
+        <View style={styles.formLabelContainer}>
+          <Text style={styles.label}>First name</Text>
         </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.textInputContainer}>
+          <Input
+          control={control}
+          name="firstname"
+          rules={rules.phoneNumber}
+          error={errors.phoneNumber}
+          keyboardType="name-phone-pad"
+          placeholder="Please enter your first name"
+          autoCapitalize="none"/>
+          
+          </View>
         </View>
-        <View style={styles.inputParentContainer}>
-         <Text style={styles.inputLabel}>Last name</Text>
-          <View style={styles.inputContainer}>
-            <View style={styles.phoneNumberContainer}>
-            <TouchableOpacity style={styles.countryCodeSelector}>
-            <Ionicons name="person" size={30} color="#6200ee" />
-            </TouchableOpacity>
-            </View>
-          <TextInput
-            placeholder="Last Name"
-            onChangeText={setLastname}
-            value={lastname}
-          />
-        </View>
-        </View>
+       </View>
+       <View style={styles.inputParentContainer}>
 
-        <View >
-          <Text style={styles.inputLabel}>NCC centre</Text>
-          <View style={styles.centerinputContainer}>
-          <TextInput
-            placeholder="Select Your Center"
-            style={styles.input}
-            onChangeText={setNccCentre}
-             value={selectedCenter}
-           
-           
+        <View style={styles.formLabelContainer}>
+          <Text style={styles.label}>Last name</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.textInputContainer}>
+          <Input
+          control={control}
+          name="firstname"
+          rules={rules.phoneNumber}
+          error={errors.phoneNumber}
+          keyboardType="name-phone-pad"
+          placeholder="Please enter your last name"
+          autoCapitalize="none"/>
+          
+          </View>
+        </View>
+       </View>
+
+       <View style={styles.inputParentContainer}>
+
+        <View style={styles.formLabelContainer}>
+          <Text style={styles.label}>Sex</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.genderInputContainer}>
+          <Input
+          control={control}
+          name="firstname"
+          rules={rules.phoneNumber}
+          error={errors.phoneNumber}
+          keyboardType="name-pad"
+          placeholder="Click to choose"
+          autoCapitalize="none"
           />
-            <Picker
+          <TouchableOpacity style={styles.logoContainer}>
+          <Image source={require("../assets/arrow-down.png")} style={styles.logo}/>
+          </TouchableOpacity>
+          <Picker
+        style={styles.picker}
+        selectedValue={selectedCenter}
+        onValueChange={(itemValue,itemIndex) => {setSelectedCenter(itemValue)}}
+        mode="dropdown"
+      >
+        {sex.filter(item => typeof item === "string").map((item,index,) => (
+          <Picker.Item key={index} label={item} value={item} style={styles.pickerItem}/>
+      ))}
+      </Picker>
+          </View>
+        </View>
+       </View>
+
+
+       <View style={styles.inputParentContainer}>
+
+<View style={styles.formLabelContainer}>
+  <Text style={styles.label}>NCC satelite center</Text>
+</View>
+<View style={styles.inputContainer}>
+  <View style={styles.genderInputContainer}>
+  <Input
+  control={control}
+  name="firstname"
+  rules={rules.phoneNumber}
+  error={errors.phoneNumber}
+ // keyboardType="name-pad"
+  placeholder="Click to choose"
+  autoCapitalize="none"/>
+  <TouchableOpacity style={styles.logoContainer}>
+  <Image source={require("../assets/arrow-down.png")} style={styles.logo}/>
+  </TouchableOpacity>
+
+  <Picker
         style={styles.picker}
         selectedValue={selectedCenter}
         onValueChange={(itemValue,itemIndex) => {setSelectedCenter(itemValue)}}
@@ -185,25 +204,62 @@ const handleSelectedCenter = (centerSelected) => {
           <Picker.Item key={index} label={item} value={item} style={styles.pickerItem}/>
       ))}
       </Picker>
-          <TouchableOpacity style={styles.inputLogo}>
-          {/* <AntDesign name="circledowno" size={40} color="#6200ee" /> */}
-          <FontAwesome name="angle-down" size={40} color="#6200ee" />
-          </TouchableOpacity>
-         </View>
-        </View>
+  </View>
+</View>
+      </View>
+
+      <View style={styles.inputParentContainer}>
+
+<View style={styles.formLabelContainer}>
+  <Text style={styles.label}>Date of Birth</Text>
+</View>
+<View style={styles.inputContainer}>
+  <View style={styles.textInputContainer}>
+  <Input
+  control={control}
+  name="firstname"
+  rules={rules.phoneNumber}
+  error={errors.phoneNumber}
+ // keyboardType="name-phone-pad"
+  placeholder="click calendar icon"
+  autoCapitalize="none"/>
+  
+  </View>
+</View>
+</View>
+
+
+
        
-      
-        <Button
+       <Controller
+       control={control}
+       name="ncccenter"
+       defaulValue=""
+       rules={{required:true}}
+       render={({onChange,onBlur,value,name}) => {
+        <Picker
+        onValuechange = {(itemValue) => onChange(itemValue)}
+        onBlue={onBlur}
+        selectedValue={value}
+        name={name}
+       >
+         {sex.filter(item => typeof item === "string").map((item,index,) => (
+          <Picker.Item key={index} label={item} value={item} style={styles.pickerItem}/>
+      ))}
+        </Picker>
+       }}
+       />
+<Button
           mode="contained"
-          onPress={handleRegistration}
+          onPress={handleSubmit(handleRegistration)}
           style={[
             styles.button,
-            { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
+            { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
           ]}
           disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
           labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
         >
-          Next
+         Proceed
         </Button>
 
         <PageFooter/>
@@ -220,177 +276,115 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    justifyContent: "space-between",
-    padding: 20,
-    // gap:30,
-  },
-  logoContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-end", // Center the logo and text horizontally
-    width: "100%", // Ensure it takes the full width to center the content
-  },
-  logo: {
-    width: 70,
-    height: 70,
-  },
-  logoText: {
-    width: 65,
-    height: 75,
-    marginTop: 20,
-  },
- 
-  welcomeText: {
-    fontSize: 20,
-
-    textAlign: "left",
-  },
-  loginText: {
-    fontSize: 16,
-    textAlign: "left",
-    marginBottom: 30,
-    color: "#000",
+    //justifyContent: "space-between",
+    padding: 5,
+     gap:10,
   },
   inputParentContainer:{
-    marginBottom:20
-  },
-  inputContainer: {
-    flex:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'flex-start',
-    marginBottom: 10,
-    borderWidth:1,
-    borderRadius: 10,
-    borderColor: "#ddd",
-  },
-  inputLogo:{
-   marginHorizontal:10
-  },
-  centerinputContainer: {
-    flex:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'flex-start',
-    marginBottom: 10,
-    borderWidth:1,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-  picker: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    opacity: 0,
-  },
-  pickerItem:{
-    // backgroundColor:'grey',
-    // padding:10,
-    // borderBottomColor:'black',
-    // borderWidth:2,
-    // gap:30
-  },
-  inputLabel: {
-    fontSize: 16,
-    color: "#000",
-    marginBottom: 5,
-  },
-  input: {
-    flex:1,
-    backgroundColor: "transparent",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 16,
-    height: 60,
-    padding:10
-  },
-  error: {
-    color: 'red',
-    fontSize: 12,
-    marginLeft: 10,
-    marginRight:5,
-  },
-  firstnameContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 7,
-  },
-  phoneNumberContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    // marginBottom: 10,
-  },
-  countryCodeSelector: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    paddingTop: 20,
-    borderColor: "transparent",
-
-    borderRadius: 10,
-  },
-  countryCodeText: {
-    fontSize: 16,
-    color: "#000",
-    height: 30,
-  },
-
-  button: {
-    paddingVertical: 12,
-    marginBottom: 40,
-    borderRadius: 7,
-  },
-  signUpContainer: {
-    marginBottom: 80,
-    alignItems: "center",
-  },
-  signUpText: {
-    color: "#000",
-    marginVertical: 10,
-    fontSize: 13,
-  },
-  sign: {
-    color: "#0000FF",
-    marginVertical: 10,
-    fontSize: 15,
-  },
-
-  footer: {
-    marginTop: 40,
-    alignItems: "center",
-  },
-  footerText: {
-    fontSize: 14,
-    color: "#000",
-    marginBottom: 5,
-  },
-  footerLink: {
-    fontSize: 14,
-    color: "#0000FF",
-    marginBottom: 40,
-  },
-  footerView: {
-    display: "flex",
-    flexDirection: "row",
+    display:"flex",
+    flexDirection:"column",
+    alignSelf:"center",
+    width: '90%',
+    height: '14%',
+    //top: 111,
+    paddingTop: 0,
+    paddingRight: 0,
+    paddingBottom: 10,
+    paddingLeft: 0,
     gap: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  footerImage: {
-    marginTop: 12,
-    height: 30,
-    width: 33,
-  },
-  otp: {
-    color: "#06447C",
-    fontSize: 16,
+    //borderWidth:1
 
-    marginBottom: 5,
   },
+  formLabelContainer:{
+    width: 104,
+    height: 28,
+    padding: 10,
+    gap: 10,
+    //borderWidth:1
+
+  },
+ 
+  label:{
+    display:'flex',
+    flexDirection:"column",
+    alignSelf:'center',
+    width: "100%",
+    height: 15,
+    fontFamily: 'Roboto',
+    fontSize: 13,
+    fontWeight: '400',
+    lineHeight: 15,
+    //letterSpacing: 1,
+    textAlign: 'left',
+    
+
+
+  },
+  inputContainer:{
+    width:290,
+    height:43,
+    borderWidth:1,
+    borderRadius:7,
+    borderColor:"#ddd",
+    alignSelf:"center",
+  },
+  textInputContainer:{
+    width: 290,
+    height: 35,
+    borderRadius: 7,
+    //borderWidth: 1,
+    gap: 35,
+    borderColor:"#CAC3C3"
+},
+genderInputContainer:{
+  display:'flex',
+  flexDirection:"row",
+  justifyContent:"space-between",
+  width: 290,
+  height: 35,
+  borderRadius: 7,
+  //borderWidth: 1,
+  gap: 35,
+  borderColor:"#CAC3C3"
+},
+picker: {
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  opacity: 0,
+},
+logoContainer:{
+  height:58,
+  width:34,
+  right:'10%',
+  marginTop:"4%",
+  //paddingTop:10,
+  //paddingRight:58,
+  //paddingBottom:10,
+  // paddingLeft:58,
+  gap:10
+},
+logo:{
+  width:20,
+  height:20
+},
+  input:{
+    width: 204,
+    height: 15,
+    fontFamily: 'Roboto',
+    fontSize: 13,
+    fontWeight: '400',
+    lineHeight: 15,
+    //letterSpacing: 0em,
+    textAlign: 'center',
+
+
+  },
+  
   pageHeaderContainer:{
     marginBottom:20
-  }
+  },
+
+ 
 });
 export default LetsMeet;
