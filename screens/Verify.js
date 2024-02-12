@@ -124,14 +124,15 @@ const requestOtp = async () => {
 };
 
 
-const handleRegistration = async () => {
-  navigation.navigate("Setpassword",{
+const handleRegistration = () => {
+   navigation.navigate("Setpassword",{
     email: values.emailAddress,
-    otp:values.otp
+    otp:values.otp,
+    phoneNumber:complete_phone_number
   })
 }
   // Determine if the phone number is 11 digits for enabling the button
-  const isButtonActive = values.otp.length === 4
+  const isButtonActive = values.otp.length === 6
  
   return (
     <SafeAreaView style={styles.safeArea}>

@@ -11,13 +11,14 @@ import {
   Image,
   Platform,
   StatusBar,
+  Alert,
   
 } from "react-native";
 import { Button } from "react-native-paper"
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { Foundation } from '@expo/vector-icons';
-
+import axiosInstance from "../axios_services/axios";
 
 const useForm = (initialValues,validate) => {
   const [values,setValues] = useState(initialValues)
@@ -60,7 +61,8 @@ return {
 
 
 const Setpasssword = ({route,navigation}) => {
-
+ const {phoneNumber,email,otp} = route.params
+ const [loading,setLoading] = useState(false)
     const validate = (values) => {
       const errors = {}
   
@@ -91,9 +93,35 @@ const Setpasssword = ({route,navigation}) => {
     const goBack = () => {
         navigation.goBack()
     }
-   const {email,otp} = route.params
+
  
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
+    setLoading(true)
+
+    const data = { 
+      email:email,
+      otp:otp,
+      password:values.password
+     };
+  
+    try {
+      const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/verify-otp-set-password", data);
+      console.log(response.status)
+      if (response.status === 200 || response.status ===201) {
+        // return the response data
+        Alert.alert("OK", response.data.message)
+        navigation.navigate("LetsMeet",{
+          phoneNumber:phoneNumber
+        });
+        setLoading(false)
+      
+      } 
+    } catch (error) {
+      // handle the error
+      Alert.alert("Error", error.response.data.message)
+      setLoading(false)
+      
+    }
     // Handle the registration logic here
     navigation.navigate("LetsMeet");
   };

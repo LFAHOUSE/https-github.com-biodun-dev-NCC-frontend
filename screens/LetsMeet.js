@@ -21,10 +21,79 @@ import { FontAwesome } from '@expo/vector-icons';
 import PageFooter from "./components/PageFooter";
 import { validateName } from "../utils/utils";
 
+
+
+const useForm = (initialValues,validate) => {
+  const [values,setValues] = useState(initialValues)
+  const [errors,setErrors] = useState({})
+  const [touched,setTouched] = useState({})
+
+  const handleInputChange = (name,value) => {
+    setValues({
+      ...values,
+      [name]:value
+    })
+
+    const validationErrors = validate(values)
+setErrors({
+  ...errors,
+  [name]:validationErrors[name],
+})
+  }
+
+
+
+
+const handleBlur = (name) => {
+  setTouched(({
+    ...touched,
+    [name]: true
+  }))
+}
+
+
+const isValid = () => {
+  Object.values(errors).every((error) => error === null)
+}
+
+
+return {
+  values,errors,touched,handleInputChange,handleBlur,isValid
+}
+}
+
+
 const LetsMeet= ({route,navigation}) => {
+  const {phoneNumber} = route.params
     const goBack = () => {
         navigation.goBack()
     }
+
+
+    const validate = (values) => {
+      const errors = {}
+  
+      if(!values.firstname) {
+        errors.emailAddress = "*Firstname is required"
+      } else if (
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.emailAddress)
+      ) {
+        errors.emailAddress = "**Email is invalid"
+      }
+  
+      if (!values.otp) {
+        errors.otp = "**otp is required"
+      }
+   
+      return errors
+  
+  }
+  const initialValues = {
+    firstname:"",
+    lastname:"",
+    nccCenter:"",
+  }
+  const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(initialValues,validate)
   //  const {phoneNumber,emailAddress} = route.params
   //  console.log("Phone Number: " + phoneNumber,"Email: " + emailAddress)
   const [firstname, setfirstname] = useState("");
