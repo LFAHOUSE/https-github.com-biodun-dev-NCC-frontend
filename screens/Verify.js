@@ -48,8 +48,8 @@ const Verify = ({ route, navigation }) => {
     }
   };
 
-  const email = useWatch({control, name:"email",otp:"otp"})
-  const otp = useWatch({control, name:"otp",otp})
+  const email = useWatch({control, name:"email"})
+  const otp = useWatch({control, name:"otp"})
 
   
   const [loading,setLoading] = useState(false)
@@ -92,6 +92,7 @@ const requestOtp = async () => {
 
 
 const handleRegistration = () => {
+  console.log("PhoneNumber: "+ phoneNumber)
    navigation.navigate("Setpassword",{
     email: email,
     otp:otp,
@@ -141,6 +142,7 @@ const handleRegistration = () => {
             keyboardType="number-pad"
             placeholder="7063164212"
             autoCapitalize="none"
+            
           />
         
         </View>

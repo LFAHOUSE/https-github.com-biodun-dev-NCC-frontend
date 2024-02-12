@@ -64,7 +64,7 @@ return {
 
 
 const LetsMeet= ({route,navigation}) => {
-  const {phoneNumber} = route.params
+  const phoneNumber = route.params
     const goBack = () => {
         navigation.goBack()
     }

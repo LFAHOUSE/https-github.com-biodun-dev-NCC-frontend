@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useController } from 'react-hook-form';
 
-const Input = ({ logo,label,placeholder, control, name, rules, error, ...props }) => {
+const Input = ({ logo,label,placeholder, secureTextEntry,control, name, rules, error, ...props }) => {
   // Use useController to connect the input component to the form state and validation rules
   const {
     field: { ref, value, onChange, onBlur },
@@ -23,6 +23,7 @@ const Input = ({ logo,label,placeholder, control, name, rules, error, ...props }
         onChangeText={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
         {...props}
         ref={ref}
       />

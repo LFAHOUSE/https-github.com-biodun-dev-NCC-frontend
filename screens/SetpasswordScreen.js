@@ -17,91 +17,47 @@ import {
 import { Button } from "react-native-paper"
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
-import { Foundation } from '@expo/vector-icons';
 import axiosInstance from "../axios_services/axios";
-
-const useForm = (initialValues,validate) => {
-  const [values,setValues] = useState(initialValues)
-  const [errors,setErrors] = useState({})
-  const [touched,setTouched] = useState({})
-
-  const handleInputChange = (name,value) => {
-    setValues({
-      ...values,
-      [name]:value
-    })
-
-    const validationErrors = validate(values)
-setErrors({
-  ...errors,
-  [name]:validationErrors[name],
-})
-  }
-
-
-
-
-const handleBlur = (name) => {
-  setTouched(({
-    ...touched,
-    [name]: true
-  }))
-}
-
-
-const isValid = () => {
-  Object.values(errors).every((error) => error === null)
-}
-
-
-return {
-  values,errors,touched,handleInputChange,handleBlur,isValid
-}
-}
-
-
+import { useForm,useWatch} from "react-hook-form";
+import Input from "./components/Input";
 const Setpasssword = ({route,navigation}) => {
  const {phoneNumber,email,otp} = route.params
  const [loading,setLoading] = useState(false)
-    const validate = (values) => {
-      const errors = {}
-  
-      if(!values.password) {
-        errors.password = "*Password is required"
-      } else if (
-       values.password < 8
-      ) {
-        errors.password = "**Password must be at least 8 characcters"
-      }
-  
-      if (!values.confirmPassword) {
-        errors.confirmPassword = "**Confirm password is required"
-      }else if (values.password !== values.confirmPassword) {
-        errors.confirmPassword = "**Password do no match"
-      }
-   
-      return errors
-  
-  }
 
-  const initialValues = {
-    password:"",
-    confirmPassword:""
-  }
-  const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(initialValues,validate)
+ const {
+  watch,
+  control,
+  handleSubmit,
+  formState: { errors },
+} = useForm();
+  const password = useWatch({control,name:"password"})
+  const confirmPassword = useWatch({control,name:"confirmPassword"})
   //To navigate backward on the pageHeader component
     const goBack = () => {
         navigation.goBack()
     }
-
- 
+    const rules = {
+      password: {
+        required: 'Password is required',
+        minLength: {
+          value: 8,
+          message: 'Password must be at least 8 characters',
+        },
+      },
+      confirmPassword: {
+        required: 'Confirm password is required',
+        validate: value =>
+          value === watch('password') || 'Passwords do not match',
+      },
+    };
   const handleRegistration = async () => {
+    console.log("PhoneNumber: " + phoneNumber)
     setLoading(true)
 
     const data = { 
       email:email,
       otp:otp,
-      password:values.password
+      password:password
      };
   
     try {
@@ -127,74 +83,80 @@ const Setpasssword = ({route,navigation}) => {
   };
   
   // Determine if all input fields are touched for enabling the button
-   const isButtonActive = values.password === values.confirmPassword
+   const isButtonActive = password === confirmPassword
  return(
-   <SafeAreaView style={styles.safeArea}>
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="always">
-        <View style={styles.pageHeaderContainer}>
-         <PageHeader onBack={goBack} pageTitle="Create password" />
+  <SafeAreaView style={styles.safeArea}>
+  <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={'always'}>
+    
+    <View style={styles.pageHeaderContainer}>
+    <PageHeader pageTitle="Let us verify you" onBack={goBack}/>
+    </View>
+   
+    <View style={styles.inputParentContainer}>
+  
+    <View style={styles.labelContainer}>
+    <Text style={styles.inputLabel}>Choose a password</Text>
+   </View>
+
+    <View style={styles.inputContainer}>
+      <View style={styles.inputAccessory}>
+        
        </View>
-
-          <View style={styles.inputParentContainer}>
-          <Text style={styles.inputLabel}>Password</Text>
-          <View style={styles.inputContainer}>
-            <View style={styles.phoneNumberContainer}>
-            <TouchableOpacity style={styles.countryCodeSelector}>
-            <Foundation name="key" size={30} color="#6200ee" />
-            </TouchableOpacity>
-            </View>
-
-           <TextInput
-            style={[styles.input,errors.emailAddress && touched.emailAddress && styles.inputError]}
-            placeholder="Password"
-            value={values.password}
-            onChangeText={(value) => handleInputChange("password",value)}
-            onBlur={() => handleBlur("password")}
-            secureTextEntry
+       <View style={styles.textInputContainer}>
+       <Input
+        control={control}
+        name="password"
+        rules={rules.password}
+        error={errors.password}
+        keyboardType="name-phone-pad"
+        autoCapitalize="none"
+        secureTextEntry
       />
-         {errors.password && touched.password && (
-              <Text style={styles.errorText}>{errors.password}</Text>
-            )}
-        </View>
-        </View>
-        <View style={styles.inputParentContainer}>
-         <Text style={styles.inputLabel}>Confirm Password</Text>
-          <View style={styles.inputContainer}>
-            <View style={styles.phoneNumberContainer}>
-            <TouchableOpacity style={styles.countryCodeSelector}>
-            <Foundation name="key" size={30} color="#6200ee" />
-            </TouchableOpacity>
-            </View>
-          <TextInput
-            style={[styles.input,errors.emailAddress && touched.emailAddress && styles.inputError]}
-            placeholder="Confirm Password"
-            onChangeText={(value) => handleInputChange("confirmPassword", value)}
-            value={values.confirmPassword}
-            onBlur={() =>handleBlur("confirmPassword")}
-            secureTextEntry
-          />
-          {errors.confirmPassword && touched.confirmPassword && (
-              <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-            )}
-        </View>
-        </View>
+    
+    </View>
+    </View>
+    
 
-        <Button
-          mode="contained"
-          onPress={handleRegistration}
-          style={[
-            styles.button,
-            { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
-          ]}
-          disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
-          labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
-        >
-          Next
-        </Button>
 
-        <PageFooter/>
-    </ScrollView>
-   </SafeAreaView>
+    </View>
+{/* second input */}
+<View style={styles.inputParentContainer}>
+  
+  <View style={styles.labelContainer}>
+  <Text style={styles.inputLabel}>Retype Password</Text>
+ </View>
+
+  <View style={styles.inputContainer}>
+     <Input
+      control={control}
+      name="confirmPassword"
+      rules={rules.confirmPassword}
+      error={errors.confirmPassword}
+      keyboardType="name-phone-pad"
+      autoCapitalize="none"
+     secureTextEntry
+    />
+  
+  </View>
+  </View>
+
+  
+    <Button
+      mode="contained"
+      onPress={handleSubmit(handleRegistration)}
+      style={[
+        styles.button,
+        { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
+      ]}
+      disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
+      labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
+    >
+      Next
+    </Button>
+
+   <PageFooter/>
+  </ScrollView>
+</SafeAreaView>
  )
 }
 
@@ -210,6 +172,10 @@ const styles = StyleSheet.create({
     padding: 20,
     // gap:30,
   },
+  arrowDown:{
+    marginBottom:2
+  },
+
   logoContainer: {
     alignItems: "center",
     flexDirection: "row",
@@ -226,11 +192,13 @@ const styles = StyleSheet.create({
     height: 75,
     marginTop: 20,
   },
- 
   welcomeText: {
     fontSize: 20,
 
     textAlign: "left",
+  },
+  pageHeaderContainer:{
+    marginBottom:20
   },
   loginText: {
     fontSize: 16,
@@ -239,20 +207,124 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   inputParentContainer:{
-    // marginBottom:20
+    width: 312,
+    height: 108,
+    //top: 111,
+    left: 24,
+    paddingTop: '0', 
+    paddingRight:'0',
+    paddingBottom: '10', 
+    paddingLeft:'0',
+    gap: 10,
+    marginBottom:20
+  } ,
+
+  // inputParentContainerContent:{
+  //   width: '318,
+  //   height: 108
+
+  // },
+
+  labelContainer:{
+    width: '105',
+    height: '28',
+    padding: '10',
+    gap: 10
+
   },
-  inputContainer: {
-    flex:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'flex-start',
+  inputLabel: {
+    width:'85',
+    height:'15',
+    fontSize: 16,
+    color: "#000",
     marginBottom: 5,
-    borderWidth:1,
-    borderRadius: 10,
-    borderColor: "#ddd",
   },
-  inputLogo:{
-   marginHorizontal:10
+  // inputContainer: {
+  //   alignSelf: "stretch",
+  //   flex:1,
+  //   flexDirection:'row',
+  //   alignItems:'center',
+  //   justifyContent:'flex-start',
+  //   height:70,
+  //   borderWidth:1,
+  //   borderRadius: 10,
+  //   borderColor: "#ddd",
+  // },
+
+  inputContainer: {
+    display:"flex",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    width:290,
+    height:40,
+    borderRadius:7,
+    borderWidth:1,
+    background: "#CAC3C3",
+    borderColor:"#CAC3C3"
+  },
+  emailAddressInput:{
+   
+      display:"flex",
+      flexDirection:"row",
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      width:189,
+      height:15,
+      borderRadius:7,
+      borderWidth:1,
+      background: "#CAC3C3",
+      borderColor:"#CAC3C3"
+  },
+  inputAccessory:{
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    //justifyContent:'space-between',
+    right:10,
+    width:101,
+    height:36
+  },
+  phoneNumberIcon:{
+    width: 35,
+    height: 36,
+    paddingTop: '12',
+    paddingRight: '10',
+    paddingBottom: '12',
+    paddingLeft: '10',
+    gap: 10
+
+  },
+
+  phoneIconLogo:{
+      width:'15',
+      
+      
+  },
+
+  textInputContainer:{
+    width: 124,
+    height: 43,
+    paddingTop: '10', 
+    paddingRight:'10',
+    paddingBottom: '10', 
+    paddingLeft:'26',
+    borderRadius: 7,
+    gap: 10,
+    fontSize:16
+  },
+
+  
+  input: {
+     borderColor: "#ddd",
+    flex:1,
+    backgroundColor: "transparent",
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    fontSize: 16,
+    height: 60,
+    padding:10,
+    borderColor:'#fff',
   },
   inputError:{
     borderColor:"red"
@@ -263,51 +335,44 @@ const styles = StyleSheet.create({
   marginLeft: 10,
   marginRight:5,
   },
-  inputLabel: {
-    fontSize: 16,
-    color: "#000",
-    marginBottom: 5,
-  },
-  input: {
-    flex:1,
-    backgroundColor: "transparent",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 16,
-    height: 60,
-    padding:10
-  },
-  error: {
-    color: 'red',
-    fontSize: 12,
-    marginLeft: 10,
-    marginRight:5,
-  },
-  passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 7,
-  },
-  phoneNumberContainer: {
+  emailAddressContainer: {
     flexDirection: "row",
     alignItems: "center",
     // marginBottom: 10,
   },
   countryCodeSelector: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    paddingTop: 20,
-    borderColor: "transparent",
-
-    borderRadius: 10,
+    alignItems:'center',
+    justifyItems: 'center',
+      flexDirection:'row',
+      gap:5,
+      // backgroundColor: "#fff",
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      paddingTop: 20,
+      borderColor: "transparent",
+      borderRadius: 10,
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
   },
   countryCodeText: {
     fontSize: 16,
     color: "#000",
     height: 30,
   },
+  emailAddressInput: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
 
+    fontSize: 16,
+    borderColor: "transparent",
+    height: 60,
+    borderTopRightRadius: 7,
+    borderBottomRightRadius: 7,
+  },
   button: {
     paddingVertical: 12,
     marginBottom: 40,
@@ -327,32 +392,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 15,
   },
-
-  footer: {
-    marginTop: 40,
-    alignItems: "center",
-  },
-  footerText: {
-    fontSize: 14,
+  visitorText: {
     color: "#000",
-    marginBottom: 5,
-  },
-  footerLink: {
-    fontSize: 14,
-    color: "#0000FF",
-    marginBottom: 40,
-  },
-  footerView: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  footerImage: {
-    marginTop: 12,
-    height: 30,
-    width: 33,
+    marginVertical: 10,
   },
   otp: {
     color: "#06447C",
@@ -360,8 +402,6 @@ const styles = StyleSheet.create({
 
     marginBottom: 5,
   },
-  pageHeaderContainer:{
-    marginBottom:20
-  }
+
 });
 export default Setpasssword;
