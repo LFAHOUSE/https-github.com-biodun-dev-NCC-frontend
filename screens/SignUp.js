@@ -13,79 +13,42 @@ import {
   Alert,
 } from "react-native";
 import { Button } from "react-native-paper";
-import { FontAwesome } from '@expo/vector-icons';
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios.js";
-import axios from 'axios'
+import { useForm,useWatch } from "react-hook-form";
+import Input from "./components/Input.js";
 
 
-const useForm = (initialValues,validate) => {
-  const [values,setValues] = useState(initialValues)
-  const [errors,setErrors] = useState({})
-  const [touched,setTouched] = useState({})
-
-  const handleInputChange = (name,value) => {
-    setValues({
-      ...values,
-      [name]:value
-    })
-
-    const validationErrors = validate(values)
-setErrors({
-  ...errors,
-  [name]:validationErrors[name],
-})
-  }
-
-
-
-
-const handleBlur = (name) => {
-  setTouched(({
-    ...touched,
-    [name]: true
-  }))
-}
-
-
-const isValid = () => {
-  Object.values(errors).every((error) => error === null)
-}
-
-
-return {
-  values,errors,touched,handleInputChange,handleBlur,isValid
-}
-}
 
 
 const SignUp = ({props, navigation }) => {
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+
+  const rules = {
+    phoneNumber: {
+      required: 'Phone number is required',
+      minLength: {
+        value: 10,
+        message: 'Phone number not valid',
+      },
+    },
+  };
+
+  const phoneNumber = useWatch({control, name:"phoneNumber"})
 
     //  const [phoneNumber, setPhoneNumber] = useState("");
      const [countryCode, setCountryCode] = useState('+234'); 
      const [showPickerModal,setShowPickerModal] = useState(false)
      const [loading,setLoading] = useState(false)
      const [buttonText, setButtonText] = useState("Sign-up")
-
-const initialValues = {
-  phoneNumber:""
-}
-
-const validate = (values) => {
-    const errors = {}
-
-    if(!values.name) {
-      errors.phoneNumber = "*Phone number is required"
-    }
-
-    return errors
-
-}
-
-const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(initialValues,validate)
-
     const goBack = () => {
       navigation.goBck()
       }
@@ -96,17 +59,17 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
 
       
         const handleRegistration = async () => {
-          console.log(countryCode+values.phoneNumber)
+          console.log(countryCode+phoneNumber)
           setLoading(true);
           try {
             const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/initiate-registration', {
-              phoneNumber: countryCode + values.phoneNumber,
+              phoneNumber: countryCode + phoneNumber,
             });
             if (response.status === 201) {
               setLoading(true)
               setButtonText("Next")
               Alert.alert("OK",response.data.message);
-               navigation.navigate("Verify",{phoneNumber: values.phoneNumber,countryCode:countryCode})
+               navigation.navigate("Verify",{phoneNumber:phoneNumber,countryCode:countryCode})
             }
           } catch (error) {
            setLoading(false)
@@ -116,13 +79,13 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
           }
         
           setLoading(false);
-          navigation.navigate("Verify",{phoneNumber: values.phoneNumber,countryCode:countryCode})
+          navigation.navigate("Verify",{phoneNumber: phoneNumber,countryCode:countryCode})
 
          
         };
       
   // Determine if the phone number is 11 digits for enabling the button
-  const isButtonActive = values.phoneNumber.length === 10 || loading
+  const isButtonActive = phoneNumber?.length === 10 || loading
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -160,19 +123,15 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
 
            </View>
            <View style={styles.textInputContainer}>
-            <TextInput
-              style={[styles.input,errors.phoneNumber && touched.phoneNumber && styles.inputError]}
-              placeholder="7063164212"
-              value={values.phoneNumber}
-              onChangeText={(value) => {handleInputChange("phoneNumber",value)} }
-              onBlur={() => handleBlur("phoneNumber")}
-              keyboardType="number-pad"
-              maxLength={10}
-            />
-            {errors.phoneNumber && touched.phoneNumber && (
-              <Text style={styles.errorText}>{errors.phoneNumber}</Text>
-            )}
-
+           <Input
+            control={control}
+            name="phoneNumber"
+            rules={rules.phoneNumber}
+            error={errors.phoneNumber}
+            keyboardType="number-pad"
+            placeholder="7063164212"
+            autoCapitalize="none"
+          />
           <CountryPicker
           style={styles.picker}
           show={showPickerModal}
@@ -185,7 +144,7 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
 
         <Button
           mode="contained"
-          onPress={handleRegistration}
+          onPress={handleSubmit(handleRegistration)}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
@@ -270,10 +229,6 @@ const styles = StyleSheet.create({
       paddingBottom:10,
       paddingLeft:0,
       gap:10,
-      // fontSize: 16,
-      // textAlign: "left",
-      // marginBottom: 30,
-      // color: "#000",
     },
     inputParentContainer:{
       width:'290',

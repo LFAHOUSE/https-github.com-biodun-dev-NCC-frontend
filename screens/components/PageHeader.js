@@ -61,9 +61,12 @@ import {
      
     },
     titleText:{
-      fontSize: 15,
-      fontWeight: '800',
-      color: '#000'
+      fontSize: 18,
+      fontWeight: '500',
+      fontFamily:"Roboto",
+      color: '#000',
+      width:178,
+      height:31
     },
 
     headerContent:{
@@ -116,16 +119,16 @@ import {
     backButton: {
       padding: 5,
     },
-    titleContainer: {
-      flex: 1,
-      flexDirection:'row',
-      justifyContent:'space-between',
-      alignItems: 'center',
-      height:60,
-      marginBottom:10
-    },
 
     title: {
+      width:142,
+      height: 41,
+      paddingTop: '10',
+      paddingRight: 10, 
+      paddingBottom:10,
+      paddingLeft: '0',
+      gap: 10,
+
       top:2,
       gap:10,
       

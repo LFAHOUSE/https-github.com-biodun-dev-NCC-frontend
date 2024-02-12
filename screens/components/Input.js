@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { useController } from 'react-hook-form';
 
-const Input = ({ logo,label, control, name, rules, error, ...props }) => {
+const Input = ({ logo,label,placeholder, control, name, rules, error, ...props }) => {
   // Use useController to connect the input component to the form state and validation rules
   const {
     field: { ref, value, onChange, onBlur },
@@ -16,21 +16,19 @@ const Input = ({ logo,label, control, name, rules, error, ...props }) => {
 
   return (
     // Use View to wrap the input field and the error message
-    <View style={styles.container}>
-      // Use Text to render the label
-      <Text style={styles.label}>{label}</Text>
-      // Use TextInput to render the input field
+   <View>
       <TextInput
-        style={styles.input}
+      style={styles.input}
         value={value}
         onChangeText={onChange}
         onBlur={onBlur}
+        placeholder={placeholder}
         {...props}
         ref={ref}
       />
-      // Use Text to render the error message
+      
       {error && <Text style={styles.error}>{error.message}</Text>}
-    </View>
+      </View>
   );
 };
 
@@ -43,16 +41,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 5,
+    color: '#ddd',
+    //marginBottom: 5,
   },
   input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    color: '#fff',
+    
+      width:'74',
+      height:'15',
+      paddingTop:5,
+      paddingRight:'10',
+      paddingBottom:'10',
+      paddingLeft:'26',
+    
   },
   error: {
     fontSize: 14,

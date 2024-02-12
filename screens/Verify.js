@@ -3,6 +3,7 @@ import {
   SafeAreaView,
   View,
   Text,
+  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -17,79 +18,45 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { FontAwesome } from '@expo/vector-icons';
 import axiosInstance from "../axios_services/axios";
-
-
-const useForm = (initialValues,validate) => {
-  const [values,setValues] = useState(initialValues)
-  const [errors,setErrors] = useState({})
-  const [touched,setTouched] = useState({})
-
-  const handleInputChange = (name,value) => {
-    setValues({
-      ...values,
-      [name]:value
-    })
-
-    const validationErrors = validate(values)
-setErrors({
-  ...errors,
-  [name]:validationErrors[name],
-})
-  }
-
-
-
-
-const handleBlur = (name) => {
-  setTouched(({
-    ...touched,
-    [name]: true
-  }))
-}
-
-
-const isValid = () => {
-  Object.values(errors).every((error) => error === null)
-}
-
-
-return {
-  values,errors,touched,handleInputChange,handleBlur,isValid
-}
-}
+import {useForm,useWatch} from 'react-hook-form'
+import Input from "./components/Input";
 
 
 const Verify = ({ route, navigation }) => {
-  const initialValues = {
-    newPhoneNumber:"",
-    emailAddress:"",
-    otp:""
-  }
+  
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const rules = {
+    email: {
+      required: 'Email is required',
+      pattern: {
+        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+        message: 'Invalid email address',
+      },
+    },
+
+    otp:{
+      required:"OTP is requuired",
+      minLength: {
+        value: 6,
+        message: 'OTP must be at least 8 characters',
+      },
+    }
+  };
+
+  const email = useWatch({control, name:"email",otp:"otp"})
+  const otp = useWatch({control, name:"otp",otp})
+
+  
   const [loading,setLoading] = useState(false)
  const goBack = () => {
   navigation.goBack()
  }
-  const validate = (values) => {
-    const errors = {}
-
-    if(!values.emailAddress) {
-      errors.emailAddress = "*Email is required"
-    } else if (
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.emailAddress)
-    ) {
-      errors.emailAddress = "**Email is invalid"
-    }
-
-    if (!values.otp) {
-      errors.otp = "**otp is required"
-    }
- 
-    return errors
-
-}
-
-const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(initialValues,validate)
-
+  
   const {countryCode,phoneNumber} =route.params
   
   console.log("Phone Number: " + countryCode + phoneNumber)
@@ -98,12 +65,12 @@ const {values,errors,touched,handleInputChange,handleBlur,isValid} = useForm(ini
 
 // define the requestOtp function
 const requestOtp = async () => {
-  console.log("emailAddress: ", values.emailAddress)
+  console.log("emailAddress: ", email)
   setLoading(true)
   // create a data object with email and phone
   const data = { 
     phoneNumber:complete_phone_number,
-    email:values.emailAddress
+    email:email
    };
 
   try {
@@ -126,65 +93,89 @@ const requestOtp = async () => {
 
 const handleRegistration = () => {
    navigation.navigate("Setpassword",{
-    email: values.emailAddress,
-    otp:values.otp,
+    email: email,
+    otp:otp,
     phoneNumber:complete_phone_number
   })
 }
   // Determine if the phone number is 11 digits for enabling the button
-  const isButtonActive = values.otp.length === 6
+  const isButtonActive = otp?.length === 6
  
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={'always'}>
+        
         <View style={styles.pageHeaderContainer}>
-        <PageHeader pageTitle="Let's Verify You" onBack={goBack}/>
+        <PageHeader pageTitle="Let us verify you" onBack={goBack}/>
         </View>
        
         <View style={styles.inputParentContainer}>
+      
+        <View style={styles.labelContainer}>
         <Text style={styles.inputLabel}>Phone number</Text>
-        <View style={styles.inputContainer}>
+       </View>
 
-          <View style={styles.emailAddressContainer}>
-            <TouchableOpacity style={styles.countryCodeSelector}>
-            <FontAwesome name="phone" size={24} color="#6200ee" />
-           </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <View style={styles.inputAccessory}>
+
+           <View style={styles.phoneNumberIcon}>
+           <Image source={require("../assets/phone.png")} style={styles.phoneIconLogo}/>
+           </View>
+            
+            <View style={styles.countryCodeSelector} >
+             <Text style={styles.countryCodeText}>{countryCode}</Text>
             </View>
 
-            <TextInput
-              value={complete_phone_number || values.newPhoneNumber }
-              keyboardType="phone-pad"
-              onChangeText={(value) => handleInputChange("newPhoneNumber", value)}
-              onBlur={() => handleBlur("newPhoneNumber")}
-              maxLength={14}
-            />
-          
-          </View>
-        </View>
-
-        <View style={styles.inputParentContainer}>
-        <Text style={styles.inputLabel}>Email Address</Text>
-        <View style={styles.inputContainer}>
-        <View style={styles.emailAddressContainer}>
-            <TouchableOpacity style={styles.countryCodeSelector}>
-            <FontAwesome name="envelope" size={20} color="#6200ee" />
+            <TouchableOpacity style={styles.arrowDownContainer}>
+            <Image source={require("../assets/arrow-down.png")} style={styles.arrowDown}/>
             </TouchableOpacity>
-            </View>
-          <TextInput
-            style={[styles.input,errors.emailAddress && touched.emailAddress && styles.inputError]}
-            onChangeText={(value) => handleInputChange("emailAddress",value)}
-            value={values.emailAddress}
-            onBlur={() => handleBlur("emailAddress")}
-            keyboardType="email-address"
-            placeholder="e.g omoniyi.bankole@gmail.com"
-          
-          />
-          {errors.emailAddress && touched.emailAddress && (
-              <Text style={styles.errorText}>{errors.emailAddress}</Text>
-            )}
-        </View>
-        </View>
 
+           </View>
+           <View style={styles.textInputContainer}>
+           <Input
+            control={control}
+            value={complete_phone_number}
+            name="phoneNumber"
+            rules={rules.phoneNumber}
+            error={errors.phoneNumber}
+            keyboardType="number-pad"
+            placeholder="7063164212"
+            autoCapitalize="none"
+          />
+        
+        </View>
+        </View>
+        
+
+
+        </View>
+{/* second input */}
+<View style={styles.inputParentContainer}>
+      
+      <View style={styles.labelContainer}>
+      <Text style={styles.inputLabel}>Email Address</Text>
+     </View>
+
+      <View style={styles.inputContainer}>
+        {/* <View style={styles.inputAccessory}>
+         <TouchableOpacity style={styles.phoneNumberIcon}>
+         <Image source={require("../assets/phone.png")} style={styles.phoneIconLogo}/>
+         </TouchableOpacity>
+         </View> */}
+         <Input
+          control={control}
+          name="phoneNumber"
+          rules={rules.email}
+          error={errors.email}
+          keyboardType="email-adress"
+          placeholder="e.g pastorbimbo@nccnigeria.org"
+          autoCapitalize="none"
+        />
+      
+      </View>
+      </View>
+
+       
         <View style={styles.inputParentContainer}>
        <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
          <Text style={styles.otp}>Request for OTP</Text>
@@ -192,23 +183,20 @@ const handleRegistration = () => {
           </TouchableOpacity>
           
         <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.input,errors.otp && touched.otp && styles.inputError]}
-            onChangeText={(value) => handleInputChange("otp",value)}
-            onBlur={() => handleBlur("otp")}
-            value={values.otp}
-            placeholder="Enter OTP"
-            maxLength={6}
-            keyboardType="number-pad"
-          />
-          {errors.otp && touched.otp && (
-              <Text style={styles.errorText}>{errors.otp}</Text>
-            )}
+        <Input
+               control={control}
+               name="otp"
+               rules={rules.otp}
+               error={errors.otp}
+               keyboardType="number-pad"
+               autoCapitalize="none"
+              />
         </View>
-        </View>
+            </View>
+      
         <Button
           mode="contained"
-          onPress={handleRegistration}
+          onPress={handleSubmit(handleRegistration)}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#6200ee" : "#EFEFF0" },
@@ -272,25 +260,114 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   inputParentContainer:{
+    width: 312,
+    height: 108,
+    //top: 111,
+    left: 24,
+    paddingTop: '0', 
+    paddingRight:'0',
+    paddingBottom: '10', 
+    paddingLeft:'0',
+    gap: 10,
     marginBottom:20
-  },
-  inputContainer: {
-    alignSelf: "stretch",
-    flex:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'flex-start',
-    height:70,
-    borderWidth:1,
-    borderRadius: 10,
-    borderColor: "#ddd",
-  },
+  } ,
 
+  // inputParentContainerContent:{
+  //   width: '318,
+  //   height: 108
+
+  // },
+
+  labelContainer:{
+    width: '105',
+    height: '28',
+    padding: '10',
+    gap: 10
+
+  },
   inputLabel: {
+    width:'85',
+    height:'15',
     fontSize: 16,
     color: "#000",
     marginBottom: 5,
   },
+  // inputContainer: {
+  //   alignSelf: "stretch",
+  //   flex:1,
+  //   flexDirection:'row',
+  //   alignItems:'center',
+  //   justifyContent:'flex-start',
+  //   height:70,
+  //   borderWidth:1,
+  //   borderRadius: 10,
+  //   borderColor: "#ddd",
+  // },
+
+  inputContainer: {
+    display:"flex",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    width:290,
+    height:40,
+    borderRadius:7,
+    borderWidth:1,
+    background: "#CAC3C3",
+    borderColor:"#CAC3C3"
+  },
+  emailAddressInput:{
+   
+      display:"flex",
+      flexDirection:"row",
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      width:189,
+      height:15,
+      borderRadius:7,
+      borderWidth:1,
+      background: "#CAC3C3",
+      borderColor:"#CAC3C3"
+  },
+  inputAccessory:{
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    //justifyContent:'space-between',
+    right:10,
+    width:101,
+    height:36
+  },
+  phoneNumberIcon:{
+    width: 35,
+    height: 36,
+    paddingTop: '12',
+    paddingRight: '10',
+    paddingBottom: '12',
+    paddingLeft: '10',
+    gap: 10
+
+  },
+
+  phoneIconLogo:{
+      width:'15',
+      
+      
+  },
+
+  textInputContainer:{
+    width: 124,
+    height: 43,
+    paddingTop: '10', 
+    paddingRight:'10',
+    paddingBottom: '10', 
+    paddingLeft:'26',
+    borderRadius: 7,
+    gap: 10,
+    fontSize:16
+  },
+
+  
   input: {
      borderColor: "#ddd",
     flex:1,
