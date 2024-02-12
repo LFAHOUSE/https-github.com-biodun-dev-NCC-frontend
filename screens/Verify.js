@@ -164,10 +164,10 @@ const handleRegistration = () => {
          </View> */}
          <Input
           control={control}
-          name="phoneNumber"
+          name="email"
           rules={rules.email}
           error={errors.email}
-          keyboardType="email-adress"
+          keyboardType="email-address"
           placeholder="e.g pastorbimbo@nccnigeria.org"
           autoCapitalize="none"
         />
