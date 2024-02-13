@@ -142,7 +142,12 @@ const Setpasssword = ({route,navigation}) => {
   </View>
   </View>
   </View>
-  
+  {/* Info box */}
+
+  <View style={styles.infoContainer}>
+
+
+  </View>
     <Button
       mode="contained"
       onPress={handleRegistration}
@@ -170,7 +175,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    justifyContent: "space-between",
+    //justifyContent: "space-between",
     padding: 5,
     // gap:30,
   },
@@ -209,29 +214,30 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   inputParentContainer:{
-    width: 312,
-    height: 108,
+    display:"flex",
+    flexDirection:"column",
+    alignSelf:"center",
+    width: '90%',
+    height: '14%',
     //top: 111,
-    left: 24,
-    paddingTop: '0', 
-    paddingRight:'0',
-    paddingBottom: '10', 
-    paddingLeft:'0',
+    paddingTop: 0,
+    paddingRight: 0,
+    paddingBottom: 10,
+    paddingLeft: 0,
     gap: 10,
-    marginBottom:20
+    //borderWidth:1
   } ,
 
-  // inputParentContainerContent:{
-  //   width: '318,
-  //   height: 108
-
-  // },
 
   labelContainer:{
+    display:"flex",
+    flexDirection:"row",
+    left:"10%",
     width: '105',
     height: '28',
     padding: '10',
-    gap: 10
+    gap: 10,
+    
 
   },
   inputLabel: {
@@ -241,22 +247,11 @@ const styles = StyleSheet.create({
     color: "#000",
     marginBottom: 5,
   },
-  // inputContainer: {
-  //   alignSelf: "stretch",
-  //   flex:1,
-  //   flexDirection:'row',
-  //   alignItems:'center',
-  //   justifyContent:'flex-start',
-  //   height:70,
-  //   borderWidth:1,
-  //   borderRadius: 10,
-  //   borderColor: "#ddd",
-  // },
 
   inputContainer: {
     display:"flex",
     flexDirection:"row",
-    //alignItems: 'center',
+    alignSelf: 'center',
     justifyContent: 'space-around',
     width:290,
     height:40,
@@ -408,6 +403,15 @@ const styles = StyleSheet.create({
 
     marginBottom: 5,
   },
+
+  infoContainer:{
+    width: 268,
+    height: 69,
+    top: 356,
+    left: 45,
+    borderWidth:1
+
+  }
 
 });
 export default Setpasssword;

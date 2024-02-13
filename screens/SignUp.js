@@ -129,7 +129,7 @@ const SignUp = ({props, navigation }) => {
             rules={rules.phoneNumber}
             error={errors.phoneNumber}
             keyboardType="number-pad"
-            placeholder="7063164212"
+            placeholder="e.g 7063164212"
             autoCapitalize="none"
           />
           <CountryPicker
@@ -299,7 +299,9 @@ const styles = StyleSheet.create({
       paddingLeft:'26',
       borderRadius: 7,
       gap: 10,
-      fontSize:16
+      fontSize:16,
+      right:24
+
     },
 
     input: {

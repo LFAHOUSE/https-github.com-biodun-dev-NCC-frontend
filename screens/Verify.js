@@ -338,7 +338,6 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     alignItems:"center",
     justifyContent:'space-between',
-    alignSelf:'center',
     right:10,
     width:101,
     height:36
@@ -369,7 +368,9 @@ const styles = StyleSheet.create({
     paddingLeft:'26',
     borderRadius: 7,
     gap: 10,
-    fontSize:16
+    fontSize:16,
+    right:30
+
   },
 
   
@@ -399,16 +400,11 @@ const styles = StyleSheet.create({
     // marginBottom: 10,
   },
   countryCodeSelector: {
-    alignItems:'center',
-    justifyItems: 'center',
-      flexDirection:'row',
-      gap:5,
-      // backgroundColor: "#fff",
-      paddingHorizontal: 15,
-      paddingVertical: 10,
-      paddingTop: 20,
-      borderColor: "transparent",
-      borderRadius: 10,
+   
+    width:'37',
+    height:'35',
+    padding: '10',
+    gap: 10
   },
   error: {
     color: "red",
