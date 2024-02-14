@@ -57,12 +57,13 @@ const LetsMeet= ({route,navigation}) => {
     const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
+
       const currentDate = selectedDate || date;
       setShow(Platform.OS === 'ios');
       setDate(currentDate);
     };
 
-
+console.log("date: "+ date)
     const showMode = currentMode => {
       setShow(true);
       setMode(currentMode);
@@ -75,24 +76,12 @@ const LetsMeet= ({route,navigation}) => {
     const center = useWatch({control, name:"center"})
     const dob = useWatch({control, name:"dob"})
   
-  //  const {phoneNumber,emailAddress} = route.params
-  //  console.log("Phone Number: " + phoneNumber,"Email: " + emailAddress)
-  // const [firstname, setfirstname] = useState("");
-  // const [lastname, setLastname] = useState("");
-  
   const [nccCenter,setNccCentre] = useState(["Lekki","Ajah","Ikeja","Shomolu","Ilorin","Ibadan","Oworonshoki","Port-Harcourt","Jos","Abuja"])
   const [sex,setSex] = useState(["Male","Female"])
+  const [selectedSex,setSelectedSex] = useState("")
   const [selectedCenter,setSelectedCenter] = useState("")
-  const [centerValue,setCenterValue] = useState("")
-  const [centerSelected,setCenterSelected] = useState(false)
-  const [nameError, setNameError] = useState(null)
+  
 
-const handleSelectedCenter = (centerSelected) => {
-  setNccCentre(centerSelected)
-  setSelectedCenter(centerSelected)
-  setCenterValue(centerSelected)
-  setCenterSelected(true)
-}
   const handleRegistration = () => {
     // Handle the registration logic here
     navigation.navigate("Dashboard");
@@ -156,11 +145,14 @@ const handleSelectedCenter = (centerSelected) => {
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.genderInputContainer}>
-          <Input
+          <TextInput
+          style={styles.input}
           control={control}
           name="sex"
-          rules={rules.sex}
+          onChangeText={setSex}
           error={errors.sex}
+          value={selectedSex}
+          rules={rules.sex}
           keyboardType="name-pad"
           placeholder="Click to choose"
           autoCapitalize="none"
@@ -170,8 +162,8 @@ const handleSelectedCenter = (centerSelected) => {
           </TouchableOpacity>
           <Picker
         style={styles.picker}
-        selectedValue={selectedCenter}
-        onValueChange={(itemValue,itemIndex) => {setSelectedCenter(itemValue)}}
+        selectedValue={selectedSex}
+        onValueChange={(itemValue,itemIndex) => {setSelectedSex(itemValue)}}
         mode="dropdown"
       >
         {sex.filter(item => typeof item === "string").map((item,index,) => (
@@ -190,9 +182,12 @@ const handleSelectedCenter = (centerSelected) => {
 </View>
 <View style={styles.inputContainer}>
   <View style={styles.genderInputContainer}>
-  <Input
+  <TextInput
+  style={styles.input}
   control={control}
   name="nccCenter"
+  onChangeText={setNccCentre}
+  value={selectedCenter}
   rules={rules.nccCenter}
   error={errors.nccCenter}
  // keyboardType="name-pad"
@@ -223,13 +218,14 @@ const handleSelectedCenter = (centerSelected) => {
 </View>
 <View style={styles.inputContainer}>
   <View style={styles.textInputContainer}>
-  <Input
+  <TextInput
+  style={styles.input}
   control={control}
   name="dob"
   rules={rules.dob}
   error={errors.dob}
+  onChangeText={setDate}
   value={date}
- // keyboardType="name-phone-pad"
   placeholder="click the calendar icon"
   autoCapitalize="none"/>
   <TouchableOpacity onPress={showDatepicker} style={styles.calendarContainer}>
@@ -379,14 +375,27 @@ logo:{
   height:20
 },
   input:{
-    width: 204,
-    height: 15,
-    fontFamily: 'Roboto',
-    fontSize: 13,
-    fontWeight: '400',
-    lineHeight: 15,
-    //letterSpacing: 0em,
-    textAlign: 'center',
+    // width: 204,
+    // height: 15,
+    // fontFamily: 'Roboto',
+    // fontSize: 13,
+    // fontWeight: '400',
+    // lineHeight: 15,
+    // //letterSpacing: 0em,
+    // textAlign: 'center',
+
+    borderColor: "#ddd",
+    backgroundColor: "transparent",
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    fontSize: 16,
+    height: 60,
+    padding:10,
+    width:240,
+    height:'15',
+    paddingRight:'10',
+    paddingBottom:'10',
+    paddingLeft:'26',
 
 
   },
