@@ -5,8 +5,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
   ScrollView,
   Image,
   Platform,
@@ -23,8 +21,8 @@ import Input from "./components/Input";
 
 
 const Setpasssword = ({route,navigation}) => {
-//  const {phoneNumber,email,otp} = route.param
-
+ const {phoneNumber,email,otp} = route.params
+console.log("PhoneNumber in password: "+ phoneNumber)
  const [loading,setLoading] = useState(false)
 
  const {
@@ -53,34 +51,34 @@ const Setpasssword = ({route,navigation}) => {
           value === watch('password') || 'Passwords do not match',
       },
     };
-  const handleRegistration =  () => {
-    // console.log("PhoneNumber: " + phoneNumber)
-    // setLoading(true)
+  const handleRegistration =  async () => {
+    console.log("PhoneNumber: " + phoneNumber)
+    setLoading(true)
 
-    // const data = { 
-    //   email:email,
-    //   otp:otp,
-    //   password:password
-    //  };
+    const data = { 
+      email:email,
+      otp:otp,
+      password:password
+     };
   
-    // try {
-    //   const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/verify-otp-set-password", data);
-    //   console.log(response.status)
-    //   if (response.status === 200 || response.status ===201) {
-    //     // return the response data
-    //     Alert.alert("OK", response.data.message)
-    //     navigation.navigate("VerificationComplete",{
-    //       phoneNumber:phoneNumber
-    //     });
-    //     setLoading(false)
+    try {
+      const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/verify-otp-set-password", data);
+      console.log(response.status)
+      if (response.status === 200 || response.status ===201) {
+        // return the response data
+        Alert.alert("OK", response.data.message)
+        navigation.navigate("VerificationComplete",{
+          phoneNumber:phoneNumber
+        });
+        setLoading(false)
       
-    //   } 
-    // } catch (error) {
-    //   // handle the error
-    //   Alert.alert("Error", error.response.data.message)
-    //   setLoading(false)
+      } 
+    } catch (error) {
+      // handle the error
+      Alert.alert("Error", error.response.data.message)
+      setLoading(false)
       
-    // }
+    }
     // Handle the registration logic here
     navigation.navigate("VerificationComplete");
   };
@@ -116,9 +114,6 @@ const Setpasssword = ({route,navigation}) => {
     
     </View>
     </View>
-    
-
-
     </View>
 {/* second input */}
 <View style={styles.inputParentContainer}>
@@ -146,11 +141,22 @@ const Setpasssword = ({route,navigation}) => {
 
   <View style={styles.infoContainer}>
 
+    <View style={styles.infoLogoContainer}>
+      <Image style={styles.infoLogo} source={require("../assets/info.png")}/>
+    </View>
+
+    <View style={styles.infoTextContainer}>
+    <View style={styles.infoText}>
+        <Text style={styles.text}>*10 characters</Text>
+        <Text  style={styles.text}>*one special characters</Text>
+        <Text  style={styles.text}>*one upper case letter</Text>
+        </View>
+    </View>
 
   </View>
     <Button
       mode="contained"
-      onPress={handleRegistration}
+      onPress={handleSubmit(handleRegistration)}
       style={[
         styles.button,
         { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
@@ -160,8 +166,11 @@ const Setpasssword = ({route,navigation}) => {
     >
       Next
     </Button>
-
-   <PageFooter/>
+    
+      <View style={styles.footerContainer}>
+      <PageFooter/>
+      </View>
+   
   </ScrollView>
 </SafeAreaView>
  )
@@ -405,13 +414,70 @@ const styles = StyleSheet.create({
   },
 
   infoContainer:{
+    display:"flex",
+    flexDirection:"row",
     width: 268,
     height: 69,
-    top: 356,
+    top: '356',
     left: 45,
-    borderWidth:1
+    marginVertical:32
+
+  },
+  infoLogoContainer:{
+    width: 69,
+    height: 69,
+    padding: 10,
+    gap: 10,
+  
+
+  },
+  infoLogo:{
+    width:49,
+    height:49,
+    opacity:50
+  },
+
+  infoTextContainer:{
+    width: 217,
+    height: 73,
+    padding: 10,
+    gap: 10,
+ 
+
+  },
+  infoText:{
+    flex:1,
+    width: 197,
+    height: 43,
+    gap: 2,
+   right:5,
+ 
+    alignSelf: 'center',
+    display:'flex',
+   
+
+  },
+  text:{
+    flex:1,
+    fontFamily: 'Roboto',
+    fontWeight: '300',
+     lineHeight: 13,
+    letterSpacing: 0.2,
+    //alignSelf:'center',
+    color:"#FF0303",
+    width: 900,
+    height: 13,
+     
+
+
+  },
+
+  footerContainer:{
+    marginTop:87,
+    marginBottom:20
 
   }
 
+   
 });
 export default Setpasssword;

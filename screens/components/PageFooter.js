@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
       footerLink: {
         fontSize: 14,
         color: "#0000FF",
-        marginBottom: 40,
+       // marginBottom: 40,
       },
       
       footerImageContainer: {

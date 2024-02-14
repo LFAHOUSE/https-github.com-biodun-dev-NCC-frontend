@@ -131,6 +131,7 @@ const SignUp = ({props, navigation }) => {
             keyboardType="number-pad"
             placeholder="e.g 7063164212"
             autoCapitalize="none"
+            
           />
           <CountryPicker
           style={styles.picker}
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
       marginBottom: 5,
     },
     button:{
-      marginTop:20,
+      marginTop:40,
       width:290,
       height:'40',
       padding:'10',
@@ -390,7 +391,8 @@ const styles = StyleSheet.create({
       width:187,
       height:86,
       alignSelf:'center',
-      gap:5
+      gap:5,
+      marginTop:49
     },
     sign: {
       color: "#6EB1E1",
@@ -444,13 +446,8 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     footerContainer:{
-      width: '247',
-      height: '50',
-      top: '728',
-      //left: 86,
-      padding: 10,
-      gap: 10
-
+      marginTop:87,
+    marginBottom:20
     }
   });
   

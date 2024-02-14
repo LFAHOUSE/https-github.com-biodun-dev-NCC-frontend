@@ -159,11 +159,7 @@ const handleRegistration = () => {
      </View>
 
       <View style={styles.inputContainer}>
-        {/* <View style={styles.inputAccessory}>
-         <TouchableOpacity style={styles.phoneNumberIcon}>
-         <Image source={require("../assets/phone.png")} style={styles.phoneIconLogo}/>
-         </TouchableOpacity>
-         </View> */}
+
          <Input
           control={control}
           name="email"
@@ -461,12 +457,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   footerContainer:{
-    width: '247',
-    height: '50',
-    top: '728',
-    //left: 86,
-    padding: 10,
-    gap: 10
+    marginTop:87,
+    marginBottom:20
 
   }
 });

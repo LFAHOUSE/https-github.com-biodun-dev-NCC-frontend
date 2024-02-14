@@ -15,13 +15,12 @@ import {
 import {Picker} from '@react-native-picker/picker'
 import { Button } from "react-native-paper"
 import PageHeader from "./components/PageHeader";
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
 import PageFooter from "./components/PageFooter";
 import { validateName } from "../utils/utils";
 import Input from "./components/Input";
 import { useForm,useWatch ,Controller} from "react-hook-form";
+import DatePicker from '@react-native-community/datetimepicker'
+
 
 
 
@@ -41,28 +40,37 @@ const LetsMeet= ({route,navigation}) => {
 
     const rules = {
       firstname: {
-        required: 'Email is required',
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          message: 'Invalid email address',
-        },
+        required: 'First name is required',
+        
       },
-      password: {
-        required: 'Password is required',
-        minLength: {
-          value: 8,
-          message: 'Password must be at least 8 characters',
-        },
+      lastname: {
+        required: 'Last name is required',
+        
       },
-      confirm: {
-        required: 'Confirm password is required',
-        validate: value =>
-          value === watch('password') || 'Passwords do not match',
-      },
+
     };
 
     const firstname = useWatch({control, name:"firstname"})
     const lastname = useWatch({control, name:"lastname"})
+    const [date, setDate] = useState(new Date())
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate || date;
+      setShow(Platform.OS === 'ios');
+      setDate(currentDate);
+    };
+
+
+    const showMode = currentMode => {
+      setShow(true);
+      setMode(currentMode);
+    };
+
+    const showDatepicker = () => {
+      showMode('date');
+    };
     //const sex = useWatch({control, name:"sex"})
     const center = useWatch({control, name:"center"})
     const dob = useWatch({control, name:"dob"})
@@ -101,7 +109,7 @@ const handleSelectedCenter = (centerSelected) => {
         <View style={styles.pageHeaderContainer}>
          <PageHeader onBack={goBack} pageTitle="Let's Meet You" />
        </View>
-
+<View>
        <View style={styles.inputParentContainer}>
 
         <View style={styles.formLabelContainer}>
@@ -112,8 +120,8 @@ const handleSelectedCenter = (centerSelected) => {
           <Input
           control={control}
           name="firstname"
-          rules={rules.phoneNumber}
-          error={errors.phoneNumber}
+          rules={rules.firstname}
+          error={errors.firstname}
           keyboardType="name-phone-pad"
           placeholder="Please enter your first name"
           autoCapitalize="none"/>
@@ -130,9 +138,9 @@ const handleSelectedCenter = (centerSelected) => {
           <View style={styles.textInputContainer}>
           <Input
           control={control}
-          name="firstname"
-          rules={rules.phoneNumber}
-          error={errors.phoneNumber}
+          name="lastname"
+          rules={rules.lastname}
+          error={errors.lastname}
           keyboardType="name-phone-pad"
           placeholder="Please enter your last name"
           autoCapitalize="none"/>
@@ -150,9 +158,9 @@ const handleSelectedCenter = (centerSelected) => {
           <View style={styles.genderInputContainer}>
           <Input
           control={control}
-          name="firstname"
-          rules={rules.phoneNumber}
-          error={errors.phoneNumber}
+          name="sex"
+          rules={rules.sex}
+          error={errors.sex}
           keyboardType="name-pad"
           placeholder="Click to choose"
           autoCapitalize="none"
@@ -184,9 +192,9 @@ const handleSelectedCenter = (centerSelected) => {
   <View style={styles.genderInputContainer}>
   <Input
   control={control}
-  name="firstname"
-  rules={rules.phoneNumber}
-  error={errors.phoneNumber}
+  name="nccCenter"
+  rules={rules.nccCenter}
+  error={errors.nccCenter}
  // keyboardType="name-pad"
   placeholder="Click to choose"
   autoCapitalize="none"/>
@@ -208,8 +216,8 @@ const handleSelectedCenter = (centerSelected) => {
 </View>
       </View>
 
-      <View style={styles.inputParentContainer}>
 
+ <View style={styles.inputParentContainer}>
 <View style={styles.formLabelContainer}>
   <Text style={styles.label}>Date of Birth</Text>
 </View>
@@ -217,38 +225,35 @@ const handleSelectedCenter = (centerSelected) => {
   <View style={styles.textInputContainer}>
   <Input
   control={control}
-  name="firstname"
-  rules={rules.phoneNumber}
-  error={errors.phoneNumber}
+  name="dob"
+  rules={rules.dob}
+  error={errors.dob}
+  value={date}
  // keyboardType="name-phone-pad"
-  placeholder="click calendar icon"
+  placeholder="click the calendar icon"
   autoCapitalize="none"/>
+  <TouchableOpacity onPress={showDatepicker} style={styles.calendarContainer}>
+  <Image source={require("../assets/calendar.png")} />
+  </TouchableOpacity>
+  {show &&  <DatePicker
+        style={styles.datePicker}
+        date={date}
+        mode={mode}
+        value={date}
+        display="default"
+        placeholder="Select date"
+        dateformat="YYYY-MM-DD"
+        onChange={onChange}
+        show="false"
+      />
+      
+      }
+ 
   
   </View>
 </View>
 </View>
 
-
-
-       
-       <Controller
-       control={control}
-       name="ncccenter"
-       defaulValue=""
-       rules={{required:true}}
-       render={({onChange,onBlur,value,name}) => {
-        <Picker
-        onValuechange = {(itemValue) => onChange(itemValue)}
-        onBlue={onBlur}
-        selectedValue={value}
-        name={name}
-       >
-         {sex.filter(item => typeof item === "string").map((item,index,) => (
-          <Picker.Item key={index} label={item} value={item} style={styles.pickerItem}/>
-      ))}
-        </Picker>
-       }}
-       />
 <Button
           mode="contained"
           onPress={handleSubmit(handleRegistration)}
@@ -261,8 +266,10 @@ const handleSelectedCenter = (centerSelected) => {
         >
          Proceed
         </Button>
-
+        </View>
+        <View style={styles.footerContainer}>
         <PageFooter/>
+          </View>
     </ScrollView>
    </SafeAreaView>
  )
@@ -280,6 +287,9 @@ const styles = StyleSheet.create({
     padding: 5,
      gap:10,
   },
+  pageHeaderContainer:{
+    marginBottom:20
+  },
   inputParentContainer:{
     display:"flex",
     flexDirection:"column",
@@ -295,6 +305,7 @@ const styles = StyleSheet.create({
     //borderWidth:1
 
   },
+  
   formLabelContainer:{
     width: 104,
     height: 28,
@@ -317,7 +328,6 @@ const styles = StyleSheet.create({
     //letterSpacing: 1,
     textAlign: 'left',
     
-
 
   },
   inputContainer:{
@@ -356,7 +366,7 @@ picker: {
 logoContainer:{
   height:58,
   width:34,
-  right:'10%',
+  right:'40%',
   marginTop:"4%",
   //paddingTop:10,
   //paddingRight:58,
@@ -380,11 +390,33 @@ logo:{
 
 
   },
-  
-  pageHeaderContainer:{
-    marginBottom:20
-  },
+  calendarContainer:{
+    width: 290,
+    height: 38,
+    gap: 167,
+    //borderWidth:1,
+    marginBottom:78,
+    top:-24
 
+  },
+  
+  button:{
+    marginTop:60,
+    width:290,
+    height:'40',
+    padding:'10',
+    gap:10,
+    borderRadius:10,
+    left:32,
+  },
+  datePicker: {
+    width: 200,
+  },
+footerContainer:{
+  // marginTop:87,
+  // marginBottom:20
+  marginVertical:30
+}
  
 });
 export default LetsMeet;

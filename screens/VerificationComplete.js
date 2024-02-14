@@ -118,14 +118,10 @@ const styles = StyleSheet.create({
     //left:32,
   },
 
-  // footerContainer:{
-  //   width:247,
-  //   height:50,
-  //   top: 728,
-  //   left: 86,
-  //   padding: 10,
-  //   gap: 10
+  footerContainer:{
+    marginTop:87,
+    marginBottom:20
 
-  // }
+  }
 })
 export default VerificationComplete
