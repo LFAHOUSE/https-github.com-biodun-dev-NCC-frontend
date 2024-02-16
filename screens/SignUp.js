@@ -93,7 +93,7 @@ const SignUp = ({props, navigation }) => {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} >
 
-       <View style={styles.pageHeaderContainer}>
+       <View>
        <PageHeader pageTitle="Registration" onBack={goBack}/>
         </View>
 
@@ -192,55 +192,62 @@ const styles = StyleSheet.create({
     },
     container: {
       flexGrow: 1,
-      justifyContent: "space-between",
-      padding: 5,
-     //  gap:10,
+        justifyContent: "space-between",
+        padding:"2%",
+         gap:20,
+        flexDirection:"column"
     },
-    logoContainer: {
-      alignItems: "center",
-      flexDirection: "row",
-      alignContent: "center",
-      justifyContent: "flex-end", // Center the logo and text horizontally
-      width: "100%", // Ensure it takes the full width to center the content
-    },
-    logo: {
-      width: 70,
-      height: 70,
-    },
+    
+  
     pageHeaderContainer:{
       marginBottom:20
     },
-    logoText: {
-      width: 65,
-      height: 75,
-      marginTop: 20,
-    },
     signText: {
-      width:94,
-      height:38,
+      display:'flex',
+      flexDirection:"row",
+      width:"29.5%",
+      height:"40.5%",
       paddingTop:10,
       paddingRight:10,
       paddingBottom:0,
       paddingLeft:0,
       gap:10,
+     // borderWidth:1,
       fontSize: 20,
       fontWeight: "bold",
       
     },
+    signUpContainer: {
+      display:"flex",
+      flexDirection:'column',
+      width:"90%",
+      height:"15%",
+      left:"8%",
+
+      //top:'144',
+      //borderWidth:1
+      
+    },
     signupText: {
-      width:291,
-      height:'34',
+      display:"flex",
+      flexDirection:'row',
+      width:"100%",
+      height:'64%',
       paddingTop:10,
       paddingRight:10,
       paddingBottom:10,
       paddingLeft:0,
       gap:10,
+      //borderWidth:1
     },
     inputParentContainer:{
-      width:'290',
-      height:'102',
+      display:"flex",
+      flexDirection:"column",
+      width:'89.5%',
+      height:'15.5%',
       top:'237',
-      left:32
+      left:"8%",
+      //borderWidth:1
 
     },
     inputContainer: {
@@ -248,12 +255,14 @@ const styles = StyleSheet.create({
       flexDirection:"row",
       alignItems: 'center',
       justifyContent: 'space-around',
-      width:290,
-      height:40,
+      width:"95%",
+      height:"40%",
       borderRadius:7,
       borderWidth:1,
       background: "#CAC3C3",
-      borderColor:"#CAC3C3"
+      borderColor:"#CAC3C3",
+      // borderWidth:1,
+      // borderColor:"red"
     },
     inputAccessory:{
       display:"flex",
@@ -261,29 +270,30 @@ const styles = StyleSheet.create({
       alignItems:"center",
       justifyContent:'space-between',
       right:10,
-      width:101,
-      height:36
+      width:"35%",
+      height:"100%",
+     // borderWidth:1
     },
     phoneNumberIcon:{
-      width: 35,
+      width: 30,
       height: 36,
-      paddingTop: '12',
-      paddingRight: '10',
-      paddingBottom: '12',
-      paddingLeft: '10',
+      paddingTop: '1.3%',
+      paddingRight: '1%',
+      paddingBottom: '1.2%',
+      paddingLeft: '1%',
       gap: 10
 
     },
 
     phoneIconLogo:{
-        width:'15',
+        width:"100%",
         
         
     },
 
     arrowDownContainer:{
-      width: 29,
-      height:36,
+      width: "60%",
+      height:"90%",
       padding: 10,
       gap: 10
 
@@ -294,26 +304,28 @@ const styles = StyleSheet.create({
       height:16
     },
     textInputContainer:{
-      width: 124,
-      height: 43,
-      paddingTop: '10', 
-      paddingRight:'10',
-      paddingBottom: '10', 
-      paddingLeft:'26',
+      width: "50%",
+      height: "100%",
+      paddingTop: '1%', 
+      paddingRight:'1%',
+      paddingBottom: '1%', 
+      paddingLeft:'2.6%',
       borderRadius: 7,
       gap: 10,
       fontSize:16,
-      right:24
+      right:24,
+      //borderWidth:1
 
     },
 
     input: {
       width:'74',
-      height:'15',
+      height:'1.5%',
       paddingTop:5,
-      paddingRight:'10',
-      paddingBottom:'10',
-      paddingLeft:'26',
+      paddingRight:'1%',
+      paddingBottom:'1%',
+      paddingLeft:'2.6%',
+      borderWidth:1
     
    },
     inputError:{
@@ -326,22 +338,23 @@ const styles = StyleSheet.create({
     marginRight:5,
     },
     inputLabel: {
-      width:'95',
-      height:'35', 
-      paddingTop: 10,
-      paddingRight:10,
-      paddingBottom:10,
-      paddingLeft:0,
+      width:'50%',
+      height:'40%', 
+      paddingTop: "1%",
+      paddingRight:"1%",
+      paddingBottom:"1%",
+      paddingLeft:"0%",
       gap:10,
       fontSize: 16,
       color: "#000",
       marginBottom: 5,
+     // borderWidth:1
     },
     button:{
-      marginTop:40,
-      width:290,
-      height:'40',
-      padding:'10',
+      marginTop:"10%",
+      width:"85%",
+      height:'8%',
+      padding:'1%',
       gap:10,
       borderRadius:10,
       left:32,
@@ -369,88 +382,80 @@ const styles = StyleSheet.create({
       gap: 10
       
     },
-    countryCodeText: {
-      width:'30',
-      height:'30',
-      fontSize: 16,
-      color: "#000",
-    },
+    // countryCodeText: {
+    //   width:'30',
+    //   height:'30',
+    //   fontSize: 16,
+    //   color: "#000",
+    // },
    
-      
-    signUpContainer: {
-      width:187,
-      height:86,
-      left:32,
-      //top:'144',
-      
-    },
-    signUpText: {
-      color: "#000",
-      marginVertical: 10,
-      fontSize: 13,
-    },
+
     account:{
-      width:187,
-      height:86,
+      width:"75%",
+      height:"15%",
       alignSelf:'center',
       gap:5,
-      marginTop:49
+      //marginTop:49,
+      //borderWidth:1,
+      //left:"5%",
+      alignSelf:"center"
     },
     sign: {
+     // width:78,
       color: "#6EB1E1",
       marginLeft:20,
       fontSize: 15,
     },
     visitorTextContainer:{
-      width: 83,
-      height:18,
-      paddingTop: '17',
-      paddingRight: '10',
-      paddingBottom: '10',
-      paddingLeft: '10',
+      display:'flex',
+      flexDirection:"row",
+      width: "40%",
+      height:"27%",
+      paddingTop: '1%',
+      paddingRight: '1%',
+      paddingBottom: '2%',
+      paddingLeft: '0%',
       gap: 10,
+      //borderWidth:1,
+      alignSelf:"center"
       
       
     },
     visitorText: {
-      width: 100,
-      height: 18,
+      width: "100%",
+      height: "120%",
       color: "#000",
       fontWeight:'800',
       fontSize:13,
       fontFamily:"Roboto"
-
+    
       //marginVertical: 10,
     },
     member:{
-      width:187,
-      height:29,
-      paddingTop:'0',
-      paddingRight:'10',
-      paddingBottom:'1',
-      paddingLeft:'0'  
+      width:"100%",
+      height:"30%",
+      paddingTop:0,
+      paddingRight:10,
+      paddingBottom:1,
+      paddingLeft:0,
+     //borderWidth:1,
+     alignSelf:"center"
     },
     memberText:{
-      width:209,
-      height:'28'
+      display:'flex',
+      flexDirection:"row",
+      width:"100%",
+      height:28,
+      //alignSelf:"center",
+      left:"60%"
     },
-
-    picker: {
-      width: '80%',
-      height: 40,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      marginBottom: 10,
-    },
+    
     code: {
       fontSize: 18,
       marginBottom: 10,
     },
-    footerContainer:{
-      marginTop:87,
-    marginBottom:20
-    }
+   
+    
   });
   
 
