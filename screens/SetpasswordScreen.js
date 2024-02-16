@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     marginBottom: 5,
-    borderWidth:1
+   // borderWidth:1
   },
 
   inputContainer: {
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width:"95%",
-    height:"40%",
+    height:"50%",
     borderRadius:7,
     borderWidth:1,
     background: "#CAC3C3",
