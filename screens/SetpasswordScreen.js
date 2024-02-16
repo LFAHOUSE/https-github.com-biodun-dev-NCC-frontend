@@ -24,6 +24,7 @@ const Setpasssword = ({route,navigation}) => {
  const {phoneNumber,email,otp} = route.params
 console.log("PhoneNumber in password: "+ phoneNumber)
  const [loading,setLoading] = useState(false)
+ const [statusText,setStatusText]= useState("")
 
  const {
   watch,
@@ -63,7 +64,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
   
     try {
       const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/verify-otp-set-password", data);
-      console.log(response.status)
+      setStatusText(response.data.message)
       if (response.status === 200 || response.status ===201) {
         // return the response data
         Alert.alert("OK", response.data.message)
@@ -75,11 +76,12 @@ console.log("PhoneNumber in password: "+ phoneNumber)
       } 
     } catch (error) {
       // handle the error
+      setStatusText(error.response.data.message)
       Alert.alert("Error", error.response.data.message)
       setLoading(false)
       
     }
-    // Handle the registration logic here
+    // TO be removed in Production
     navigation.navigate("VerificationComplete");
   };
   

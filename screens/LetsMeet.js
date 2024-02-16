@@ -16,12 +16,10 @@ import {Picker} from '@react-native-picker/picker'
 import { Button } from "react-native-paper"
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
-import { validateName } from "../utils/utils";
 import Input from "./components/Input";
 import { useForm,useWatch ,Controller} from "react-hook-form";
-import DatePicker from '@react-native-community/datetimepicker'
-
-
+import DateTimePicker from "@react-native-community/datetimepicker";
+import moment from 'moment'
 
 
 
@@ -30,7 +28,16 @@ const LetsMeet= ({route,navigation}) => {
     const goBack = () => {
         navigation.goBack()
     }
-
+    const [nccCenter,setNccCentre] = useState(["Lekki","Ajah","Ikeja","Shomolu","Ilorin","Ibadan","Oworonshoki","Port-Harcourt","Jos","Abuja"])
+    const [sex,setSex] = useState(["Male","Female"])
+    const [selectedSex,setSelectedSex] = useState("")
+    const [selectedCenter,setSelectedCenter] = useState("")
+    const [dateSelected,setDatSelected] = useState("")
+    const [date, setDate] = useState(new Date())
+    const [show, setShow] = useState(false);
+    const [statusText,setStatusText]= useState("")
+    
+  
     const {
       control,
       handleSubmit,
@@ -52,40 +59,61 @@ const LetsMeet= ({route,navigation}) => {
 
     const firstname = useWatch({control, name:"firstname"})
     const lastname = useWatch({control, name:"lastname"})
-    const [date, setDate] = useState(new Date())
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
-
-      const currentDate = selectedDate || date;
-      setShow(Platform.OS === 'ios');
-      setDate(currentDate);
-    };
-
-console.log("date: "+ date)
-    const showMode = currentMode => {
+      console.log("selectedDate: " + selectedDate)
+    if (selectedDate) {
+      setDate(selectedDate)
+        const formattedDate = moment (selectedDate).format('DD-MM-YYYY');
+        setDatSelected(formattedDate)
+        setShow(false)
+      } else {
+        setShow(false);
+      }
+    }
+  
+    const showMode = () => {
       setShow(true);
-      setMode(currentMode);
     };
 
-    const showDatepicker = () => {
-      showMode('date');
-    };
-    //const sex = useWatch({control, name:"sex"})
-    const center = useWatch({control, name:"center"})
-    const dob = useWatch({control, name:"dob"})
   
-  const [nccCenter,setNccCentre] = useState(["Lekki","Ajah","Ikeja","Shomolu","Ilorin","Ibadan","Oworonshoki","Port-Harcourt","Jos","Abuja"])
-  const [sex,setSex] = useState(["Male","Female"])
-  const [selectedSex,setSelectedSex] = useState("")
-  const [selectedCenter,setSelectedCenter] = useState("")
+ 
+    const handleRegistration =  async () => {
+      console.log("PhoneNumber: " + phoneNumber)
+      setLoading(true)
   
+      const data = { 
+        phoneNumber:phoneNumber,
+        firstname: firstname,
+        lastName: lastname, 
+        nccCentre: selectedCenter,
+        sex:selectedSex,
+        dob:dateSelected
 
-  const handleRegistration = () => {
-    // Handle the registration logic here
-    navigation.navigate("Dashboard");
-  }
+       };
+    
+      try {
+        const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration", data);
+        setStatusText(response.data.message)
+        if (response.status === 200 || response.status ===201) {
+          // return the response data
+          Alert.alert("OK", response.data.message)
+          navigation.navigate("Dashboard",{
+            phoneNumber:phoneNumber
+          });
+          setLoading(false)
+        
+        } 
+      } catch (error) {
+        // handle the error
+        Alert.alert("Error", error.response.data.message)
+        setStatusText(error.response.data.message)
+        setLoading(false)
+        
+      }
+      //To be removed in Production
+      navigation.navigate("Dashboard");
+    };
 
   
 
@@ -148,12 +176,12 @@ console.log("date: "+ date)
           <TextInput
           style={styles.input}
           control={control}
-          name="sex"
+          name="gender"
           onChangeText={setSex}
           error={errors.sex}
           value={selectedSex}
           rules={rules.sex}
-          keyboardType="name-pad"
+          keyboardType="name-phone-pad"
           placeholder="Click to choose"
           autoCapitalize="none"
           />
@@ -178,20 +206,20 @@ console.log("date: "+ date)
        <View style={styles.inputParentContainer}>
 
 <View style={styles.formLabelContainer}>
-  <Text style={styles.label}>NCC satelite center</Text>
+  <Text style={styles.label}>NCC center</Text>
 </View>
 <View style={styles.inputContainer}>
   <View style={styles.genderInputContainer}>
   <TextInput
   style={styles.input}
   control={control}
-  name="nccCenter"
+  name="nccsateliteCenter"
   onChangeText={setNccCentre}
   value={selectedCenter}
   rules={rules.nccCenter}
   error={errors.nccCenter}
  // keyboardType="name-pad"
-  placeholder="Click to choose"
+  placeholder="choose your satelite center"
   autoCapitalize="none"/>
   <TouchableOpacity style={styles.logoContainer}>
   <Image source={require("../assets/arrow-down.png")} style={styles.logo}/>
@@ -218,6 +246,7 @@ console.log("date: "+ date)
 </View>
 <View style={styles.inputContainer}>
   <View style={styles.textInputContainer}>
+
   <TextInput
   style={styles.input}
   control={control}
@@ -225,22 +254,22 @@ console.log("date: "+ date)
   rules={rules.dob}
   error={errors.dob}
   onChangeText={setDate}
-  value={date}
+  value={dateSelected}
   placeholder="click the calendar icon"
   autoCapitalize="none"/>
-  <TouchableOpacity onPress={showDatepicker} style={styles.calendarContainer}>
+
+  <TouchableOpacity onPress={showMode} style={styles.calendarContainer}>
   <Image source={require("../assets/calendar.png")} />
   </TouchableOpacity>
-  {show &&  <DatePicker
+  {show &&  <DateTimePicker
         style={styles.datePicker}
-        date={date}
-        mode={mode}
+        mode='date'
         value={date}
-        display="default"
-        placeholder="Select date"
-        dateformat="YYYY-MM-DD"
+        display={Platform.OS === 'ios' ? 'spinner' : 'inline'}
+        is24Hour={true}
+        dateformat="DD-MM-YYYY"
         onChange={onChange}
-        show="false"
+     
       />
       
       }

@@ -53,6 +53,7 @@ const Verify = ({ route, navigation }) => {
 
   
   const [loading,setLoading] = useState(false)
+  const [statusText,setStatusText] = useState("")
  const goBack = () => {
   navigation.goBack()
  }
@@ -78,12 +79,14 @@ const requestOtp = async () => {
     console.log(response.status)
     if (response.status === 200) {
       // return the response data
+      setStatusText(response.data.message)
       Alert.alert("OK", response.data.message)
       setLoading(false)
     
     } 
   } catch (error) {
     // handle the error
+    setStatusText(error.response.data.message)
     Alert.alert("Error", error.response.data.message)
     setLoading(false)
     

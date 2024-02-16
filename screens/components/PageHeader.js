@@ -45,70 +45,72 @@ import {
 
   const styles = StyleSheet.create({
     pageHeader:{
-      width:360,
-      height:100,
+      width:"100%",
+      height:"100%",
       gap:10,
       
     },
     headerContainer:{
       display:'flex',
       flexDirection: 'row',
-      padding: 5,
-      width:318,
-      height:71 ,
+      padding: "2%",
+      width:"100%",
+      height:"97%" ,
       gap:107,
-      //gap:80
+      //borderWidth:1
      
     },
     titleText:{
       fontSize: 18,
-      fontWeight: '500',
+      fontWeight: '800',
       fontFamily:"Roboto",
       color: '#000',
-      width:178,
-      height:31
+      width:"160%",
+      height:"120%",
+      //borderWidth:1,
     },
 
-    headerContent:{
-      display:"flex",
-      flexDirection:"column"
-    },
     arrowAndTitle:{
       display:"flex",
       flexDirection:'column',
-      width:108,
-      height:71,
-      gap:16
+      width:"30%",
+      height:"100%",
+      gap:16,
+      //borderWidth:1
     },
     logoAndText:{
       flex:1,
       flexDirection:"row",
-      width:103,
-      height:71,
-      right:10
+      width:"100%",
+      height:"103%",
+      right:10,
+      //borderWidth:1
     },
     logoContainer:{
-      width:60,
-      height:71,
+      width:"40%",
+      height:"90%",
       paddingTop: 24,
       paddingRight: 10,
       paddingBottom: 0,
       paddingLeft: 10,
       gap:10,
+      //borderWidth:1,
+     left:"1%",
      // left:215
      marginTop:5
     },
     textContainer:{
-      paddingTop: 23,
+      paddingTop: "20%",
       paddingRight: 10,
       paddingBottom:10,
       paddingLeft: 10,
       gap:10,
-      maxWidth:61,
-      maxHeight:69,
-      top:'2px',
+      width:"65%",
+      maxHeight:"100%",
+      top:'1%',
+      //borderWidth:1,
       //left:257,
-      right:20
+        right:"10%"
     },
     text:{
       width:90.05,

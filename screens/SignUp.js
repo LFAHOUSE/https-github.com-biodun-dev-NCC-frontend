@@ -48,9 +48,11 @@ const SignUp = ({props, navigation }) => {
      const [countryCode, setCountryCode] = useState('+234'); 
      const [showPickerModal,setShowPickerModal] = useState(false)
      const [loading,setLoading] = useState(false)
+     const [statusText,setStatusText] = useState("")
      const [buttonText, setButtonText] = useState("Sign-up")
+
     const goBack = () => {
-      navigation.goBck()
+      navigation.goBack()
       }
 
       const openCodePicker = () => {
@@ -65,24 +67,24 @@ const SignUp = ({props, navigation }) => {
             const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/initiate-registration', {
               phoneNumber: countryCode + phoneNumber,
             });
+            setStatusText(response.data.message)
             if (response.status === 201) {
-              setLoading(true)
+              setLoading(false)
               setButtonText("Next")
               Alert.alert("OK",response.data.message);
                navigation.navigate("Verify",{phoneNumber:phoneNumber,countryCode:countryCode})
             }
           } catch (error) {
            setLoading(false)
+           setStatusText(error.response.data.message)
             console.log(error)
              setButtonText("Try Again")
             Alert.alert('Sign up failed', error.response.data.message);
           }
-        
+        // To be removed in production
           setLoading(false);
           navigation.navigate("Verify",{phoneNumber: phoneNumber,countryCode:countryCode})
-
-         
-        };
+          };
       
   // Determine if the phone number is 11 digits for enabling the button
   const isButtonActive = phoneNumber?.length === 10 || loading
