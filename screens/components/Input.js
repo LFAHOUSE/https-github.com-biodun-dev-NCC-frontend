@@ -65,13 +65,14 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:"row",
     //alignItems:"center",
-    right:"175%",
+    right:"80%",
     fontSize: 14,
     color: '#f00',
-    marginTop: 5,
+
     width:200,
     height: 27,
     gap: 111,
+    top:20
     //borderWidth:1,
 
   },

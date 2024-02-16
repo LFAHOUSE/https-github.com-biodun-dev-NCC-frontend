@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width:"95%",
-    height:"40%",
+    height:"50%",
     borderRadius:7,
     borderWidth:1,
     background: "#CAC3C3",

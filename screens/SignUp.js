@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'space-around',
       width:"95%",
-      height:"40%",
+      height:"50%",
       borderRadius:7,
       borderWidth:1,
       background: "#CAC3C3",
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     },
     phoneNumberIcon:{
       width: 30,
-      height: 36,
+      height: "85%",
       paddingTop: '1.3%',
       paddingRight: '1%',
       paddingBottom: '1.2%',
@@ -368,8 +368,8 @@ const styles = StyleSheet.create({
    },
 
       phoneNumberContainer: {
-        width:'101',
-        height:'36',
+        width:'80%',
+        height:'80%',
         flexDirection: "row",
         alignItems: "center",
         // marginBottom: 10,
@@ -383,12 +383,12 @@ const styles = StyleSheet.create({
       gap: 10
       
     },
-    // countryCodeText: {
-    //   width:'30',
-    //   height:'30',
-    //   fontSize: 16,
-    //   color: "#000",
-    // },
+    countryCodeText: {
+      width:'100%',
+      height:'70%',
+      fontSize: 16,
+      color: "#000",
+    },
    
 
     account:{

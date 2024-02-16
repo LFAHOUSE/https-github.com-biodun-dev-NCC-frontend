@@ -92,7 +92,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
   <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={'always'}>
     
     <View style={styles.pageHeaderContainer}>
-    <PageHeader pageTitle="Let us verify you" onBack={goBack}/>
+    <PageHeader pageTitle="Set password" onBack={goBack}/>
     </View>
    
     <View style={styles.inputParentContainer}>
@@ -186,9 +186,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    //justifyContent: "space-between",
-    padding: 5,
-    // gap:30,
+        justifyContent: "space-between",
+        padding:"2%",
+         gap:20,
+        flexDirection:"column"
   },
   arrowDown:{
     marginBottom:2
@@ -243,84 +244,51 @@ const styles = StyleSheet.create({
   labelContainer:{
     display:"flex",
     flexDirection:"row",
-    left:"10%",
-    width: '105',
-    height: '28',
+    left:"8%",
+    width: '60%',
+    height: '38%',
     padding: '10',
     gap: 10,
+    //borderWidth:1
     
 
   },
   inputLabel: {
-    width:'85',
-    height:'15',
+    width:'100%',
+    height:'100%',
     fontSize: 16,
     color: "#000",
     marginBottom: 5,
+    borderWidth:1
   },
 
   inputContainer: {
     display:"flex",
     flexDirection:"row",
-    alignSelf: 'center',
+    alignItems: 'center',
     justifyContent: 'space-around',
-    width:290,
-    height:40,
+    width:"95%",
+    height:"40%",
     borderRadius:7,
     borderWidth:1,
     background: "#CAC3C3",
-    borderColor:"#CAC3C3"
+    borderColor:"#CAC3C3",
+    borderWidth:1,
+    left:"8%"
   },
-  emailAddressInput:{
-   
-      display:"flex",
-      flexDirection:"row",
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      width:189,
-      height:15,
-      borderRadius:7,
-      borderWidth:1,
-      background: "#CAC3C3",
-      borderColor:"#CAC3C3"
-  },
-  inputAccessory:{
-    display:"flex",
-    flexDirection:"row",
-    alignItems:"center",
-    //justifyContent:'space-between',
-    right:10,
-    width:101,
-    height:36
-  },
-  phoneNumberIcon:{
-    width: 35,
-    height: 36,
-    paddingTop: '12',
-    paddingRight: '10',
-    paddingBottom: '12',
-    paddingLeft: '10',
-    gap: 10
+ 
 
-  },
-
-  phoneIconLogo:{
-      width:'15',
-      
-      
-  },
-
-  textInputContainer:{
-    width: 124,
-    height: 43,
-    paddingTop: '10', 
-    paddingRight:'10',
-    paddingBottom: '10', 
-    paddingLeft:'26',
-    borderRadius: 7,
-    gap: 10,
-    fontSize:16
-  },
+  // textInputContainer:{
+  //   width: 124,
+  //   height: 43,
+  //   paddingTop: '10', 
+  //   paddingRight:'10',
+  //   paddingBottom: '10', 
+  //   paddingLeft:'26',
+  //   borderRadius: 7,
+  //   gap: 10,
+  //   fontSize:16
+  // },
 
   
   input: {
