@@ -17,13 +17,14 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios.js";
-import { useForm,useWatch } from "react-hook-form";
+import {useForm,Controller,useWatch} from "react-hook-form"
 import Input from "./components/Input.js";
 
 
 
 
 const SignUp = ({props, navigation }) => {
+  // const {control,handleSubmit,errors} = useForm()
 
   const {
     control,
@@ -167,15 +168,15 @@ const SignUp = ({props, navigation }) => {
           </TouchableOpacity>
           </View>
           <View style={styles.member}>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <TouchableOpacity>
             <Text style={styles.memberText}>
-              I am a member, Login <Text style={styles.sign}>here</Text>
+              I am a member, Login <Text style={styles.sign} onPress={()=>navigation.navigate("Login")}>here</Text>
             </Text>
           </TouchableOpacity>
           </View>
 
         </View>
-        <View style={styles.footerContainer}>
+        <View>
         <PageFooter/>
         </View>
       

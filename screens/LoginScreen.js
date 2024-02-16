@@ -451,7 +451,7 @@ inputStatusContainer:{
 button:{
   alignSelf:"center",
   marginTop:"9%",
-  width:"85%",
+  width:"80%",
       height:'6%',
   padding:'1%',
   gap:10,

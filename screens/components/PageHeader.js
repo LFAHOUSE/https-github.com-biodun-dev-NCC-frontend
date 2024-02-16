@@ -66,7 +66,7 @@ import {
       fontFamily:"Roboto",
       color: '#000',
       width:"160%",
-      height:"120%",
+      height:"180%",
       //borderWidth:1,
     },
 

@@ -207,7 +207,7 @@ const handleRegistration = () => {
         >
           Next
         </Button>
-          <View style={styles.footerContainer}>
+          <View>
           <PageFooter/>
           </View>
      
@@ -225,8 +225,9 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: "space-between",
-    padding: 5,
-    // gap:30,
+    padding:"2%",
+     gap:20,
+    flexDirection:"column"
   },
   arrowDown:{
     marginBottom:2
@@ -263,74 +264,40 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   inputParentContainer:{
-    width: 312,
-    height: 108,
-    //top: 111,
-    left: 24,
-    paddingTop: '0', 
-    paddingRight:'0',
-    paddingBottom: '10', 
-    paddingLeft:'0',
-    gap: 10,
-    marginBottom:20
+    display:"flex",
+    flexDirection:"column",
+    width:'89.5%',
+    height:'15.5%',
+    top:'237',
+    left:"8%",
+    gap:8
   } ,
 
-  // inputParentContainerContent:{
-  //   width: '318,
-  //   height: 108
-
-  // },
 
   labelContainer:{
-    width: '105',
-    height: '28',
+    display:"flex",
+    flexDirection:"row",
+    width: '50%',
+    height: '30%',
     padding: '10',
-    gap: 10
+    gap: 10,
+    //borderWidth:1
 
   },
-  inputLabel: {
-    width:'85',
-    height:'15',
-    fontSize: 16,
-    color: "#000",
-    marginBottom: 5,
-  },
-  // inputContainer: {
-  //   alignSelf: "stretch",
-  //   flex:1,
-  //   flexDirection:'row',
-  //   alignItems:'center',
-  //   justifyContent:'flex-start',
-  //   height:70,
-  //   borderWidth:1,
-  //   borderRadius: 10,
-  //   borderColor: "#ddd",
-  // },
-
+  
   inputContainer: {
     display:"flex",
     flexDirection:"row",
     alignItems: 'center',
     justifyContent: 'space-around',
-    width:290,
-    height:40,
+    width:"95%",
+    height:"40%",
     borderRadius:7,
     borderWidth:1,
     background: "#CAC3C3",
-    borderColor:"#CAC3C3"
-  },
-  emailAddressInput:{
-   
-      display:"flex",
-      flexDirection:"row",
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      width:189,
-      height:15,
-      borderRadius:7,
-      borderWidth:1,
-      background: "#CAC3C3",
-      borderColor:"#CAC3C3"
+    borderColor:"#CAC3C3",
+    borderWidth:1,
+    // borderColor:"red"
   },
   inputAccessory:{
     display:"flex",
@@ -338,8 +305,8 @@ const styles = StyleSheet.create({
     alignItems:"center",
     justifyContent:'space-between',
     right:10,
-    width:101,
-    height:36
+    width:"35%",
+    height:"100%",
   },
   phoneNumberIcon:{
     width: 35,
@@ -373,17 +340,7 @@ const styles = StyleSheet.create({
   },
 
   
-  input: {
-     borderColor: "#ddd",
-    flex:1,
-    backgroundColor: "transparent",
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    fontSize: 16,
-    height: 60,
-    padding:10,
-    borderColor:'#fff',
-  },
+  
   inputError:{
     borderColor:"red"
   },
@@ -393,11 +350,7 @@ const styles = StyleSheet.create({
   marginLeft: 10,
   marginRight:5,
   },
-  emailAddressContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    // marginBottom: 10,
-  },
+
   countryCodeSelector: {
    
     width:'37',
@@ -414,45 +367,17 @@ const styles = StyleSheet.create({
     color: "#000",
     height: 30,
   },
-  emailAddressInput: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-
-    fontSize: 16,
-    borderColor: "transparent",
-    height: 60,
-    borderTopRightRadius: 7,
-    borderBottomRightRadius: 7,
-  },
+ 
   button:{
-    marginTop:20,
-    width:290,
-    height:'40',
-    padding:'10',
+    marginTop:"10%",
+    width:"85%",
+    height:'8%',
+    padding:'1%',
     gap:10,
     borderRadius:10,
     left:32,
   },
-  signUpContainer: {
-    marginBottom: 80,
-    alignItems: "center",
-  },
-  signUpText: {
-    color: "#000",
-    marginVertical: 10,
-    fontSize: 13,
-  },
-  sign: {
-    color: "#0000FF",
-    marginVertical: 10,
-    fontSize: 15,
-  },
-  visitorText: {
-    color: "#000",
-    marginVertical: 10,
-  },
+  
   otp: {
     color: "#06447C",
     fontSize: 16,
