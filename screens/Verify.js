@@ -106,7 +106,7 @@ const handleRegistration = () => {
  
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={'always'}>
+      <ScrollView contentContainerStyle={styles.container}>
         
         <View style={styles.pageHeaderContainer}>
         <PageHeader pageTitle="Let us verify you" onBack={goBack}/>

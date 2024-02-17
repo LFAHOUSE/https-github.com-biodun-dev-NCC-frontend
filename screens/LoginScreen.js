@@ -177,7 +177,7 @@ render={({ field,fieldState}) => (
 
           <Button
           mode="contained"
-          onPress={handleRegistration}
+          onPress={handleSubmit(handleRegistration)}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },

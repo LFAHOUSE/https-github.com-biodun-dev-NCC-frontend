@@ -122,7 +122,7 @@ const LetsMeet= ({route,navigation}) => {
   const isButtonActive = selectedCenter
  return(
    <SafeAreaView style={styles.safeArea}>
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="always">
+    <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.pageHeaderContainer}>
          <PageHeader onBack={goBack} pageTitle="Let's Meet You" />
        </View>
@@ -186,7 +186,7 @@ const LetsMeet= ({route,navigation}) => {
         control={control}
         rules={rules.sex}
         render={({ field,fieldState}) => (
-        <View style={[styles.inputContainer,{borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
+        <View style={[styles.inputContainer,{borderColor: selectedSex ? 'green' : 'red',borderWidth:1}]}>
           <TouchableOpacity style={styles.genderInputContainer}>
           <TextInput
           style={styles.input}
@@ -227,7 +227,7 @@ const LetsMeet= ({route,navigation}) => {
         control={control}
         rules={rules.nccCenter}
         render={({ field,fieldState}) => (
-<View style={[styles.inputContainer, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
+<View style={[styles.inputContainer, {borderColor: selectedCenter ? 'green' : 'red',borderWidth:1}]}>
   <TouchableOpacity style={styles.genderInputContainer}>
   <TextInput
   style={styles.input}
@@ -265,15 +265,11 @@ const LetsMeet= ({route,navigation}) => {
         control={control}
         rules={rules.phoneNumber}
         render={({ field,fieldState}) => (
-<View style={styles.inputContainer}>
+<View style={[styles.inputContainer,{borderColor: dateSelected ? 'green' : 'red',borderWidth:1}]}>
   <TouchableOpacity style={styles.textInputContainer}>
 
   <TextInput
   style={styles.input}
-  control={control}
-  name="dob"
-  rules={rules.dob}
-  error={errors.dob}
   onChangeText={setDate}
   value={dateSelected}
   placeholder="click the calendar icon"

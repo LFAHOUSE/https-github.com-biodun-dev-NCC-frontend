@@ -89,7 +89,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
    const isButtonActive = password === confirmPassword
  return(
   <SafeAreaView style={styles.safeArea}>
-  <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={'always'}>
+  <ScrollView contentContainerStyle={styles.container} >
     
     <View style={styles.pageHeaderContainer}>
     <PageHeader pageTitle="Set password" onBack={goBack}/>
