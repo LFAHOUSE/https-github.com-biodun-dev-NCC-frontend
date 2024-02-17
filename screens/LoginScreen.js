@@ -21,7 +21,7 @@ import axiosInstance from "../axios_services/axios";
 
 
 const LoginScreen = ({navigation}) => {
-const {control,handleSubmit,errors} = useForm()
+const {control,handleSubmit,errors,onBlur} = useForm()
     const phoneNumber = useWatch({control,name:"phoneNumber"})
     const password = useWatch({control, name:"password"})
 
@@ -58,7 +58,7 @@ const {control,handleSubmit,errors} = useForm()
     navigation.navigate("Verify",{phoneNumber: phoneNumber,countryCode:countryCode})
     };
     // Determine if the phone number is 11 digits for enabling the button
-    const isButtonActive = phoneNumber?.length === 10 && password.length >= 8;
+    const isButtonActive = phoneNumber?.length === 10 && password?.length >= 8;
 
     return(
         <SafeAreaView style={styles.safeArea}>
@@ -110,6 +110,7 @@ const {control,handleSubmit,errors} = useForm()
         name="phoneNumber"
         control={control}
         rules={{ required: 'Phone Number  is required' }}
+        onBlur={onBlur}
         render={({ field,fieldState}) => (
           <TouchableOpacity style={styles.inputFieldContainer}>
             <TextInput

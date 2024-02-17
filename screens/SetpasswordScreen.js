@@ -82,7 +82,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
       
     }
     // TO be removed in Production
-    navigation.navigate("VerificationComplete");
+    navigation.navigate("VerificationComplete",{phoneNumber:phoneNumber});
   };
   
   // Determine if all input fields are touched for enabling the button

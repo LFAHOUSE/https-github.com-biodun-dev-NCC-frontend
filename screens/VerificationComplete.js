@@ -17,7 +17,7 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 
 const VerificationComplete = ({route,navigation}) => {
-
+   const phoneNumber = route.params
   const goBack = () => {
     navigation.goBack()
   }

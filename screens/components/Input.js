@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     right:"80%",
     fontSize: 14,
     color: '#f00',
-
+    borderWidth:1,
     width:200,
     height: 27,
     gap: 111,

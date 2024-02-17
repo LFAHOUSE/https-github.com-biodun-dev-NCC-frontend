@@ -36,6 +36,7 @@ const LetsMeet= ({route,navigation}) => {
     const [date, setDate] = useState(new Date())
     const [show, setShow] = useState(false);
     const [statusText,setStatusText]= useState("")
+    const [loading,setLoading] = useState(false)
     
   
     const {
