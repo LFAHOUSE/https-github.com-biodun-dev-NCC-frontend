@@ -9,6 +9,7 @@ import Verify from './screens/Verify';
 import LetsMeet from './screens/LetsMeet';
 import Setpasssword from './screens/SetpasswordScreen';
 import VerificationComplete from './screens/VerificationComplete';
+import Dashboard from './screens/Dashboard.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,7 @@ export default function App() {
             <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/>
             <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/>
            <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/>
+           <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
           
         </Stack.Navigator>
       </NavigationContainer>

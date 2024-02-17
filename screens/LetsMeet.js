@@ -126,14 +126,14 @@ const LetsMeet= ({route,navigation}) => {
         <View style={styles.pageHeaderContainer}>
          <PageHeader onBack={goBack} pageTitle="Let's Meet You" />
        </View>
-<View>
+
        <View style={styles.inputParentContainer}>
 
         <View style={styles.formLabelContainer}>
           <Text style={styles.label}>First name</Text>
         </View>
         <View style={styles.inputContainer}>
-          <View style={styles.textInputContainer}>
+          <TouchableOpacity style={styles.textInputContainer}>
           <Input
           control={control}
           name="firstname"
@@ -143,7 +143,7 @@ const LetsMeet= ({route,navigation}) => {
           placeholder="Please enter your first name"
           autoCapitalize="none"/>
           
-          </View>
+          </TouchableOpacity>
         </View>
        </View>
        <View style={styles.inputParentContainer}>
@@ -152,7 +152,7 @@ const LetsMeet= ({route,navigation}) => {
           <Text style={styles.label}>Last name</Text>
         </View>
         <View style={styles.inputContainer}>
-          <View style={styles.textInputContainer}>
+          <TouchableOpacity style={styles.textInputContainer}>
           <Input
           control={control}
           name="lastname"
@@ -162,7 +162,7 @@ const LetsMeet= ({route,navigation}) => {
           placeholder="Please enter your last name"
           autoCapitalize="none"/>
           
-          </View>
+          </TouchableOpacity>
         </View>
        </View>
 
@@ -172,7 +172,7 @@ const LetsMeet= ({route,navigation}) => {
           <Text style={styles.label}>Sex</Text>
         </View>
         <View style={styles.inputContainer}>
-          <View style={styles.genderInputContainer}>
+          <TouchableOpacity style={styles.genderInputContainer}>
           <TextInput
           style={styles.input}
           control={control}
@@ -198,7 +198,7 @@ const LetsMeet= ({route,navigation}) => {
           <Picker.Item key={index} label={item} value={item} style={styles.pickerItem}/>
       ))}
       </Picker>
-          </View>
+          </TouchableOpacity>
         </View>
        </View>
 
@@ -206,10 +206,10 @@ const LetsMeet= ({route,navigation}) => {
        <View style={styles.inputParentContainer}>
 
 <View style={styles.formLabelContainer}>
-  <Text style={styles.label}>NCC center</Text>
+  <Text style={styles.label}>NCC satelite center</Text>
 </View>
 <View style={styles.inputContainer}>
-  <View style={styles.genderInputContainer}>
+  <TouchableOpacity style={styles.genderInputContainer}>
   <TextInput
   style={styles.input}
   control={control}
@@ -235,7 +235,7 @@ const LetsMeet= ({route,navigation}) => {
           <Picker.Item key={index} label={item} value={item} style={styles.pickerItem}/>
       ))}
       </Picker>
-  </View>
+  </TouchableOpacity>
 </View>
       </View>
 
@@ -245,7 +245,7 @@ const LetsMeet= ({route,navigation}) => {
   <Text style={styles.label}>Date of Birth</Text>
 </View>
 <View style={styles.inputContainer}>
-  <View style={styles.textInputContainer}>
+  <TouchableOpacity style={styles.textInputContainer}>
 
   <TextInput
   style={styles.input}
@@ -275,7 +275,7 @@ const LetsMeet= ({route,navigation}) => {
       }
  
   
-  </View>
+  </TouchableOpacity>
 </View>
 </View>
 
@@ -291,8 +291,8 @@ const LetsMeet= ({route,navigation}) => {
         >
          Proceed
         </Button>
-        </View>
-        <View style={styles.footerContainer}>
+  
+        <View>
         <PageFooter/>
           </View>
     </ScrollView>
@@ -308,9 +308,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
-    //justifyContent: "space-between",
-    padding: 5,
+    justifyContent: "space-between",
+    padding:"2%",
      gap:10,
+    flexDirection:"column"
   },
   pageHeaderContainer:{
     marginBottom:20
@@ -320,22 +321,22 @@ const styles = StyleSheet.create({
     flexDirection:"column",
     alignSelf:"center",
     width: '90%',
-    height: '14%',
+    height: '11%',
     //top: 111,
-    paddingTop: 0,
-    paddingRight: 0,
-    paddingBottom: 10,
-    paddingLeft: 0,
+    paddingTop: "0%",
+    paddingRight: "0%",
+    paddingBottom: "2%",
+    paddingLeft: "0%",
     gap: 10,
     //borderWidth:1
 
   },
   
   formLabelContainer:{
-    width: 104,
-    height: 28,
-    padding: 10,
-    gap: 10,
+    width: "80%",
+    height: "30%",
+    padding: '1%',
+    //gap: 10,
     //borderWidth:1
 
   },
@@ -345,27 +346,35 @@ const styles = StyleSheet.create({
     flexDirection:"column",
     alignSelf:'center',
     width: "100%",
-    height: 15,
+    height: "90%",
     fontFamily: 'Roboto',
     fontSize: 13,
     fontWeight: '400',
     lineHeight: 15,
-    //letterSpacing: 1,
+    letterSpacing: 1,
     textAlign: 'left',
+  //  borderWidth:1
     
 
   },
   inputContainer:{
-    width:290,
-    height:43,
+    display:"flex",
+    flexDirection:'row',
+    justifyContent:"center",
+    alignContent:"center",
+    alignItems:"center",
+    width:"100%",
+    height:"50%",
     borderWidth:1,
     borderRadius:7,
-    borderColor:"#ddd",
+    borderColor:"#CAC3C3",
     alignSelf:"center",
+  //  borderWidth:1,
+    
   },
   textInputContainer:{
-    width: 290,
-    height: 35,
+    width: "95%",
+    height: "95%",
     borderRadius: 7,
     //borderWidth: 1,
     gap: 35,
@@ -375,8 +384,8 @@ genderInputContainer:{
   display:'flex',
   flexDirection:"row",
   justifyContent:"space-between",
-  width: 290,
-  height: 35,
+  width: "95%",
+  height: "95%",
   borderRadius: 7,
   //borderWidth: 1,
   gap: 35,
@@ -389,14 +398,15 @@ picker: {
   opacity: 0,
 },
 logoContainer:{
-  height:58,
-  width:34,
+  height:"60%",
+  width:"10%",
   right:'40%',
   marginTop:"4%",
-  //paddingTop:10,
-  //paddingRight:58,
-  //paddingBottom:10,
-  // paddingLeft:58,
+  //borderWidth:1,
+  paddingTop:"1%",
+  paddingRight:"5.8%",
+  paddingBottom:"1%",
+  paddingLeft:"1.8%",
   gap:10
 },
 logo:{
@@ -404,48 +414,37 @@ logo:{
   height:20
 },
   input:{
-    // width: 204,
-    // height: 15,
-    // fontFamily: 'Roboto',
-    // fontSize: 13,
-    // fontWeight: '400',
-    // lineHeight: 15,
-    // //letterSpacing: 0em,
-    // textAlign: 'center',
-
     borderColor: "#ddd",
     backgroundColor: "transparent",
-    paddingHorizontal: 5,
-    paddingVertical: 5,
+    paddingHorizontal: "0.5%",
+    paddingVertical:"0.5%",
     fontSize: 16,
-    height: 60,
-    padding:10,
-    width:240,
-    height:'15',
-    paddingRight:'10',
-    paddingBottom:'10',
-    paddingLeft:'26',
-
+    width:"80%",
+    height:'100%',
+    paddingRight:'1%',
+    paddingBottom:'1%',
+    paddingLeft:'2.6%',
+   // borderWidth:1
 
   },
   calendarContainer:{
-    width: 290,
-    height: 38,
-    gap: 167,
+    width: "15%",
+    height: "100%",
+   // gap: 167,
     //borderWidth:1,
     marginBottom:78,
-    top:-24
+    top:"-50%"
 
   },
   
   button:{
-    marginTop:60,
-    width:290,
-    height:'40',
-    padding:'10',
+   marginTop:"10%",
+    width:"85%",
+    height:'6%',
+    padding:'1%',
     gap:10,
     borderRadius:10,
-    left:32,
+    left:"8%",
   },
   datePicker: {
     width: 200,
