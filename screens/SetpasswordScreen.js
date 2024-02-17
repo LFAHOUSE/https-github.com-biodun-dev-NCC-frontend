@@ -17,6 +17,7 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import axiosInstance from "../axios_services/axios";
 import { useForm, Controller,useWatch} from "react-hook-form";
+import Loader from "./components/Loader";
 
 
 
@@ -47,7 +48,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
         },
       },
       confirmPassword: {
-        required: 'Confirm password is required',
+        required: 'Confirmation password is required',
         validate: value =>
           value === watch('password') || 'Passwords do not match',
       },
@@ -89,6 +90,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
   // Determine if all input fields are touched for enabling the button
    const isButtonActive = password === confirmPassword
  return(
+  loading ? (<Loader/>) :(
   <SafeAreaView style={styles.safeArea}>
   <ScrollView contentContainerStyle={styles.container} >
     
@@ -160,7 +162,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
 
     <View style={styles.infoTextContainer}>
     <View style={styles.infoText}>
-        <Text style={styles.text}>*10 characters</Text>
+        <Text style={styles.text}>*8 characters</Text>
         <Text  style={styles.text}>*one special characters</Text>
         <Text  style={styles.text}>*one upper case letter</Text>
         </View>
@@ -186,7 +188,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
    
   </ScrollView>
 </SafeAreaView>
- )
+ ))
 }
 
 const styles = StyleSheet.create({
@@ -279,7 +281,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width:"95%",
-    height:"50%",
+    height:"40%",
     borderRadius:7,
     borderWidth:1,
     background: "#CAC3C3",

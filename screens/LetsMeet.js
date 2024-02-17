@@ -20,6 +20,7 @@ import PageFooter from "./components/PageFooter";
 import { useForm,useWatch ,Controller} from "react-hook-form";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from 'moment'
+import Loader from "./components/Loader";
 
 
 
@@ -123,6 +124,7 @@ const LetsMeet= ({route,navigation}) => {
   // Determine if all input fields are touched for enabling the button
   const isButtonActive = selectedCenter
  return(
+   loading ? (<Loader/>) : (
    <SafeAreaView style={styles.safeArea}>
     <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.pageHeaderContainer}>
@@ -317,7 +319,7 @@ const LetsMeet= ({route,navigation}) => {
           </View>
     </ScrollView>
    </SafeAreaView>
- )
+ ))
 }
 
 const styles = StyleSheet.create({
@@ -330,7 +332,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "space-between",
     padding:"2%",
-     gap:10,
+    // gap:5,
     flexDirection:"column"
   },
   pageHeaderContainer:{
@@ -340,7 +342,7 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:"column",
     alignSelf:"center",
-    width: '90%',
+    width: '80%',
     height: '11%',
     //top: 111,
     paddingTop: "0%",

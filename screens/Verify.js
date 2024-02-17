@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width:"95%",
-    height:"50%",
+    height:"40%",
     borderRadius:7,
     borderWidth:1,
     background: "#CAC3C3",
@@ -459,13 +459,14 @@ const styles = StyleSheet.create({
   },
  
   button:{
-    marginTop:"10%",
+    marginTop:"15%",
     width:"85%",
-    height:'8%',
+    height:'7.5%',
     padding:'1%',
     gap:10,
     borderRadius:10,
-    left:32,
+    alignSelf:"center"
+    //left:32,
   },
 
   otpContainer:{

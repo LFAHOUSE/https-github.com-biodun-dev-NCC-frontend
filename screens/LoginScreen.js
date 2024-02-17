@@ -10,6 +10,7 @@ import {
   Image,
   Platform,
   StatusBar,
+  Alert,
 } from "react-native";
 import { Button } from "react-native-paper";
 import PageHeader from "./components/PageHeader";
@@ -17,7 +18,7 @@ import PageFooter from "./components/PageFooter";
 import {useForm,Controller,useWatch} from "react-hook-form"
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios";
-
+import Loader from "./components/Loader";
 
 
 const LoginScreen = ({navigation}) => {
@@ -26,6 +27,9 @@ const {control,handleSubmit,formState:{errors}} = useForm()
     const password = useWatch({control, name:"password"})
 
     const [countryCode, setCountryCode] = useState("+234");
+    const [loading, setLoading] = useState(false)
+    const [statusText, setStatusText] = useState("")
+
     const [showPickerModal,setShowPickerModal] = useState(false)
   
     const openCodePicker = () => {
@@ -42,7 +46,7 @@ const {control,handleSubmit,formState:{errors}} = useForm()
       });
       console.log(response.data.message)
       setStatusText(response.data.message)
-      if (response.status === 200 || response.status === 200 ) {
+      if (response.status === 200 || response.status === 201 ) {
         setLoading(false)
         setButtonText("Next")
         Alert.alert("OK",response.data.message);
@@ -63,6 +67,7 @@ const {control,handleSubmit,formState:{errors}} = useForm()
     const isButtonActive = phoneNumber?.length === 10 && password?.length >= 8;
 
     return(
+        loading ? (<Loader/>) : (
         <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.container}>
          <View>
@@ -209,7 +214,7 @@ render={({ field,fieldState}) => (
           </View>
         </ScrollView>
       </SafeAreaView>
-    )
+    ))
 }
 
 const styles = StyleSheet.create({
@@ -336,8 +341,8 @@ const styles = StyleSheet.create({
   display:"flex",
   flexDirection:"row",
   alignItems:"center",
-  width: "110%",
-  height: '50%',
+  width: "100%",
+  height: '45%',
   padding:"1%",
   borderRadius: 7,
   borderWidth: 1,
@@ -467,8 +472,9 @@ button:{
   padding:'1%',
   gap:10,
   borderRadius:10,
-  left:"5%",
-  borderWidth:1
+  //left:"2%",
+  borderWidth:1,
+
 },
 
 signUpContainer: {

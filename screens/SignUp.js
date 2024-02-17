@@ -15,6 +15,7 @@ import {
 import { Button } from "react-native-paper";
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
+import Loader from "./components/Loader.js";
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios.js";
 import {useForm,Controller,useWatch} from "react-hook-form"
@@ -57,7 +58,9 @@ const SignUp = ({props, navigation }) => {
         const handleRegistration = async () => {
           console.log(countryCode+phoneNumber)
           setLoading(true);
+          console.log(loading)
           try {
+            setLoading(true)
             const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/initiate-registration', {
               phoneNumber: countryCode + phoneNumber,
             });
@@ -83,7 +86,10 @@ const SignUp = ({props, navigation }) => {
   // Determine if the phone number is 11 digits for enabling the button
   const isButtonActive = phoneNumber?.length === 10 || loading
 
+ 
+
   return (
+    loading ? (<Loader/>) :(
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} >
 
@@ -183,6 +189,7 @@ const SignUp = ({props, navigation }) => {
       
       </ScrollView>
     </SafeAreaView>
+    )
   );
 };
 
@@ -258,7 +265,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'space-around',
       width:"95%",
-      height:"50%",
+      height:"40%",
       borderRadius:7,
       borderWidth:1,
       background: "#CAC3C3",
@@ -361,7 +368,7 @@ const styles = StyleSheet.create({
     button:{
       marginTop:"10%",
       width:"85%",
-      height:'8%',
+      height:'7%',
       padding:'1%',
       gap:10,
       borderRadius:10,

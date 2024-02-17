@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 import StartupScreen from './screens/StartupScreen'; // Ensure this is correctly imported
+import Loader from './screens/components/Loader.js';
 import LoginScreen from './screens/LoginScreen.js';// Ensure this is correctly imported
 import SignUp from './screens/SignUp';
 import Verify from './screens/Verify';
@@ -24,6 +25,9 @@ export default function App() {
             component={StartupScreen} 
             options={{ headerShown: false }} // This hides the header
           /> */}
+   {/* <Stack.Screen name="Loader" component={Loader}
+                   options={{ headerShown: false }} // This hides the header
+           /> */}
           {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
           <Stack.Screen name="Login" component={LoginScreen}
                    options={{ headerShown: false }} // This hides the header
