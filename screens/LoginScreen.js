@@ -87,8 +87,12 @@ const {control,handleSubmit,formState:{errors}} = useForm()
           <View style={styles.inputLabelContainer}>
             <Text style={styles.label}>Phone Number</Text>
           </View>
-
-          <View style={styles.inputContainier}>
+          <Controller
+        name="phoneNumber"
+        control={control}
+        rules={{ required: "Phone number is required"}}
+        render={({ field,fieldState}) => (
+          <View style={[styles.inputContainier, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
            <View style={styles.inputAccessory}>
          <View style={styles.phoneIconContainer}> 
               <Image style={styles.phoneIcon} source={require("../assets/phone.png")}/>
@@ -108,14 +112,10 @@ const {control,handleSubmit,formState:{errors}} = useForm()
               <Image style={styles.angleDown} source={require("../assets/arrow-down.png")}/>
             </TouchableOpacity>
             </View>
-         <Controller
-        name="phoneNumber"
-        control={control}
-        rules={{ required: true}}
-        render={({ field,fieldState}) => (
+        
           <TouchableOpacity style={styles.inputFieldContainer}>
             <TextInput
-              style={[styles.input, {borderColor: fieldState.isTouched ? 'transparent' : 'red',borderWidth:1}]}
+              style={styles.input}
               placeholder="7063164212"
               onChangeText={field.onChange}
               value={field.value}
@@ -126,15 +126,16 @@ const {control,handleSubmit,formState:{errors}} = useForm()
             />   
             
          </TouchableOpacity>
-        )}
+       
+          </View>
+           )}
         
-      />
-          </View>
-          {errors.phoneNumber?.type === 'required' ?(
+           />
+          {errors.phoneNumber && (
             <View style={styles.inputStatusContainer}>
-            <Text style={{width: "100%",height: "100%",color:"red"}}>Phone number is required</Text>
+            <Text style={{width: "100%",height: "100%",color:"red"}}>{errors.phoneNumber?.message}</Text>
           </View>
-            ) : null}
+            ) }
           </View>
 
           {/* Password input */}
@@ -144,18 +145,18 @@ const {control,handleSubmit,formState:{errors}} = useForm()
 <View style={styles.inputLabelContainer}>
   <Text style={styles.label}>Password</Text>
 </View>
-
-<View style={styles.inputContainier}>
-
-
 <Controller
 name="password"
 control={control}
 rules={{ minLength: 8,required: true, }}
 render={({ field,fieldState}) => (
+<View style={[styles.inputContainier,{borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
+
+
+
 <TouchableOpacity style={styles.inputFieldContainer}>
   <TextInput
-    style={[styles.passwordinput, {borderColor: fieldState.isTouched ? 'transparent' : 'red',borderWidth:1}]}
+    style={styles.passwordinput}
     secureTextEntry
     onChangeText={field.onChange}
     value={field.value}
@@ -163,10 +164,10 @@ render={({ field,fieldState}) => (
     // onFocus={field.name}
   />
 </TouchableOpacity>
-)}
-/>
 
 </View>
+)}
+/>
 {errors.password?.type === 'required' && (
   <View style={styles.inputStatusContainer}>
   <Text style={{width: "100%",height: "100%",color:"red"}}>{errors.password}</Text>
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
   padding:"1%",
   borderRadius: 7,
   borderWidth: 1,
-  borderColor:"#ddd",
+  borderColor:"purple",
   //marginVertical:"-2%"
 
  },
