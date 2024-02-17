@@ -10,6 +10,7 @@ import {
   Image,
   Platform,
   StatusBar,
+  Alert,
   
 } from "react-native";
 import {Picker} from '@react-native-picker/picker'
@@ -23,7 +24,8 @@ import moment from 'moment'
 
 
 const LetsMeet= ({route,navigation}) => {
-  const phoneNumber = route.params
+  const {phoneNumber,otp} = route.params
+  console.log("PhoneNumber in LetsMeet: " + phoneNumber)
     const goBack = () => {
         navigation.goBack()
     }
@@ -79,38 +81,38 @@ const LetsMeet= ({route,navigation}) => {
   
  
     const handleRegistration =  async () => {
-      console.log("PhoneNumber: " + phoneNumber)
+      console.log("PhoneNumber in LetsMeet: " + phoneNumber)
       setLoading(true)
   
-      const data = { 
-        phoneNumber:phoneNumber,
-        firstname: firstname,
-        lastName: lastname, 
-        nccCentre: selectedCenter,
-        sex:selectedSex,
-        dob:dateSelected
+      // const data = { 
+      //   phoneNumber:phoneNumber,
+      //   firstname: firstname,
+      //   lastName: lastname, 
+      //   nccCentre: selectedCenter,
+      //   sex:selectedSex,
+      //   dob:dateSelected
 
-       };
+      //  };
     
-      try {
-        const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration", data);
-        setStatusText(response.data.message)
-        if (response.status === 200 || response.status ===201) {
-          // return the response data
-          Alert.alert("OK", response.data.message)
-          navigation.navigate("Dashboard",{
-            phoneNumber:phoneNumber
-          });
-          setLoading(false)
+      // try {
+      //   const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration", data);
+      //   setStatusText(response.data?.message)
+      //   if (response.status === 200 || response.status ===201) {
+      //     // return the response data
+      //     Alert.alert("OK", response.data?.message)
+      //     navigation.navigate("Dashboard",{
+      //       phoneNumber:phoneNumber
+      //     });
+      //     setLoading(false)
         
-        } 
-      } catch (error) {
-        // handle the error
-        Alert.alert("Error", error.response.data.message)
-        setStatusText(error.response.data.message)
-        setLoading(false)
+      //   } 
+      // } catch (error) {
+      //   // handle the error
+      //   Alert.alert("Error", error.response.data?.message)
+      //   setStatusText(error.response.data?.message)
+      //   setLoading(false)
         
-      }
+      // }
       //To be removed in Production
       navigation.navigate("Dashboard");
     };
@@ -299,7 +301,7 @@ const LetsMeet= ({route,navigation}) => {
 
 <Button
           mode="contained"
-          onPress={handleSubmit(handleRegistration)}
+          onPress={handleRegistration}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },

@@ -69,7 +69,8 @@ console.log("PhoneNumber in password: "+ phoneNumber)
         // return the response data
         Alert.alert("OK", response.data.message)
         navigation.navigate("VerificationComplete",{
-          phoneNumber:phoneNumber
+          phoneNumber:phoneNumber,
+          email:email
         });
         setLoading(false)
       
@@ -82,7 +83,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
       
     }
     // TO be removed in Production
-    navigation.navigate("VerificationComplete",{phoneNumber:phoneNumber});
+    navigation.navigate("VerificationComplete",{phoneNumber:phoneNumber,email:email});
   };
   
   // Determine if all input fields are touched for enabling the button

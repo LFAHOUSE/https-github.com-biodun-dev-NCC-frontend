@@ -17,9 +17,15 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 
 const VerificationComplete = ({route,navigation}) => {
-   const phoneNumber = route.params
+   const {phoneNumber,email} = route.params
   const goBack = () => {
     navigation.goBack()
+  }
+  const handleNavigate = () => {
+    console.log("Phone number in Verification complete: "+ phoneNumber)
+    navigation.navigate("LetsMeet",{
+      phoneNumber:phoneNumber
+    })
   }
 
     return (
@@ -39,7 +45,7 @@ const VerificationComplete = ({route,navigation}) => {
            
         <Button
           mode="contained"
-          onPress={() => navigation.navigate("LetsMeet")} 
+          onPress={handleNavigate} 
           style={[
             styles.button,
             { backgroundColor:"#06447C"},

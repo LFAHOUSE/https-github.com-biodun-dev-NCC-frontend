@@ -18,7 +18,7 @@ import PageHeader from './components/PageHeader';
 const Dashboard = () => {
     return (
         <SafeAreaView style={styles.safeArea}>
-            <ScrollView style={styles.container}>
+            <ScrollView contentContainerStyle={styles.container}>
              <View style={styles.pageHeaderContainer}>
                 <PageHeader pageTitle="Dashboard"/>
              </View>

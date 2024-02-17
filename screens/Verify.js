@@ -61,6 +61,8 @@ const Verify = ({ route, navigation }) => {
   
   console.log("Phone Number: " + countryCode + phoneNumber)
   const complete_phone_number = countryCode+phoneNumber
+  const [timer,setTimer] = useState(90)
+  const [otpButtonText,setOtpButtonText] = useState("Request for OTP")
  
 
 // define the requestOtp function
@@ -76,23 +78,65 @@ const requestOtp = async () => {
   try {
     const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/add-email-request-otp", data);
     console.log(response.status)
-    if (response.status === 200) {
-      // return the response data
+    if (response.status === 200 || response.status === 201) {
+      startTimer()
       setStatusText(response.data.message)
-      Alert.alert("OK", response.data.message)
       setLoading(false)
-    
-    } 
+     } else {
+      setLoading(false)
+      setOtpButtonText("Resend OTP")
+     }
   } catch (error) {
-    // handle the error
+    setOtpButtonText("Resend OTP")
     setStatusText(error.response.data.message)
-    Alert.alert("Error", error.response.data.message)
     setLoading(false)
     
   }
 };
 
+const resendOtp = async () => {
+  console.log("emailAddress: ", email)
+  setLoading(true)
+  // create a data object with email and phone
+  const data = { 
+    email:email
+   };
 
+  try {
+    const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/resend-otp", data);
+    console.log(response.status)
+    if (response.status === 200 || response.status === 201) {
+      startTimer()
+      setStatusText(response.data.message)
+      setLoading(false)
+     } else {
+      setLoading(false)
+      setOtpButtonText("Resend OTP")
+     }
+  } catch (error) {
+    setOtpButtonText("Resend OTP")
+    setStatusText(error.response.data.message)
+    setLoading(false)
+    
+  }
+};
+
+const startTimer = () => {
+  setTimer(90);
+  // set the button text to disable
+  setOtpButtonText('');
+  let intervalId;
+  // a function to update the timer every second
+  const updateTimer = () => {
+    setTimer(timer => timer - 1);
+    if (timer === 0) {
+      clearInterval(intervalId);
+      setOtpButtonText('Resend OTP');
+    }
+  };
+  // set the interval to call the updateTimer function every second
+  intervalId = setInterval(updateTimer, 1000);
+};
 const handleRegistration = () => {
   console.log("PhoneNumber: "+ phoneNumber)
    navigation.navigate("Setpassword",{
@@ -140,6 +184,7 @@ const handleRegistration = () => {
            </View>
            <View style={styles.textInputContainer}>
            <TextInput
+           style={styles.input}
             value={complete_phone_number}
             name="phoneNumber"
             keyboardType="number-pad"
@@ -184,10 +229,26 @@ const handleRegistration = () => {
 
        
         <View style={styles.inputParentContainer}>
-       <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
-         <Text style={styles.otp}>Request for OTP</Text>
-         {loading && <ActivityIndicator size={24} color="#6200ee"/>}
-          </TouchableOpacity>
+          {otpButtonText === "Request for OTP" ? (
+             <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
+             <View style={{display:"flex",flexDirection:"column",width:"95%",height:"75%"}}>
+             <View style={styles.otpContainer}>
+              <Text style={styles.otp}>{otpButtonText}</Text>
+              {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{`${timer}s`}</Text> }
+              </View>
+              {statusText && <Text style={{color:"green",width:'100%',fontSize:10}}>{statusText}</Text>}
+              </View>
+               </TouchableOpacity>
+          ): <TouchableOpacity onPress={resendOtp} style={{display:'flex'}}>
+          <View style={{display:"flex",flexDirection:"column",width:"95%",height:"75%"}}>
+          <View style={styles.otpContainer}>
+           <Text style={styles.otp}>{otpButtonText}</Text>
+           {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{`${timer}s`}</Text> }
+           </View>
+           {statusText && <Text style={{color:"green",width:'100%',fontSize:10}}>{statusText}</Text>}
+           </View>
+            </TouchableOpacity> }
+      
           <Controller
         name="otp"
         control={control}
@@ -199,6 +260,7 @@ const handleRegistration = () => {
                name="otp"
                value={field.value}
                onChangeText={field.onChange}
+               placeholder="Provide your otp "
                onBlur={field.onBlur}
                keyboardType="number-pad"
                autoCapitalize="none"
@@ -311,6 +373,7 @@ const styles = StyleSheet.create({
     borderWidth:1,
     // borderColor:"red"
   },
+
   inputAccessory:{
     display:"flex",
     flexDirection:"row",
@@ -403,6 +466,16 @@ const styles = StyleSheet.create({
     gap:10,
     borderRadius:10,
     left:32,
+  },
+
+  otpContainer:{
+    display:'flex',
+    flexDirection:"row",
+    justifyContent:'space-between',
+    width:"98%",
+    height:"70%",
+    //borderWidth:1
+
   },
   
   otp: {
