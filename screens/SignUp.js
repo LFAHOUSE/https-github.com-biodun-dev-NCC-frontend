@@ -18,20 +18,13 @@ import PageFooter from "./components/PageFooter";
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios.js";
 import {useForm,Controller,useWatch} from "react-hook-form"
-import Input from "./components/Input.js";
+
 
 
 
 
 const SignUp = ({props, navigation }) => {
-  // const {control,handleSubmit,errors} = useForm()
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const {control,handleSubmit,formState:{errors}}= useForm()
 
   const rules = {
     phoneNumber: {
@@ -108,8 +101,12 @@ const SignUp = ({props, navigation }) => {
           <View style={styles.inputLabel}>
           <Text style={styles.label}>Phone number</Text>
           </View>
-        
-        <View style={styles.inputContainer}>
+          <Controller
+        name="phoneNumber"
+        control={control}
+        rules={rules.phoneNumber}
+        render={({ field,fieldState}) => (
+        <View style={[styles.inputContainer, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
           <View style={styles.inputAccessory}>
 
            <View style={styles.phoneNumberIcon}>
@@ -126,9 +123,10 @@ const SignUp = ({props, navigation }) => {
 
            </View>
            <View style={styles.textInputContainer}>
-           <Input
-            control={control}
-            name="phoneNumber"
+           <TextInput
+            value={field.value}
+            onChangeText={field.onChange}
+            onBlur={field.onBlur}
             rules={rules.phoneNumber}
             error={errors.phoneNumber}
             keyboardType="number-pad"
@@ -144,6 +142,9 @@ const SignUp = ({props, navigation }) => {
         />
         </View>
         </View>
+         )}
+        
+         />
         </View>
 
         <Button
@@ -270,10 +271,11 @@ const styles = StyleSheet.create({
       flexDirection:"row",
       alignItems:"center",
       justifyContent:'space-between',
-      right:10,
+      right:"3%",
       width:"35%",
       height:"100%",
-     // borderWidth:1
+      //top:"5%",
+    // borderWidth:1
     },
     phoneNumberIcon:{
       width: 30,
@@ -282,7 +284,8 @@ const styles = StyleSheet.create({
       paddingRight: '1%',
       paddingBottom: '1.2%',
       paddingLeft: '1%',
-      gap: 10
+      gap: 10,
+      top:"2%"
 
     },
 
@@ -296,7 +299,8 @@ const styles = StyleSheet.create({
       width: "60%",
       height:"90%",
       padding: 10,
-      gap: 10
+      gap: 10,
+      top:"3%",
 
     },
 
@@ -305,6 +309,8 @@ const styles = StyleSheet.create({
       height:16
     },
     textInputContainer:{
+      display:"flex",
+      flexDirection:"row",
       width: "50%",
       height: "100%",
       paddingTop: '1%', 
@@ -315,6 +321,7 @@ const styles = StyleSheet.create({
       gap: 10,
       fontSize:16,
       right:24,
+      //top:"2%",
       //borderWidth:1
 
     },
@@ -380,7 +387,8 @@ const styles = StyleSheet.create({
       width:'37',
       height:'35',
       padding: '10',
-      gap: 10
+      gap: 10,
+      top:'2%'
       
     },
     countryCodeText: {

@@ -467,7 +467,7 @@ button:{
   padding:'1%',
   gap:10,
   borderRadius:10,
-  //left:"8%",
+  left:"5%",
   borderWidth:1
 },
 

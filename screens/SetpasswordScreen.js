@@ -12,12 +12,12 @@ import {
   Alert,
   
 } from "react-native";
-import { Button } from "react-native-paper"
+import { Button, TextInput } from "react-native-paper"
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import axiosInstance from "../axios_services/axios";
-import { useForm,useWatch} from "react-hook-form";
-import Input from "./components/Input";
+import { useForm, Controller,useWatch} from "react-hook-form";
+
 
 
 const Setpasssword = ({route,navigation}) => {
@@ -100,15 +100,19 @@ console.log("PhoneNumber in password: "+ phoneNumber)
     <View style={styles.labelContainer}>
     <Text style={styles.inputLabel}>Choose a password</Text>
    </View>
-
-    <View style={styles.inputContainer}>
+   <Controller
+        name="password"
+        control={control}
+        rules={rules.password}
+        render={({ field,fieldState}) => (
+    <View style={[styles.inputContainer,{borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
 
        <View style={styles.textInputContainer}>
-       <Input
-        control={control}
-        name="password"
-        rules={rules.password}
-        error={errors.password}
+       <TextInput
+       style={styles.input}
+        value={field.value}
+        onChangeText={field.onChange}
+        onBlur={field.onBlur}
         keyboardType="name-phone-pad"
         autoCapitalize="none"
         secureTextEntry
@@ -116,6 +120,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
     
     </View>
     </View>
+        )}/>
     </View>
 {/* second input */}
 <View style={styles.inputParentContainer}>
@@ -123,14 +128,18 @@ console.log("PhoneNumber in password: "+ phoneNumber)
   <View style={styles.labelContainer}>
   <Text style={styles.inputLabel}>Retype Password</Text>
  </View>
-   
-  <View style={styles.inputContainer}>
+ <Controller
+        name="confirmPassword"
+        control={control}
+        rules={rules.confirmPassword}
+        render={({ field,fieldState}) => (
+  <View style={[styles.inputContainer, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
     <View style={styles.textInputContainer}>
-     <Input
-      control={control}
-      name="confirmPassword"
-      rules={rules.confirmPassword}
-      error={errors.confirmPassword}
+     <TextInput
+     style={styles.input}
+      value={field.value}
+      onChangeText={field.onChange}
+      onBlur={field.onBlur}
       keyboardType="name-phone-pad"
       autoCapitalize="none"
      secureTextEntry
@@ -138,6 +147,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
   
   </View>
   </View>
+        )}/>
   </View>
   {/* Info box */}
 
@@ -293,66 +303,28 @@ const styles = StyleSheet.create({
   
   input: {
      borderColor: "#ddd",
-    flex:1,
     backgroundColor: "transparent",
     paddingHorizontal: 5,
     paddingVertical: 5,
     fontSize: 16,
     height: 60,
     padding:10,
-    borderColor:'#fff',
+    width:240,
+   // height:'15',
+    paddingRight:'10',
+    paddingBottom:'10',
+    paddingLeft:'26',
+    
   },
-  inputError:{
-    borderColor:"red"
-  },
-  errorText:{
-    color: 'red',
-  fontSize: 12,
-  marginLeft: 10,
-  marginRight:5,
-  },
-  emailAddressContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    // marginBottom: 10,
-  },
-  countryCodeSelector: {
-    alignItems:'center',
-    justifyItems: 'center',
-      flexDirection:'row',
-      gap:5,
-      // backgroundColor: "#fff",
-      paddingHorizontal: 15,
-      paddingVertical: 10,
-      paddingTop: 20,
-      borderColor: "transparent",
-      borderRadius: 10,
-  },
-  error: {
-    color: "red",
-    fontSize: 12,
-  },
-  countryCodeText: {
-    fontSize: 16,
-    color: "#000",
-    height: 30,
-  },
-  emailAddressInput: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-
-    fontSize: 16,
-    borderColor: "transparent",
-    height: 60,
-    borderTopRightRadius: 7,
-    borderBottomRightRadius: 7,
-  },
+  
+  
+ 
+  
+  
   button:{
     marginTop:"10%",
     width:"85%",
-    height:'8%',
+    height:'6%',
     padding:'1%',
     gap:10,
     borderRadius:10,
@@ -390,7 +362,8 @@ const styles = StyleSheet.create({
     height: 69,
     top: '356',
     left: 45,
-    marginVertical:32
+    marginVertical:32,
+
 
   },
   infoLogoContainer:{
@@ -412,6 +385,8 @@ const styles = StyleSheet.create({
     height: 73,
     padding: 10,
     gap: 10,
+    // borderWidth:1,
+    // borderColor:"red"
  
 
   },

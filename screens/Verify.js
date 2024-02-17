@@ -18,8 +18,7 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { FontAwesome } from '@expo/vector-icons';
 import axiosInstance from "../axios_services/axios";
-import {useForm,useWatch} from 'react-hook-form'
-import Input from "./components/Input";
+import {useForm,Controller,useWatch} from 'react-hook-form'
 
 
 const Verify = ({ route, navigation }) => {
@@ -118,8 +117,12 @@ const handleRegistration = () => {
         <View style={styles.labelContainer}>
         <Text style={styles.inputLabel}>Phone number</Text>
        </View>
-
-        <View style={styles.inputContainer}>
+       <Controller
+        name="phoneNumber"
+        control={control}
+        rules={rules.phoneNumber}
+        render={({ field,}) => (
+        <View style={[styles.inputContainer, {borderColor: 'green' }]}>
           <View style={styles.inputAccessory}>
 
            <View style={styles.phoneNumberIcon}>
@@ -136,12 +139,9 @@ const handleRegistration = () => {
 
            </View>
            <View style={styles.textInputContainer}>
-           <Input
-            control={control}
+           <TextInput
             value={complete_phone_number}
             name="phoneNumber"
-            rules={rules.phoneNumber}
-            error={errors.phoneNumber}
             keyboardType="number-pad"
             placeholder="7063164212"
             autoCapitalize="none"
@@ -150,6 +150,7 @@ const handleRegistration = () => {
         
         </View>
         </View>
+        )}/>
         
 
 
@@ -160,20 +161,25 @@ const handleRegistration = () => {
       <View style={styles.labelContainer}>
       <Text style={styles.inputLabel}>Email Address</Text>
      </View>
+     <Controller
+        name="email"
+        control={control}
+        rules={rules.email}
+        render={({ field,fieldState}) => (
+      <View style={[styles.inputContainer,  {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
 
-      <View style={styles.inputContainer}>
-
-         <Input
-          control={control}
-          name="email"
-          rules={rules.email}
-          error={errors.email}
+         <TextInput
+         style={styles.input}
+          value={field.value}
+          onChangeText={field.onChange}
+          onBlur={field.onBlur}
           keyboardType="email-address"
           placeholder="e.g pastorbimbo@nccnigeria.org"
           autoCapitalize="none"
         />
       
       </View>
+        )}/>
       </View>
 
        
@@ -182,17 +188,23 @@ const handleRegistration = () => {
          <Text style={styles.otp}>Request for OTP</Text>
          {loading && <ActivityIndicator size={24} color="#6200ee"/>}
           </TouchableOpacity>
-          
-        <View style={styles.inputContainer}>
-        <Input
-               control={control}
+          <Controller
+        name="otp"
+        control={control}
+        rules={rules.otp}
+        render={({ field,fieldState}) => (
+        <View style={[styles.inputContainer,  {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
+        <TextInput
+              style={styles.input}
                name="otp"
-               rules={rules.otp}
-               error={errors.otp}
+               value={field.value}
+               onChangeText={field.onChange}
+               onBlur={field.onBlur}
                keyboardType="number-pad"
                autoCapitalize="none"
               />
         </View>
+        )}/>
             </View>
       
         <Button
@@ -339,6 +351,21 @@ const styles = StyleSheet.create({
 
   },
 
+  input: {
+    borderColor: "#ddd",
+   backgroundColor: "transparent",
+   paddingHorizontal: 5,
+   paddingVertical: 5,
+   fontSize: 16,
+   height: 60,
+   padding:10,
+   width:240,
+   height:'15',
+   paddingRight:'10',
+   paddingBottom:'10',
+   paddingLeft:'26',
+   
+ },
   
   
   inputError:{

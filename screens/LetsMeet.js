@@ -16,7 +16,6 @@ import {Picker} from '@react-native-picker/picker'
 import { Button } from "react-native-paper"
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
-import Input from "./components/Input";
 import { useForm,useWatch ,Controller} from "react-hook-form";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from 'moment'
@@ -133,38 +132,48 @@ const LetsMeet= ({route,navigation}) => {
         <View style={styles.formLabelContainer}>
           <Text style={styles.label}>First name</Text>
         </View>
-        <View style={styles.inputContainer}>
+        <Controller
+        name="firstname"
+        control={control}
+        rules={rules.firstname}
+        render={({ field,fieldState}) => (
+        <View style={[styles.inputContainer,{borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
           <TouchableOpacity style={styles.textInputContainer}>
-          <Input
-          control={control}
-          name="firstname"
-          rules={rules.firstname}
-          error={errors.firstname}
+          <TextInput
+          value={field.value}
+          onChangeText={field.onChange}
+          onBlur={field.onBlur}
           keyboardType="name-phone-pad"
           placeholder="Please enter your first name"
           autoCapitalize="none"/>
           
           </TouchableOpacity>
         </View>
+        )}/>
        </View>
        <View style={styles.inputParentContainer}>
 
         <View style={styles.formLabelContainer}>
           <Text style={styles.label}>Last name</Text>
         </View>
-        <View style={styles.inputContainer}>
+        <Controller
+        name="lastname"
+        control={control}
+        rules={rules.lastname}
+        render={({ field,fieldState}) => (
+        <View style={[styles.inputContainer, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
           <TouchableOpacity style={styles.textInputContainer}>
-          <Input
-          control={control}
-          name="lastname"
-          rules={rules.lastname}
-          error={errors.lastname}
+          <TextInput
+          value={field.value}
+          onChangeText={field.onChange}
+          onBlur={field.onBlur}
           keyboardType="name-phone-pad"
           placeholder="Please enter your last name"
           autoCapitalize="none"/>
           
           </TouchableOpacity>
         </View>
+        )}/>
        </View>
 
        <View style={styles.inputParentContainer}>
@@ -172,16 +181,19 @@ const LetsMeet= ({route,navigation}) => {
         <View style={styles.formLabelContainer}>
           <Text style={styles.label}>Sex</Text>
         </View>
-        <View style={styles.inputContainer}>
+        <Controller
+        name="gender"
+        control={control}
+        rules={rules.sex}
+        render={({ field,fieldState}) => (
+        <View style={[styles.inputContainer,{borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
           <TouchableOpacity style={styles.genderInputContainer}>
           <TextInput
           style={styles.input}
           control={control}
           name="gender"
           onChangeText={setSex}
-          error={errors.sex}
           value={selectedSex}
-          rules={rules.sex}
           keyboardType="name-phone-pad"
           placeholder="Click to choose"
           autoCapitalize="none"
@@ -201,6 +213,7 @@ const LetsMeet= ({route,navigation}) => {
       </Picker>
           </TouchableOpacity>
         </View>
+        )}/>
        </View>
 
 
@@ -209,17 +222,18 @@ const LetsMeet= ({route,navigation}) => {
 <View style={styles.formLabelContainer}>
   <Text style={styles.label}>NCC satelite center</Text>
 </View>
-<View style={styles.inputContainer}>
+<Controller
+        name="nccsateliteCenter"
+        control={control}
+        rules={rules.nccCenter}
+        render={({ field,fieldState}) => (
+<View style={[styles.inputContainer, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
   <TouchableOpacity style={styles.genderInputContainer}>
   <TextInput
   style={styles.input}
-  control={control}
-  name="nccsateliteCenter"
-  onChangeText={setNccCentre}
+  onChangeText={field.onChange}
   value={selectedCenter}
-  rules={rules.nccCenter}
-  error={errors.nccCenter}
- // keyboardType="name-pad"
+  onBlur={field.onBlur}
   placeholder="choose your satelite center"
   autoCapitalize="none"/>
   <TouchableOpacity style={styles.logoContainer}>
@@ -238,6 +252,7 @@ const LetsMeet= ({route,navigation}) => {
       </Picker>
   </TouchableOpacity>
 </View>
+        )}/>
       </View>
 
 
@@ -245,6 +260,11 @@ const LetsMeet= ({route,navigation}) => {
 <View style={styles.formLabelContainer}>
   <Text style={styles.label}>Date of Birth</Text>
 </View>
+<Controller
+        name="phoneNumber"
+        control={control}
+        rules={rules.phoneNumber}
+        render={({ field,fieldState}) => (
 <View style={styles.inputContainer}>
   <TouchableOpacity style={styles.textInputContainer}>
 
@@ -278,6 +298,7 @@ const LetsMeet= ({route,navigation}) => {
   
   </TouchableOpacity>
 </View>
+        )}/>
 </View>
 
 <Button
