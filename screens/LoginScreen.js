@@ -21,7 +21,7 @@ import axiosInstance from "../axios_services/axios";
 
 
 const LoginScreen = ({navigation}) => {
-const {control,handleSubmit,errors,onBlur} = useForm()
+const {control,handleSubmit,formState:{errors}} = useForm()
     const phoneNumber = useWatch({control,name:"phoneNumber"})
     const password = useWatch({control, name:"password"})
 
@@ -33,12 +33,14 @@ const {control,handleSubmit,errors,onBlur} = useForm()
   }
   const handleRegistration = async () => {
     console.log(countryCode+phoneNumber)
+    console.log(password)
     setLoading(true);
     try {
       const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/login', {
         phoneNumber: countryCode + phoneNumber,
         password:password
       });
+      console.log(response.data.message)
       setStatusText(response.data.message)
       if (response.status === 200 || response.status === 200 ) {
         setLoading(false)
@@ -109,27 +111,30 @@ const {control,handleSubmit,errors,onBlur} = useForm()
          <Controller
         name="phoneNumber"
         control={control}
-        rules={{ required: 'Phone Number  is required' }}
-        onBlur={onBlur}
+        rules={{ required: true}}
         render={({ field,fieldState}) => (
           <TouchableOpacity style={styles.inputFieldContainer}>
             <TextInput
-              style={[styles.input, {borderColor: fieldState.isTouched ? 'green' : 'transparent',borderWidth:1}]}
+              style={[styles.input, {borderColor: fieldState.isTouched ? 'transparent' : 'red',borderWidth:1}]}
               placeholder="7063164212"
               onChangeText={field.onChange}
               value={field.value}
+              onBlur={field.onBlur}
+              // onFocus={field.onFocus}
               maxLength={10}
-            />
-            {errors && (
-            <View style={styles.inputStatusContainer}>
-            <Text style={{width: "100%",height: "100%",color:"red"}}>{errors.phoneNumber}</Text>
-          </View>
-            )}
+              keyboardType="number-pad"
+            />   
+            
          </TouchableOpacity>
         )}
+        
       />
-       
           </View>
+          {errors.phoneNumber?.type === 'required' ?(
+            <View style={styles.inputStatusContainer}>
+            <Text style={{width: "100%",height: "100%",color:"red"}}>Phone number is required</Text>
+          </View>
+            ) : null}
           </View>
 
           {/* Password input */}
@@ -146,30 +151,32 @@ const {control,handleSubmit,errors,onBlur} = useForm()
 <Controller
 name="password"
 control={control}
-rules={{ required: 'minimum of 8 characters' }}
+rules={{ minLength: 8,required: true, }}
 render={({ field,fieldState}) => (
 <TouchableOpacity style={styles.inputFieldContainer}>
   <TextInput
-    style={[styles.passwordinput, {borderColor: fieldState.isTouched ? 'green' : 'transparent',borderWidth:1}]}
+    style={[styles.passwordinput, {borderColor: fieldState.isTouched ? 'transparent' : 'red',borderWidth:1}]}
     secureTextEntry
     onChangeText={field.onChange}
     value={field.value}
+    onBlur={field.onBlur}
+    // onFocus={field.name}
   />
-  {errors && (
-  <View style={styles.inputStatusContainer}>
-  <Text style={{width: "100%",height: "100%",color:"red"}}>{errors.password}</Text>
-</View>
-  )}
 </TouchableOpacity>
 )}
 />
 
 </View>
+{errors.password?.type === 'required' && (
+  <View style={styles.inputStatusContainer}>
+  <Text style={{width: "100%",height: "100%",color:"red"}}>{errors.password}</Text>
+</View>
+  )}
 </View>
 
           <Button
           mode="contained"
-          onPress={handleSubmit(handleRegistration)}
+          onPress={handleRegistration}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
@@ -398,6 +405,7 @@ const styles = StyleSheet.create({
 inputFieldContainer:{
   flex:1,
   height:"100%",
+  width:"100%",
   paddingTop: 10,
   paddingRight: 10,
   paddingBottom: 10,
@@ -443,10 +451,10 @@ passwordinput:{
 
 inputStatusContainer:{
  flex:1,
-  width: "200%",
+  width: "100%",
   height: "30%",
   gap: 111,
-  right:"95%",
+  //right:"95%",
   borderWidth:1
 
 },
