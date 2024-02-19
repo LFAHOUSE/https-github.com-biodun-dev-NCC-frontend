@@ -64,6 +64,7 @@ const Verify = ({ route, navigation }) => {
   const complete_phone_number = countryCode+phoneNumber
   const [timer,setTimer] = useState(90)
   const [otpButtonText,setOtpButtonText] = useState("Request for OTP")
+  const [sent,setSent] = useState(false)
  
 
 // define the requestOtp function
@@ -80,14 +81,17 @@ const requestOtp = async () => {
     const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/add-email-request-otp", data);
     console.log(response.status)
     if (response.status === 200 || response.status === 201) {
+      setSent(true)
       startTimer()
       setStatusText(response.data.message)
       setLoading(false)
      } else {
+      setSent(false)
       setLoading(false)
       setOtpButtonText("Resend OTP")
      }
   } catch (error) {
+    setSent(false)
     setOtpButtonText("Resend OTP")
     setStatusText(error.response.data.message)
     setLoading(false)
@@ -107,14 +111,17 @@ const resendOtp = async () => {
     const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/resend-otp", data);
     console.log(response.status)
     if (response.status === 200 || response.status === 201) {
+      setSent(true)
       startTimer()
       setStatusText(response.data.message)
       setLoading(false)
      } else {
+      setSent(false)
       setLoading(false)
       setOtpButtonText("Resend OTP")
      }
   } catch (error) {
+    setSent(false)
     setOtpButtonText("Resend OTP")
     setStatusText(error.response.data.message)
     setLoading(false)
@@ -244,7 +251,7 @@ const handleRegistration = () => {
           <View style={{display:"flex",flexDirection:"column",width:"95%",height:"75%"}}>
           <View style={styles.otpContainer}>
            <Text style={styles.otp}>{otpButtonText}</Text>
-           {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{`${timer}s`}</Text> }
+           {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{ `${timer}s`}</Text>}  
            </View>
            {statusText && <Text style={{color:"green",width:'100%',fontSize:10}}>{statusText}</Text>}
            </View>

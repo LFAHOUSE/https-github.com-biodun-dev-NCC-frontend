@@ -25,9 +25,7 @@ export default function App() {
             component={StartupScreen} 
             options={{ headerShown: false }} // This hides the header
           /> */}
-   {/* <Stack.Screen name="Loader" component={Loader}
-                   options={{ headerShown: false }} // This hides the header
-           /> */}
+  
           {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
           <Stack.Screen name="Login" component={LoginScreen}
                    options={{ headerShown: false }} // This hides the header

@@ -17,17 +17,25 @@ import {Picker} from '@react-native-picker/picker'
 import { Button } from "react-native-paper"
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
-import { useForm,useWatch ,Controller} from "react-hook-form";
+import { useForm,useWatch ,Controller,getValues} from "react-hook-form";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from 'moment'
 import Loader from "./components/Loader";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 
-
 const LetsMeet= ({route,navigation}) => {
   const {phoneNumber,otp,password,email} = route.params
   console.log("PhoneNumber in LetsMeet: " + phoneNumber)
+  console.log( phoneNumber,
+    firstname,
+    lastname, 
+    email,
+    otp,
+    password,
+    selectedCenter,
+    selectedSex,
+    dateSelected)
     const goBack = () => {
         navigation.goBack()
     }
@@ -41,7 +49,7 @@ const LetsMeet= ({route,navigation}) => {
     const [statusText,setStatusText]= useState("")
     const [loading,setLoading] = useState(false)
     
-  
+  console.log(dateSelected)
     const {
       control,
       handleSubmit,
@@ -68,7 +76,7 @@ const LetsMeet= ({route,navigation}) => {
       console.log("selectedDate: " + selectedDate)
     if (selectedDate) {
       setDate(selectedDate)
-        const formattedDate = moment (selectedDate).format('DD-MM-YYYY');
+        const formattedDate = moment (selectedDate).format('YYYY-MM-DD');
         setDatSelected(formattedDate)
         setShow(false)
       } else {
@@ -81,26 +89,63 @@ const LetsMeet= ({route,navigation}) => {
     };
 
   
- 
+ // Define a named function for the render prop
+function renderInput({ field, fieldState }) {
+  return (
+    <View
+      style={[
+        styles.inputContainer,
+        { borderColor: fieldState.isTouched ? 'green' : 'red', borderWidth: 1 },
+      ]}
+    >
+      <TouchableOpacity style={styles.textInputContainer}>
+        <TextInput
+          name="firstname"
+          value={field.value}
+          onChangeText={field.onChange}
+          onBlur={field.onBlur}
+          keyboardType="name-phone-pad"
+          placeholder="Please enter your first name"
+          autoCapitalize="none"
+        />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+// Pass the function as a reference to the render prop
+<Controller
+  name="firstname"
+  control={control}
+  rules={rules.firstname}
+  render={renderInput} // no need to use an anonymous function here
+/>;
+
     const handleRegistration =  async () => {
       console.log("PhoneNumber in LetsMeet: " + phoneNumber)
+      console.log( phoneNumber,
+        firstname,
+        lastname, 
+        email,
+        otp,
+        password,
+        selectedCenter,
+        selectedSex,
+        dateSelected)
       setLoading(true)
-  
-      const data = { 
-        phoneNumber:phoneNumber,
-        firstname: firstname,
-        lastName: lastname, 
-        email:email,
-        otp:otp,
-        password:password,
-        nccCentre: selectedCenter,
-        sex:selectedSex,
-        dob:dateSelected
-
-       };
     
       try {
-        const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration", data);
+        const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration",{
+          phoneNumber:phoneNumber,
+          firstname: firstname,
+          lastName: lastname, 
+          email:email,
+          otp:otp,
+          password:password,
+          nccCentre: selectedCenter,
+          sex:selectedSex,
+          dob:dateSelected
+        });
         setStatusText(response.data?.message)
         if (response.status === 200 || response.status ===201) {
           // return the response data
@@ -128,7 +173,7 @@ const LetsMeet= ({route,navigation}) => {
 
   console.log(Array.isArray(nccCenter))
   // Determine if all input fields are touched for enabling the button
-  const isButtonActive = selectedCenter
+  const isButtonActive = dateSelected
  return(
    loading ? (<Loader/>) : (
    <SafeAreaView style={styles.safeArea}>
@@ -150,6 +195,7 @@ const LetsMeet= ({route,navigation}) => {
         <View style={[styles.inputContainer,{borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
           <TouchableOpacity style={styles.textInputContainer}>
           <TextInput
+          name= "firstname"
           value={field.value}
           onChangeText={field.onChange}
           onBlur={field.onBlur}
@@ -309,7 +355,7 @@ const LetsMeet= ({route,navigation}) => {
 
 <Button
           mode="contained"
-          onPress={handleRegistration}
+          onPress={handleSubmit(handleRegistration)}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },
