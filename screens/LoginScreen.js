@@ -20,12 +20,17 @@ import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios";
 import Loader from "./components/Loader";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import {setToken} from '../redux/userReducer.js'
+import {useDispatch} from 'react-redux'
 
 const LoginScreen = ({navigation}) => {
-const {control,handleSubmit,formState:{errors}} = useForm()
+
+  const dispatch = useDispatch()
+
+    const {control,handleSubmit,formState:{errors}} = useForm()
     const phoneNumber = useWatch({control,name:"phoneNumber"})
     const password = useWatch({control, name:"password"})
-   const fullPhoneNumber =countryCode + phoneNumber
+    const fullPhoneNumber =countryCode + phoneNumber
     const [countryCode, setCountryCode] = useState("+234");
     const [loading, setLoading] = useState(false)
     const [statusText, setStatusText] = useState("")
@@ -49,6 +54,7 @@ const {control,handleSubmit,formState:{errors}} = useForm()
       console.log(response.data)
       
       if (response.status === 200 || response.status === 201 ) {
+        dispatch(setToken(response.data.token))
         setStatusText(response.data.message)
         setLoading(false)
         setButtonText("Next")
