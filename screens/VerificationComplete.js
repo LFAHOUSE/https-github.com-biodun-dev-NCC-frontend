@@ -15,16 +15,19 @@ import {
 import { Button } from "react-native-paper";
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const VerificationComplete = ({route,navigation}) => {
-   const {phoneNumber,email} = route.params
+   const {phoneNumber,email,otp} = route.params
   const goBack = () => {
     navigation.goBack()
   }
   const handleNavigate = () => {
     console.log("Phone number in Verification complete: "+ phoneNumber)
     navigation.navigate("LetsMeet",{
-      phoneNumber:phoneNumber
+      phoneNumber:phoneNumber,
+      email:email,
+      otp:otp
     })
   }
 
@@ -87,8 +90,8 @@ const styles = StyleSheet.create({
     flexDirection:"column",
     alignContent:"space-around",
     alignItems:"center",
-    width: '100%',
-    height: '17.5%',
+    width: wp('100%'),
+    height: hp('17%'),
     top: '2%',
     gap:10,
     alignSelf:"center",
@@ -104,9 +107,8 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     lineHeight: 18,
     letterSpacing: 2,
-    //textAlign:"left",
     alignSelf:'center',
-   // borderWidth:1
+ 
 
   },
   successImage:{
@@ -114,20 +116,16 @@ const styles = StyleSheet.create({
     width: "20%",
     height: "60%",
     top: '8%',
-    // borderRadius:7,
-    // borderWidth:1
-    //left: 155,
     
   },
 
   button:{
+    alignSelf:"center",
     marginTop:"10%",
-    width:"85%",
-    height:'8%',
-    padding:'1%',
-    gap:10,
+    width:wp("89%"),
+    height:hp('7%'),
     borderRadius:10,
-    left:"8%",
+    left:"2%",
     //left:32,
   },
 

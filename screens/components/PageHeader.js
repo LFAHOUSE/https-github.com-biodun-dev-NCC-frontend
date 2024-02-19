@@ -8,10 +8,10 @@ import {
     ImageBackground,
     TouchableOpacity,
   } from "react-native";
-  
+  import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
   const PageHeader = ({onBack,pageTitle}) => {
      return(
-     <ImageBackground style={{width:360,height:100}} source={require("../../assets/banner.png")}>
+     <ImageBackground style={{width:wp("100%"),height:hp("16%")}} source={require("../../assets/banner.png")}>
     <View style={styles.pageHeader}>
       <View style={styles.headerContainer}>
     {/* Logo and title */}
@@ -45,17 +45,18 @@ import {
 
   const styles = StyleSheet.create({
     pageHeader:{
-      width:"100%",
-      height:"100%",
+      width:wp("100%"),
+      height:hp("16%"),
       gap:10,
+     // borderWidth:1
       
     },
     headerContainer:{
       display:'flex',
       flexDirection: 'row',
       padding: "2%",
-      width:"100%",
-      height:"97%" ,
+      width:wp("98%"),
+      height:hp("15%") ,
       gap:107,
       //borderWidth:1
      
@@ -73,16 +74,16 @@ import {
     arrowAndTitle:{
       display:"flex",
       flexDirection:'column',
-      width:"30%",
-      height:"100%",
+      width:wp("30%"),
+      height:hp("13%"),
       gap:16,
       //borderWidth:1
     },
     logoAndText:{
       flex:1,
       flexDirection:"row",
-      width:"100%",
-      height:"103%",
+      width:wp("100%"),
+      height:hp("13%"),
       right:10,
       //borderWidth:1
     },

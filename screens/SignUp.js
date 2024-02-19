@@ -19,6 +19,7 @@ import Loader from "./components/Loader.js";
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios.js";
 import {useForm,Controller,useWatch} from "react-hook-form"
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 
 
@@ -229,8 +230,8 @@ const styles = StyleSheet.create({
     signUpContainer: {
       display:"flex",
       flexDirection:'column',
-      width:"90%",
-      height:"15%",
+      width:wp("90%"),
+      height:hp("15%"),
       left:"8%",
 
       //top:'144',
@@ -240,8 +241,9 @@ const styles = StyleSheet.create({
     signupText: {
       display:"flex",
       flexDirection:'row',
-      width:"100%",
-      height:'64%',
+      //flexWrap:"wrap",
+      width:wp("90%"),
+      height:hp('10%'),
       paddingTop:10,
       paddingRight:10,
       paddingBottom:10,
@@ -252,8 +254,8 @@ const styles = StyleSheet.create({
     inputParentContainer:{
       display:"flex",
       flexDirection:"column",
-      width:'89.5%',
-      height:'15.5%',
+      width:wp('89%'),
+      height:hp('15.9%'),
       top:'237',
       left:"8%",
       //borderWidth:1
@@ -366,19 +368,18 @@ const styles = StyleSheet.create({
      // borderWidth:1
     },
     button:{
+      alignSelf:"center",
       marginTop:"10%",
-      width:"85%",
-      height:'7%',
-      padding:'1%',
-      gap:10,
+      width:wp("89%"),
+      height:hp('7%'),
       borderRadius:10,
-      left:32,
+      left:"2%",
     },
 
     
    label:{
     fontFamily:"Roboto",
-   fontWeight:'400'
+    fontWeight:'400'
    },
 
       phoneNumberContainer: {
@@ -407,8 +408,8 @@ const styles = StyleSheet.create({
    
 
     account:{
-      width:"75%",
-      height:"15%",
+      width:wp("75%"),
+      height:hp("13%"),
       alignSelf:'center',
       gap:5,
       //marginTop:49,
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
       paddingRight:10,
       paddingBottom:1,
       paddingLeft:0,
-     //borderWidth:1,
+     left:"8%",
      alignSelf:"center"
     },
     memberText:{

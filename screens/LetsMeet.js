@@ -21,11 +21,12 @@ import { useForm,useWatch ,Controller} from "react-hook-form";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from 'moment'
 import Loader from "./components/Loader";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 
 
 const LetsMeet= ({route,navigation}) => {
-  const {phoneNumber,otp} = route.params
+  const {phoneNumber,otp,password,email} = route.params
   console.log("PhoneNumber in LetsMeet: " + phoneNumber)
     const goBack = () => {
         navigation.goBack()
@@ -85,35 +86,40 @@ const LetsMeet= ({route,navigation}) => {
       console.log("PhoneNumber in LetsMeet: " + phoneNumber)
       setLoading(true)
   
-      // const data = { 
-      //   phoneNumber:phoneNumber,
-      //   firstname: firstname,
-      //   lastName: lastname, 
-      //   nccCentre: selectedCenter,
-      //   sex:selectedSex,
-      //   dob:dateSelected
+      const data = { 
+        phoneNumber:phoneNumber,
+        firstname: firstname,
+        lastName: lastname, 
+        email:email,
+        otp:otp,
+        password:password,
+        nccCentre: selectedCenter,
+        sex:selectedSex,
+        dob:dateSelected
 
-      //  };
+       };
     
-      // try {
-      //   const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration", data);
-      //   setStatusText(response.data?.message)
-      //   if (response.status === 200 || response.status ===201) {
-      //     // return the response data
-      //     Alert.alert("OK", response.data?.message)
-      //     navigation.navigate("Dashboard",{
-      //       phoneNumber:phoneNumber
-      //     });
-      //     setLoading(false)
+      try {
+        const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration", data);
+        setStatusText(response.data?.message)
+        if (response.status === 200 || response.status ===201) {
+          // return the response data
+          setLoading(false)
+          Alert.alert("OK", response.data?.message)
+          setStatusText(response.data?.message)
+          navigation.navigate("Dashboard",{
+            firstname:firstname
+          });
+       
         
-      //   } 
-      // } catch (error) {
-      //   // handle the error
-      //   Alert.alert("Error", error.response.data?.message)
-      //   setStatusText(error.response.data?.message)
-      //   setLoading(false)
+        } 
+      } catch (error) {
+        // handle the error
+        Alert.alert("Error", error.response.data?.message)
+        setStatusText(error.response.data?.message)
+        setLoading(false)
         
-      // }
+      }
       //To be removed in Production
       navigation.navigate("Dashboard");
     };
@@ -288,7 +294,7 @@ const LetsMeet= ({route,navigation}) => {
         value={date}
         display={Platform.OS === 'ios' ? 'spinner' : 'inline'}
         is24Hour={true}
-        dateformat="DD-MM-YYYY"
+        dateformat="YYYY-MM-DD"
         onChange={onChange}
      
       />
@@ -311,7 +317,7 @@ const LetsMeet= ({route,navigation}) => {
           disabled={!isButtonActive} // Optionally disable the button when the phone number is not 11 digits
           labelStyle={{ color: isButtonActive ? "#FFFFFF" : "#C0C0C0" }} // Text color for better contrast
         >
-         Proceed
+        Next
         </Button>
   
         <View>
@@ -342,9 +348,8 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:"column",
     alignSelf:"center",
-    width: '80%',
-    height: '11%',
-    //top: 111,
+    width: wp('83%'),
+    height: hp('15%'),
     paddingTop: "0%",
     paddingRight: "0%",
     paddingBottom: "2%",
@@ -460,13 +465,13 @@ logo:{
   },
   
   button:{
-   marginTop:"10%",
-    width:"85%",
-    height:'6%',
-    padding:'1%',
-    gap:10,
+    alignSelf:"center",
+    marginTop:"10%",
+    width:wp("89%"),
+    height:hp('7%'),
     borderRadius:10,
-    left:"8%",
+    left:"2%",
+    marginTop:"15%"
   },
   datePicker: {
     width: 200,

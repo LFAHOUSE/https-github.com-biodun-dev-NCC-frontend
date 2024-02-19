@@ -19,7 +19,7 @@ import {useForm,Controller,useWatch} from "react-hook-form"
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios";
 import Loader from "./components/Loader";
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 const LoginScreen = ({navigation}) => {
 const {control,handleSubmit,formState:{errors}} = useForm()
@@ -44,9 +44,10 @@ const {control,handleSubmit,formState:{errors}} = useForm()
         phoneNumber: countryCode + phoneNumber,
         password:password
       });
-      console.log(response.data.message)
-      setStatusText(response.data.message)
+      console.log(response.data)
+      
       if (response.status === 200 || response.status === 201 ) {
+        setStatusText(response.data.message)
         setLoading(false)
         setButtonText("Next")
         Alert.alert("OK",response.data.message);
@@ -120,7 +121,7 @@ const {control,handleSubmit,formState:{errors}} = useForm()
         
           <TouchableOpacity style={styles.inputFieldContainer}>
             <TextInput
-              style={styles.input}
+            style={styles.input}
               placeholder="7063164212"
               onChangeText={field.onChange}
               value={field.value}
@@ -142,6 +143,7 @@ const {control,handleSubmit,formState:{errors}} = useForm()
           </View>
             ) }
           </View>
+          {statusText && <Text style={{color:'red',left:"10%",top:"-2%"}}>{statusText}</Text>}
 
           {/* Password input */}
 
@@ -228,14 +230,17 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         padding:"2%",
          gap:20,
-        flexDirection:"column"
+        flexDirection:"column",
+        //width:wp("100%"),
+       // height:hp("100%")
+
       },
       loginTextContainer: {
           display:'flex',
           alignItems:'left',
           flexDirection: "column",
-          width:"80%",
-          height:"12%",
+          width:wp("80%"),
+          height:hp("12%"),
           //top: "8%",
           left: '8%',
          
@@ -243,14 +248,14 @@ const styles = StyleSheet.create({
       },
     
       loginContainer:{
-        width: 85,
-        height: 48,
+        width: wp("30%"),
+        height: hp("7%"),
         paddingTop: 10,
         paddingRight: 10,
         paddingBottom: 0,
         paddingLeft: 0,
         gap: 10,
-  
+        //borderWidth:1
     
       },
       loginText:{
@@ -269,20 +274,20 @@ const styles = StyleSheet.create({
      
       loginDesc: {
         flex:1,
-        width:"100%",
-        height: 34,
+        width:wp("80%"),
         paddingTop: 10,
         paddingRight: 10,
         paddingBottom: 10,
         paddingLeft: 0,
         gap: 10,
+        //borderWidth:1
         
       },
 
       desc:{
         display:"flex",
         flexDirection:'row',
-        width: "100%",
+        width: wp("100%"),
         height: 40,
         fontFamily: 'Roboto',
         fontSize: 12,
@@ -298,32 +303,24 @@ const styles = StyleSheet.create({
         display:"flex",
         flexDirection:"column",
         padding:10,
-        width: "80%",
-        height: '15%',
-       // top: "6%",
-        left: '8%',
-        gap:15,
-      //  marginBottom:"30%",
-      //  borderWidth:1,
+        width:wp("89%"),
+        height: hp('15.5%'),
+       alignSelf:"center"
 
       },
       passwordInputParentContainer:{
         display:"flex",
         flexDirection:"column",
         padding:15,
-        width: "80%",
-        height: '15%',
-       // top: "6%",
-        left: '8%',
-        gap:15,
-      //  marginBottom:"30%",
-       // borderWidth:1,
+        width: wp("89%"),
+        height: hp('15.5%'),
+        alignSelf:"center"
       },
       inputLabelContainer:{
         display:"flex",
         flexDirection:"row",
-        width:"100%",
-        height: "45%",
+        width:wp("50%"),
+        height: hp("6%"),
         paddingTop: 10,
         paddingRight: 10,
         paddingBottom: 10,
@@ -341,13 +338,14 @@ const styles = StyleSheet.create({
   display:"flex",
   flexDirection:"row",
   alignItems:"center",
-  width: "100%",
-  height: '45%',
+  width: wp("85%"),
+  height:hp('7%'),
   padding:"1%",
   borderRadius: 7,
   borderWidth: 1,
   borderColor:"purple",
   //marginVertical:"-2%"
+   //borderWidth:1
 
  },
  inputAccessory:{
@@ -418,24 +416,24 @@ inputFieldContainer:{
   paddingLeft: 26,
   borderRadius: 7,
   gap: 10,
-  //borderWidth:1,
-  borderColor:"#ddd",
+  // borderWidth:1,
+  // borderColor:"purple",
   alignItems:'center',
   justifyContent:'center'
 
 },
 
 input:{
-  flex:1,
-  width: "100%",
-  height: 37,
+ // flex:1,
+   width: "100%",
+  height: 40,
   alignItems:'center',
   //backgroundColor:"#ddd",
  // borderColor:"red",
   borderRadius:7,
   //borderWidth:1,
  // right:"10%",
-  padding:10,
+  //padding:10,
   
 
 },
@@ -443,12 +441,7 @@ passwordinput:{
   flex:1,
   width: "100%",
   height: 40,
-  //backgroundColor:"#ddd",
- // borderColor:"red",
   borderRadius:7,
-  //borderWidth:1,
-  right:"10%",
-  padding:10,
   alignSelf:'center',
   justifyContent:'center',
   alignContent:"center",
@@ -465,15 +458,13 @@ inputStatusContainer:{
 
 },
 button:{
-  alignSelf:"center",
+ alignSelf:"center",
   marginTop:"9%",
-  width:"80%",
-      height:'6%',
-  padding:'1%',
-  gap:10,
+  width:wp("89%"),
+  height:hp('7%'),
   borderRadius:10,
-  //left:"2%",
-  borderWidth:1,
+  left:"2%",
+  //borderWidth:1,
 
 },
 
@@ -482,7 +473,7 @@ signUpContainer: {
   height:86,
   left:32,
   //top:'144',
-  
+  //borderWidth:1
 },
 signUpText: {
   color: "#000",
@@ -490,12 +481,12 @@ signUpText: {
   fontSize: 13,
 },
 account:{
-  width:"75%",
-  height:"15%",
+  width:wp("75%"),
+  height:hp("13%"),
   alignSelf:'center',
   gap:5,
   //marginTop:49,
-  //borderWidth:1,
+ // borderWidth:1,
   //left:"5%",
   alignSelf:"center"
 },
@@ -537,8 +528,8 @@ member:{
   paddingRight:10,
   paddingBottom:1,
   paddingLeft:0,
- //borderWidth:1,
- alignSelf:"center"
+  left:"2%",
+  alignSelf:"center"
 },
 memberText:{
   display:'flex',

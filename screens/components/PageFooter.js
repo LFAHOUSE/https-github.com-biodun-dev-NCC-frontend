@@ -8,7 +8,7 @@ import {
     SafeAreaView,
     ScrollView
 } from 'react-native'
-
+import {widthPercentageToDP} from 'react-native-responsive-screen'
 
 const PageFooter = () => {
     return (

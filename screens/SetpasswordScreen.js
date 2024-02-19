@@ -18,6 +18,7 @@ import PageFooter from "./components/PageFooter";
 import axiosInstance from "../axios_services/axios";
 import { useForm, Controller,useWatch} from "react-hook-form";
 import Loader from "./components/Loader";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 
 
@@ -71,7 +72,8 @@ console.log("PhoneNumber in password: "+ phoneNumber)
         Alert.alert("OK", response.data.message)
         navigation.navigate("VerificationComplete",{
           phoneNumber:phoneNumber,
-          email:email
+          email:email,
+          otp:otp
         });
         setLoading(false)
       
@@ -84,7 +86,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
       
     }
     // TO be removed in Production
-    navigation.navigate("VerificationComplete",{phoneNumber:phoneNumber,email:email});
+    navigation.navigate("VerificationComplete",{phoneNumber:phoneNumber,email:email,otp:otp});
   };
   
   // Determine if all input fields are touched for enabling the button
@@ -110,7 +112,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
         render={({ field,fieldState}) => (
     <View style={[styles.inputContainer,{borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
 
-       <View style={styles.textInputContainer}>
+       <View>
        <TextInput
        style={styles.input}
         value={field.value}
@@ -137,7 +139,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
         rules={rules.confirmPassword}
         render={({ field,fieldState}) => (
   <View style={[styles.inputContainer, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
-    <View style={styles.textInputContainer}>
+    <View>
      <TextInput
      style={styles.input}
       value={field.value}
@@ -162,9 +164,9 @@ console.log("PhoneNumber in password: "+ phoneNumber)
 
     <View style={styles.infoTextContainer}>
     <View style={styles.infoText}>
-        <Text style={styles.text}>*8 characters</Text>
-        <Text  style={styles.text}>*one special characters</Text>
-        <Text  style={styles.text}>*one upper case letter</Text>
+        <Text style={styles.text}>**Minimum of 8 characters</Text>
+        <Text  style={styles.text}>**At least one special characters</Text>
+        <Text  style={styles.text}>**At least one upper case letter</Text>
         </View>
     </View>
 
@@ -204,53 +206,22 @@ const styles = StyleSheet.create({
          gap:20,
         flexDirection:"column"
   },
-  arrowDown:{
-    marginBottom:2
-  },
-
-  logoContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-end", // Center the logo and text horizontally
-    width: "100%", // Ensure it takes the full width to center the content
-  },
-  logo: {
-    width: 70,
-    height: 70,
-  },
-  logoText: {
-    width: 65,
-    height: 75,
-    marginTop: 20,
-  },
-  welcomeText: {
-    fontSize: 20,
-
-    textAlign: "left",
-  },
   pageHeaderContainer:{
     marginBottom:20
   },
-  loginText: {
-    fontSize: 16,
-    textAlign: "left",
-    marginBottom: 30,
-    color: "#000",
-  },
+
   inputParentContainer:{
     display:"flex",
     flexDirection:"column",
     alignSelf:"center",
-    width: '90%',
-    height: '14%',
-    //top: 111,
+    width: wp('89%'),
+    height: hp('15.9%'),
     paddingTop: 0,
     paddingRight: 0,
     paddingBottom: 10,
     paddingLeft: 0,
-    gap: 10,
-    //borderWidth:1
+    gap: 7,
+   // borderWidth:1
   } ,
 
 
@@ -290,19 +261,6 @@ const styles = StyleSheet.create({
     left:"8%"
   },
  
-
-  // textInputContainer:{
-  //   width: 124,
-  //   height: 43,
-  //   paddingTop: '10', 
-  //   paddingRight:'10',
-  //   paddingBottom: '10', 
-  //   paddingLeft:'26',
-  //   borderRadius: 7,
-  //   gap: 10,
-  //   fontSize:16
-  // },
-
   
   input: {
      borderColor: "#ddd",
@@ -325,13 +283,12 @@ const styles = StyleSheet.create({
   
   
   button:{
-    marginTop:"10%",
-    width:"85%",
-    height:'6%',
-    padding:'1%',
-    gap:10,
-    borderRadius:10,
-    left:32,
+    alignSelf:"center",
+      marginTop:"10%",
+      width:wp("89%"),
+      height:hp('7%'),
+      borderRadius:10,
+      left:"2%",
   },
   signUpContainer: {
     marginBottom: 80,
@@ -361,19 +318,20 @@ const styles = StyleSheet.create({
   infoContainer:{
     display:"flex",
     flexDirection:"row",
-    width: 268,
-    height: 69,
-    top: '356',
-    left: 45,
-    marginVertical:32,
+    alignSelf:"center",
+    width: wp("80%"),
+    height: hp("10%"),
+    marginVertical:"10%",
+    //borderWidth:1
 
 
   },
   infoLogoContainer:{
-    width: 69,
-    height: 69,
+    width: "25%",
+    height:"100%",
     padding: 10,
     gap: 10,
+   // borderWidth:1
   
 
   },
@@ -384,31 +342,31 @@ const styles = StyleSheet.create({
   },
 
   infoTextContainer:{
-    width: 217,
-    height: 73,
-    padding: 10,
+    width: "75%",
+    height: "100%",
     gap: 10,
-    // borderWidth:1,
-    // borderColor:"red"
+   
  
 
   },
   infoText:{
     flex:1,
-    width: 197,
-    height: 43,
+    width: "100%",
+    height: "100%",
     gap: 2,
    right:5,
- 
+   // borderWidth:1,
+    borderColor:'red',
     alignSelf: 'center',
     display:'flex',
    
 
   },
   text:{
-    flex:1,
+   flex:1,
     fontFamily: 'Roboto',
     fontWeight: '300',
+    fontSize:12,
      lineHeight: 13,
     letterSpacing: 0.2,
     //alignSelf:'center',

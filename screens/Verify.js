@@ -19,6 +19,7 @@ import PageFooter from "./components/PageFooter";
 import { FontAwesome } from '@expo/vector-icons';
 import axiosInstance from "../axios_services/axios";
 import {useForm,Controller,useWatch} from 'react-hook-form'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 
 const Verify = ({ route, navigation }) => {
@@ -228,7 +229,7 @@ const handleRegistration = () => {
       </View>
 
        
-        <View style={styles.inputParentContainer}>
+        <View style={styles.otpParentContainer}>
           {otpButtonText === "Request for OTP" ? (
              <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
              <View style={{display:"flex",flexDirection:"column",width:"95%",height:"75%"}}>
@@ -249,7 +250,13 @@ const handleRegistration = () => {
            </View>
             </TouchableOpacity> }
       
-          <Controller
+            </View>
+            <View style={styles.inputParentContainer}>
+      
+      <View style={styles.labelContainer}>
+      <Text style={styles.inputLabel}>Otp</Text>
+     </View>
+     <Controller
         name="otp"
         control={control}
         rules={rules.otp}
@@ -267,8 +274,7 @@ const handleRegistration = () => {
               />
         </View>
         )}/>
-            </View>
-      
+      </View>
         <Button
           mode="contained"
           onPress={handleSubmit(handleRegistration)}
@@ -307,47 +313,31 @@ const styles = StyleSheet.create({
     marginBottom:2
   },
 
-  logoContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-end", // Center the logo and text horizontally
-    width: "100%", // Ensure it takes the full width to center the content
-  },
-  logo: {
-    width: 70,
-    height: 70,
-  },
-  logoText: {
-    width: 65,
-    height: 75,
-    marginTop: 20,
-  },
-  welcomeText: {
-    fontSize: 20,
-
-    textAlign: "left",
-  },
   pageHeaderContainer:{
     marginBottom:20
   },
-  loginText: {
-    fontSize: 16,
-    textAlign: "left",
-    marginBottom: 30,
-    color: "#000",
-  },
+ 
   inputParentContainer:{
     display:"flex",
     flexDirection:"column",
-    width:'89.5%',
-    height:'15.5%',
+    width: wp('89%'),
+    height:hp('15.5%'),
     top:'237',
     left:"8%",
-    gap:8
+    gap:8,
+    //borderWidth:1
   } ,
 
-
+otpParentContainer:{
+    alignSelf:'center',
+    display:"flex",
+    flexDirection:"column",
+    width: wp('89%'),
+    height:hp('10%'),
+    top:'237',
+    left:"8%",
+    //borderWidth:1
+},
   labelContainer:{
     display:"flex",
     flexDirection:"row",
@@ -459,13 +449,12 @@ const styles = StyleSheet.create({
   },
  
   button:{
-    marginTop:"15%",
-    width:"85%",
-    height:'7.5%',
-    padding:'1%',
-    gap:10,
-    borderRadius:10,
-    alignSelf:"center"
+    alignSelf:"center",
+      marginTop:"10%",
+      width:wp("89%"),
+      height:hp('7%'),
+      borderRadius:10,
+      left:"2%",
     //left:32,
   },
 
