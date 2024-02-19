@@ -12,6 +12,7 @@ import Setpasssword from './screens/SetpasswordScreen';
 import VerificationComplete from './screens/VerificationComplete';
 import Dashboard from './screens/Dashboard.js';
 import MyCalendar from './screens/components/MyCalendar.js';
+import UpcomingEvents from './screens/components/UpcomingEvents.js';
 
 
 
@@ -43,6 +44,7 @@ export default function App() {
             {/* <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/> */}
            {/* <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/> */}
            <Stack.Screen name="Calendar" component={MyCalendar} options={{headerShown:false}}/>
+           <Stack.Screen name="Upcoming Events" component={UpcomingEvents} options={{headerShown:false}}/>
            <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
           
         </Stack.Navigator>

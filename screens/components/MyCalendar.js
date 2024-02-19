@@ -33,7 +33,7 @@ const MyCalendar = ({}) => {
             minDate={'2023-12-01'}
             maxDate={'2024-12-31'}
             onDayPress={onDayPress}
-            monthFormat={'MMMM YYYY '}
+            monthFormat={'MMMM yyyy '}
             onMonthChange={(month) => {console.log('month changed', month)}}
             hideExtraDays={true}
             hideArrows={false}

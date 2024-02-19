@@ -8,18 +8,20 @@ import {
 
 const UpcomingEvents = () => {
     return (
-        <view>
+        <View style = {styles.upcomingEventsContainer}>
 
-        </view>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    upcomigEventsContainer:{
+    upcomingEventsContainer:{
         width:340,
         height: 271,
-        top: 635,
+        //top: 635,
         left: 9,
+        borderWidth:1,
+        borderColor:"#ddd"
 
     }
 })
