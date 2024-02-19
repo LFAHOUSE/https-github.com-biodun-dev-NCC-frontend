@@ -18,7 +18,7 @@ import PageFooter from "./components/PageFooter";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const VerificationComplete = ({route,navigation}) => {
-   const {phoneNumber,email,otp} = route.params
+   const {phoneNumber,email,otp,password} = route.params
   const goBack = () => {
     navigation.goBack()
   }
@@ -27,7 +27,8 @@ const VerificationComplete = ({route,navigation}) => {
     navigation.navigate("LetsMeet",{
       phoneNumber:phoneNumber,
       email:email,
-      otp:otp
+      otp:otp,
+      password:password
     })
   }
 

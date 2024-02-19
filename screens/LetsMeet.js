@@ -22,23 +22,18 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from 'moment'
 import Loader from "./components/Loader";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {setUser} from "../redux/userReducer.js"
+import axiosInstance from "../axios_services/axios";
+import {useDispatch} from 'react-redux'
 
 
 const LetsMeet= ({route,navigation}) => {
-  const {phoneNumber,otp,password,email} = route.params
-  console.log("PhoneNumber in LetsMeet: " + phoneNumber)
-  console.log( phoneNumber,
-    firstname,
-    lastname, 
-    email,
-    otp,
-    password,
-    selectedCenter,
-    selectedSex,
-    dateSelected)
+ const {phoneNumber,otp,password,email} = route.params
     const goBack = () => {
         navigation.goBack()
     }
+    const dispatch = useDispatch()
+
     const [nccCenter,setNccCentre] = useState(["Lekki","Ajah","Ikeja","Shomolu","Ilorin","Ibadan","Oworonshoki","Port-Harcourt","Jos","Abuja"])
     const [sex,setSex] = useState(["Male","Female"])
     const [selectedSex,setSelectedSex] = useState("")
@@ -71,6 +66,15 @@ const LetsMeet= ({route,navigation}) => {
 
     const firstname = useWatch({control, name:"firstname"})
     const lastname = useWatch({control, name:"lastname"})
+    console.log("Firstname: "+ firstname)
+    console.log("Lastname: "+ lastname)
+    console.log("sex: "+ selectedSex)
+    console.log("nccCenter: "+ selectedCenter)
+    console.log("dob: "+ dateSelected)
+    console.log("phoneNumber inside reg: "+ phoneNumber)
+    console.log("otp inside reg: "+ otp)
+    console.log("email inside reg: "+ email)
+    console.log("password inside reg: "+ password)
 
     const onChange = (event, selectedDate) => {
       console.log("selectedDate: " + selectedDate)
@@ -89,55 +93,10 @@ const LetsMeet= ({route,navigation}) => {
     };
 
   
- // Define a named function for the render prop
-function renderInput({ field, fieldState }) {
-  return (
-    <View
-      style={[
-        styles.inputContainer,
-        { borderColor: fieldState.isTouched ? 'green' : 'red', borderWidth: 1 },
-      ]}
-    >
-      <TouchableOpacity style={styles.textInputContainer}>
-        <TextInput
-          name="firstname"
-          value={field.value}
-          onChangeText={field.onChange}
-          onBlur={field.onBlur}
-          keyboardType="name-phone-pad"
-          placeholder="Please enter your first name"
-          autoCapitalize="none"
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-// Pass the function as a reference to the render prop
-<Controller
-  name="firstname"
-  control={control}
-  rules={rules.firstname}
-  render={renderInput} // no need to use an anonymous function here
-/>;
-
-    const handleRegistration =  async () => {
-      console.log("PhoneNumber in LetsMeet: " + phoneNumber)
-      console.log( phoneNumber,
-        firstname,
-        lastname, 
-        email,
-        otp,
-        password,
-        selectedCenter,
-        selectedSex,
-        dateSelected)
-      setLoading(true)
-    
-      try {
-        const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration",{
+ const handleRegistration =  async () => {
+    const data ={
           phoneNumber:phoneNumber,
-          firstname: firstname,
+          firstName: firstname,
           lastName: lastname, 
           email:email,
           otp:otp,
@@ -145,9 +104,15 @@ function renderInput({ field, fieldState }) {
           nccCentre: selectedCenter,
           sex:selectedSex,
           dob:dateSelected
-        });
+    }
+       setLoading(true)
+    
+      try {
+        const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/complete-profile-registration",data);
+        console.log(response.data)
         setStatusText(response.data?.message)
         if (response.status === 200 || response.status ===201) {
+          dispatch(setUser(data))
           // return the response data
           setLoading(false)
           Alert.alert("OK", response.data?.message)
@@ -248,7 +213,7 @@ function renderInput({ field, fieldState }) {
           style={styles.input}
           control={control}
           name="gender"
-          onChangeText={setSex}
+          onChangeText={field.onChange}
           value={selectedSex}
           keyboardType="name-phone-pad"
           placeholder="Click to choose"

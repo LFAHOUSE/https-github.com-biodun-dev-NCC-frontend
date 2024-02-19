@@ -25,7 +25,7 @@ const LoginScreen = ({navigation}) => {
 const {control,handleSubmit,formState:{errors}} = useForm()
     const phoneNumber = useWatch({control,name:"phoneNumber"})
     const password = useWatch({control, name:"password"})
-
+   const fullPhoneNumber =countryCode + phoneNumber
     const [countryCode, setCountryCode] = useState("+234");
     const [loading, setLoading] = useState(false)
     const [statusText, setStatusText] = useState("")
@@ -39,11 +39,13 @@ const {control,handleSubmit,formState:{errors}} = useForm()
     console.log(countryCode+phoneNumber)
     console.log(password)
     setLoading(true);
+    const data ={
+      phoneNumber: countryCode + phoneNumber,
+      password:password
+    }
+    console.log(data)
     try {
-      const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/login', {
-        phoneNumber: countryCode + phoneNumber,
-        password:password
-      });
+      const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/login', data);
       console.log(response.data)
       
       if (response.status === 200 || response.status === 201 ) {
@@ -56,13 +58,13 @@ const {control,handleSubmit,formState:{errors}} = useForm()
     } catch (error) {
      setLoading(false)
      setStatusText(error.response.data.message)
-      console.log(error)
+      console.log(error.response.data.message)
        setButtonText("Try Again")
-      Alert.alert('Sign up failed', error.response.data.message);
+      Alert.alert('Login failed', error.response.data.message);
     }
   // To be removed in production
     setLoading(false);
-    navigation.navigate("Verify",{phoneNumber: phoneNumber,countryCode:countryCode})
+    navigation.navigate("Dashboard")
     };
     // Determine if the phone number is 11 digits for enabling the button
     const isButtonActive = phoneNumber?.length === 10 && password?.length >= 8;

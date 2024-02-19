@@ -36,6 +36,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
 } = useForm();
   const password = useWatch({control,name:"password"})
   const confirmPassword = useWatch({control,name:"confirmPassword"})
+  console.log("Password insside setpassword: "+ password)
   //To navigate backward on the pageHeader component
     const goBack = () => {
         navigation.goBack()
@@ -73,20 +74,26 @@ console.log("PhoneNumber in password: "+ phoneNumber)
         navigation.navigate("VerificationComplete",{
           phoneNumber:phoneNumber,
           email:email,
-          otp:otp
+          otp:otp,
+          password:password
         });
         setLoading(false)
       
       } 
     } catch (error) {
       // handle the error
+      console.log(error.response.data.message)
       setStatusText(error.response.data.message)
       Alert.alert("Error", error.response.data.message)
       setLoading(false)
       
     }
     // TO be removed in Production
-    navigation.navigate("VerificationComplete",{phoneNumber:phoneNumber,email:email,otp:otp});
+    navigation.navigate("VerificationComplete",{
+      phoneNumber:phoneNumber,
+      email:email,
+      otp:otp,
+      password:password});
   };
   
   // Determine if all input fields are touched for enabling the button

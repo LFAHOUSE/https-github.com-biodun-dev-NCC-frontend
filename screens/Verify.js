@@ -192,7 +192,7 @@ const handleRegistration = () => {
            </View>
            <View style={styles.textInputContainer}>
            <TextInput
-           style={styles.input}
+            style={styles.input}
             value={complete_phone_number}
             name="phoneNumber"
             keyboardType="number-pad"

@@ -39,6 +39,7 @@ const SignUp = ({props, navigation }) => {
   };
 
   const phoneNumber = useWatch({control, name:"phoneNumber"})
+  console.log("phone Number inside signup: "+phoneNumber)
 
     //  const [phoneNumber, setPhoneNumber] = useState("");
      const [countryCode, setCountryCode] = useState('+234'); 
