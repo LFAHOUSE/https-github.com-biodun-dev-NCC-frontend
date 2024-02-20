@@ -15,22 +15,18 @@ import {
 import { Button } from "react-native-paper";
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
+import Loader from "./components/Loader.js";
 import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios.js";
-import { useForm,useWatch } from "react-hook-form";
-import Input from "./components/Input.js";
+import {useForm,Controller,useWatch} from "react-hook-form"
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+
 
 
 
 
 const SignUp = ({props, navigation }) => {
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const {control,handleSubmit,formState:{errors}}= useForm()
 
   const rules = {
     phoneNumber: {
@@ -43,14 +39,17 @@ const SignUp = ({props, navigation }) => {
   };
 
   const phoneNumber = useWatch({control, name:"phoneNumber"})
+  console.log("phone Number inside signup: "+phoneNumber)
 
     //  const [phoneNumber, setPhoneNumber] = useState("");
      const [countryCode, setCountryCode] = useState('+234'); 
      const [showPickerModal,setShowPickerModal] = useState(false)
      const [loading,setLoading] = useState(false)
+     const [statusText,setStatusText] = useState("")
      const [buttonText, setButtonText] = useState("Sign-up")
+
     const goBack = () => {
-      navigation.goBck()
+      navigation.goBack()
       }
 
       const openCodePicker = () => {
@@ -61,37 +60,42 @@ const SignUp = ({props, navigation }) => {
         const handleRegistration = async () => {
           console.log(countryCode+phoneNumber)
           setLoading(true);
+          console.log(loading)
           try {
+            setLoading(true)
             const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/initiate-registration', {
               phoneNumber: countryCode + phoneNumber,
             });
+            setStatusText(response.data.message)
             if (response.status === 201) {
-              setLoading(true)
+              setLoading(false)
               setButtonText("Next")
               Alert.alert("OK",response.data.message);
                navigation.navigate("Verify",{phoneNumber:phoneNumber,countryCode:countryCode})
             }
           } catch (error) {
            setLoading(false)
+           setStatusText(error.response.data.message)
             console.log(error)
              setButtonText("Try Again")
             Alert.alert('Sign up failed', error.response.data.message);
           }
-        
+        // To be removed in production
           setLoading(false);
           navigation.navigate("Verify",{phoneNumber: phoneNumber,countryCode:countryCode})
-
-         
-        };
+          };
       
   // Determine if the phone number is 11 digits for enabling the button
   const isButtonActive = phoneNumber?.length === 10 || loading
 
+ 
+
   return (
+    loading ? (<Loader/>) :(
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} >
 
-       <View style={styles.pageHeaderContainer}>
+       <View>
        <PageHeader pageTitle="Registration" onBack={goBack}/>
         </View>
 
@@ -105,8 +109,12 @@ const SignUp = ({props, navigation }) => {
           <View style={styles.inputLabel}>
           <Text style={styles.label}>Phone number</Text>
           </View>
-        
-        <View style={styles.inputContainer}>
+          <Controller
+        name="phoneNumber"
+        control={control}
+        rules={rules.phoneNumber}
+        render={({ field,fieldState}) => (
+        <View style={[styles.inputContainer, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
           <View style={styles.inputAccessory}>
 
            <View style={styles.phoneNumberIcon}>
@@ -123,9 +131,10 @@ const SignUp = ({props, navigation }) => {
 
            </View>
            <View style={styles.textInputContainer}>
-           <Input
-            control={control}
-            name="phoneNumber"
+           <TextInput
+            value={field.value}
+            onChangeText={field.onChange}
+            onBlur={field.onBlur}
             rules={rules.phoneNumber}
             error={errors.phoneNumber}
             keyboardType="number-pad"
@@ -141,6 +150,9 @@ const SignUp = ({props, navigation }) => {
         />
         </View>
         </View>
+         )}
+        
+         />
         </View>
 
         <Button
@@ -165,20 +177,21 @@ const SignUp = ({props, navigation }) => {
           </TouchableOpacity>
           </View>
           <View style={styles.member}>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <TouchableOpacity>
             <Text style={styles.memberText}>
-              I am a member, Login <Text style={styles.sign}>here</Text>
+              I am a member, Login <Text style={styles.sign} onPress={()=>navigation.navigate("Login")}>here</Text>
             </Text>
           </TouchableOpacity>
           </View>
 
         </View>
-        <View style={styles.footerContainer}>
+        <View>
         <PageFooter/>
         </View>
       
       </ScrollView>
     </SafeAreaView>
+    )
   );
 };
 
@@ -190,55 +203,63 @@ const styles = StyleSheet.create({
     },
     container: {
       flexGrow: 1,
-      justifyContent: "space-between",
-      padding: 5,
-     //  gap:10,
+        justifyContent: "space-between",
+        padding:"2%",
+         gap:20,
+        flexDirection:"column"
     },
-    logoContainer: {
-      alignItems: "center",
-      flexDirection: "row",
-      alignContent: "center",
-      justifyContent: "flex-end", // Center the logo and text horizontally
-      width: "100%", // Ensure it takes the full width to center the content
-    },
-    logo: {
-      width: 70,
-      height: 70,
-    },
+    
+  
     pageHeaderContainer:{
       marginBottom:20
     },
-    logoText: {
-      width: 65,
-      height: 75,
-      marginTop: 20,
-    },
     signText: {
-      width:94,
-      height:38,
+      display:'flex',
+      flexDirection:"row",
+      width:"29.5%",
+      height:"40.5%",
       paddingTop:10,
       paddingRight:10,
       paddingBottom:0,
       paddingLeft:0,
       gap:10,
+     // borderWidth:1,
       fontSize: 20,
       fontWeight: "bold",
       
     },
+    signUpContainer: {
+      display:"flex",
+      flexDirection:'column',
+      width:wp("90%"),
+      height:hp("15%"),
+      left:"8%",
+
+      //top:'144',
+      //borderWidth:1
+      
+    },
     signupText: {
-      width:291,
-      height:'34',
+      display:"flex",
+      flexDirection:'row',
+      //flexWrap:"wrap",
+      width:wp("90%"),
+      height:hp('10%'),
       paddingTop:10,
       paddingRight:10,
       paddingBottom:10,
       paddingLeft:0,
       gap:10,
+      //borderWidth:1
     },
     inputParentContainer:{
-      width:'290',
-      height:'102',
+      display:"flex",
+      flexDirection:"column",
+      width:wp('89%'),
+      height:hp('15.9%'),
       top:'237',
-      left:32
+      left:"8%",
+      //borderWidth:1
 
     },
     inputContainer: {
@@ -246,44 +267,50 @@ const styles = StyleSheet.create({
       flexDirection:"row",
       alignItems: 'center',
       justifyContent: 'space-around',
-      width:290,
-      height:40,
+      width:"95%",
+      height:"40%",
       borderRadius:7,
       borderWidth:1,
       background: "#CAC3C3",
-      borderColor:"#CAC3C3"
+      borderColor:"#CAC3C3",
+      // borderWidth:1,
+      // borderColor:"red"
     },
     inputAccessory:{
       display:"flex",
       flexDirection:"row",
       alignItems:"center",
       justifyContent:'space-between',
-      right:10,
-      width:101,
-      height:36
+      right:"3%",
+      width:"35%",
+      height:"100%",
+      //top:"5%",
+    // borderWidth:1
     },
     phoneNumberIcon:{
-      width: 35,
-      height: 36,
-      paddingTop: '12',
-      paddingRight: '10',
-      paddingBottom: '12',
-      paddingLeft: '10',
-      gap: 10
+      width: 30,
+      height: "85%",
+      paddingTop: '1.3%',
+      paddingRight: '1%',
+      paddingBottom: '1.2%',
+      paddingLeft: '1%',
+      gap: 10,
+      top:"2%"
 
     },
 
     phoneIconLogo:{
-        width:'15',
+        width:"100%",
         
         
     },
 
     arrowDownContainer:{
-      width: 29,
-      height:36,
+      width: "60%",
+      height:"90%",
       padding: 10,
-      gap: 10
+      gap: 10,
+      top:"3%",
 
     },
 
@@ -292,26 +319,31 @@ const styles = StyleSheet.create({
       height:16
     },
     textInputContainer:{
-      width: 124,
-      height: 43,
-      paddingTop: '10', 
-      paddingRight:'10',
-      paddingBottom: '10', 
-      paddingLeft:'26',
+      display:"flex",
+      flexDirection:"row",
+      width: "50%",
+      height: "100%",
+      paddingTop: '1%', 
+      paddingRight:'1%',
+      paddingBottom: '1%', 
+      paddingLeft:'2.6%',
       borderRadius: 7,
       gap: 10,
       fontSize:16,
-      right:24
+      right:24,
+      //top:"2%",
+      //borderWidth:1
 
     },
 
     input: {
       width:'74',
-      height:'15',
+      height:'1.5%',
       paddingTop:5,
-      paddingRight:'10',
-      paddingBottom:'10',
-      paddingLeft:'26',
+      paddingRight:'1%',
+      paddingBottom:'1%',
+      paddingLeft:'2.6%',
+      borderWidth:1
     
    },
     inputError:{
@@ -324,36 +356,36 @@ const styles = StyleSheet.create({
     marginRight:5,
     },
     inputLabel: {
-      width:'95',
-      height:'35', 
-      paddingTop: 10,
-      paddingRight:10,
-      paddingBottom:10,
-      paddingLeft:0,
+      width:'50%',
+      height:'40%', 
+      paddingTop: "1%",
+      paddingRight:"1%",
+      paddingBottom:"1%",
+      paddingLeft:"0%",
       gap:10,
       fontSize: 16,
       color: "#000",
       marginBottom: 5,
+     // borderWidth:1
     },
     button:{
-      marginTop:40,
-      width:290,
-      height:'40',
-      padding:'10',
-      gap:10,
+      alignSelf:"center",
+      marginTop:"10%",
+      width:wp("89%"),
+      height:hp('7%'),
       borderRadius:10,
-      left:32,
+      left:"2%",
     },
 
     
    label:{
     fontFamily:"Roboto",
-   fontWeight:'400'
+    fontWeight:'400'
    },
 
       phoneNumberContainer: {
-        width:'101',
-        height:'36',
+        width:'80%',
+        height:'80%',
         flexDirection: "row",
         alignItems: "center",
         // marginBottom: 10,
@@ -364,91 +396,84 @@ const styles = StyleSheet.create({
       width:'37',
       height:'35',
       padding: '10',
-      gap: 10
+      gap: 10,
+      top:'2%'
       
     },
     countryCodeText: {
-      width:'30',
-      height:'30',
+      width:'100%',
+      height:'70%',
       fontSize: 16,
       color: "#000",
     },
    
-      
-    signUpContainer: {
-      width:187,
-      height:86,
-      left:32,
-      //top:'144',
-      
-    },
-    signUpText: {
-      color: "#000",
-      marginVertical: 10,
-      fontSize: 13,
-    },
+
     account:{
-      width:187,
-      height:86,
+      width:wp("75%"),
+      height:hp("13%"),
       alignSelf:'center',
       gap:5,
-      marginTop:49
+      //marginTop:49,
+      //borderWidth:1,
+      //left:"5%",
+      alignSelf:"center"
     },
     sign: {
+     // width:78,
       color: "#6EB1E1",
       marginLeft:20,
       fontSize: 15,
     },
     visitorTextContainer:{
-      width: 83,
-      height:18,
-      paddingTop: '17',
-      paddingRight: '10',
-      paddingBottom: '10',
-      paddingLeft: '10',
+      display:'flex',
+      flexDirection:"row",
+      width: "40%",
+      height:"27%",
+      paddingTop: '1%',
+      paddingRight: '1%',
+      paddingBottom: '2%',
+      paddingLeft: '0%',
       gap: 10,
+      //borderWidth:1,
+      alignSelf:"center"
       
       
     },
     visitorText: {
-      width: 100,
-      height: 18,
+      width: "100%",
+      height: "120%",
       color: "#000",
       fontWeight:'800',
       fontSize:13,
       fontFamily:"Roboto"
-
+    
       //marginVertical: 10,
     },
     member:{
-      width:187,
-      height:29,
-      paddingTop:'0',
-      paddingRight:'10',
-      paddingBottom:'1',
-      paddingLeft:'0'  
+      width:"100%",
+      height:"30%",
+      paddingTop:0,
+      paddingRight:10,
+      paddingBottom:1,
+      paddingLeft:0,
+     left:"8%",
+     alignSelf:"center"
     },
     memberText:{
-      width:209,
-      height:'28'
+      display:'flex',
+      flexDirection:"row",
+      width:"100%",
+      height:28,
+      //alignSelf:"center",
+      left:"60%"
     },
-
-    picker: {
-      width: '80%',
-      height: 40,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      marginBottom: 10,
-    },
+    
     code: {
       fontSize: 18,
       marginBottom: 10,
     },
-    footerContainer:{
-      marginTop:87,
-    marginBottom:20
-    }
+   
+    
   });
   
 

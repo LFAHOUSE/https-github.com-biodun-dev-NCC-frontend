@@ -8,10 +8,10 @@ import {
     ImageBackground,
     TouchableOpacity,
   } from "react-native";
-  
+  import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
   const PageHeader = ({onBack,pageTitle}) => {
      return(
-     <ImageBackground style={{width:360,height:100}} source={require("../../assets/banner.png")}>
+     <ImageBackground style={{width:wp("100%"),height:hp("16%")}} source={require("../../assets/banner.png")}>
     <View style={styles.pageHeader}>
       <View style={styles.headerContainer}>
     {/* Logo and title */}
@@ -45,70 +45,73 @@ import {
 
   const styles = StyleSheet.create({
     pageHeader:{
-      width:360,
-      height:100,
+      width:wp("100%"),
+      height:hp("16%"),
       gap:10,
+     // borderWidth:1
       
     },
     headerContainer:{
       display:'flex',
       flexDirection: 'row',
-      padding: 5,
-      width:318,
-      height:71 ,
+      padding: "2%",
+      width:wp("98%"),
+      height:hp("15%") ,
       gap:107,
-      //gap:80
+      //borderWidth:1
      
     },
     titleText:{
       fontSize: 18,
-      fontWeight: '500',
+      fontWeight: '800',
       fontFamily:"Roboto",
       color: '#000',
-      width:178,
-      height:31
+      width:"160%",
+      height:"180%",
+      //borderWidth:1,
     },
 
-    headerContent:{
-      display:"flex",
-      flexDirection:"column"
-    },
     arrowAndTitle:{
       display:"flex",
       flexDirection:'column',
-      width:108,
-      height:71,
-      gap:16
+      width:wp("30%"),
+      height:hp("13%"),
+      gap:16,
+      //borderWidth:1
     },
     logoAndText:{
       flex:1,
       flexDirection:"row",
-      width:103,
-      height:71,
-      right:10
+      width:wp("100%"),
+      height:hp("13%"),
+      right:10,
+      //borderWidth:1
     },
     logoContainer:{
-      width:60,
-      height:71,
+      width:"40%",
+      height:"90%",
       paddingTop: 24,
       paddingRight: 10,
       paddingBottom: 0,
       paddingLeft: 10,
       gap:10,
+      //borderWidth:1,
+     left:"1%",
      // left:215
      marginTop:5
     },
     textContainer:{
-      paddingTop: 23,
+      paddingTop: "20%",
       paddingRight: 10,
       paddingBottom:10,
       paddingLeft: 10,
       gap:10,
-      maxWidth:61,
-      maxHeight:69,
-      top:'2px',
+      width:"65%",
+      maxHeight:"100%",
+      top:'1%',
+      //borderWidth:1,
       //left:257,
-      right:20
+        right:"10%"
     },
     text:{
       width:90.05,

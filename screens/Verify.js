@@ -18,8 +18,8 @@ import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
 import { FontAwesome } from '@expo/vector-icons';
 import axiosInstance from "../axios_services/axios";
-import {useForm,useWatch} from 'react-hook-form'
-import Input from "./components/Input";
+import {useForm,Controller,useWatch} from 'react-hook-form'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 
 const Verify = ({ route, navigation }) => {
@@ -53,6 +53,7 @@ const Verify = ({ route, navigation }) => {
 
   
   const [loading,setLoading] = useState(false)
+  const [statusText,setStatusText] = useState("")
  const goBack = () => {
   navigation.goBack()
  }
@@ -61,6 +62,9 @@ const Verify = ({ route, navigation }) => {
   
   console.log("Phone Number: " + countryCode + phoneNumber)
   const complete_phone_number = countryCode+phoneNumber
+  const [timer,setTimer] = useState(90)
+  const [otpButtonText,setOtpButtonText] = useState("Request for OTP")
+  const [sent,setSent] = useState(false)
  
 
 // define the requestOtp function
@@ -76,21 +80,71 @@ const requestOtp = async () => {
   try {
     const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/add-email-request-otp", data);
     console.log(response.status)
-    if (response.status === 200) {
-      // return the response data
-      Alert.alert("OK", response.data.message)
+    if (response.status === 200 || response.status === 201) {
+      setSent(true)
+      startTimer()
+      setStatusText(response.data.message)
       setLoading(false)
-    
-    } 
+     } else {
+      setSent(false)
+      setLoading(false)
+      setOtpButtonText("Resend OTP")
+     }
   } catch (error) {
-    // handle the error
-    Alert.alert("Error", error.response.data.message)
+    setSent(false)
+    setOtpButtonText("Resend OTP")
+    setStatusText(error.response.data.message)
     setLoading(false)
     
   }
 };
 
+const resendOtp = async () => {
+  console.log("emailAddress: ", email)
+  setLoading(true)
+  // create a data object with email and phone
+  const data = { 
+    email:email
+   };
 
+  try {
+    const response = await axiosInstance.post("http://20.84.147.6:8080/api/users/resend-otp", data);
+    console.log(response.status)
+    if (response.status === 200 || response.status === 201) {
+      setSent(true)
+      startTimer()
+      setStatusText(response.data.message)
+      setLoading(false)
+     } else {
+      setSent(false)
+      setLoading(false)
+      setOtpButtonText("Resend OTP")
+     }
+  } catch (error) {
+    setSent(false)
+    setOtpButtonText("Resend OTP")
+    setStatusText(error.response.data.message)
+    setLoading(false)
+    
+  }
+};
+
+const startTimer = () => {
+  setTimer(90);
+  // set the button text to disable
+  setOtpButtonText('');
+  let intervalId;
+  // a function to update the timer every second
+  const updateTimer = () => {
+    setTimer(timer => timer - 1);
+    if (timer === 0) {
+      clearInterval(intervalId);
+      setOtpButtonText('Resend OTP');
+    }
+  };
+  // set the interval to call the updateTimer function every second
+  intervalId = setInterval(updateTimer, 1000);
+};
 const handleRegistration = () => {
   console.log("PhoneNumber: "+ phoneNumber)
    navigation.navigate("Setpassword",{
@@ -104,7 +158,7 @@ const handleRegistration = () => {
  
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps={'always'}>
+      <ScrollView contentContainerStyle={styles.container}>
         
         <View style={styles.pageHeaderContainer}>
         <PageHeader pageTitle="Let us verify you" onBack={goBack}/>
@@ -115,8 +169,12 @@ const handleRegistration = () => {
         <View style={styles.labelContainer}>
         <Text style={styles.inputLabel}>Phone number</Text>
        </View>
-
-        <View style={styles.inputContainer}>
+       <Controller
+        name="phoneNumber"
+        control={control}
+        rules={rules.phoneNumber}
+        render={({ field,}) => (
+        <View style={[styles.inputContainer, {borderColor: 'green' }]}>
           <View style={styles.inputAccessory}>
 
            <View style={styles.phoneNumberIcon}>
@@ -133,12 +191,10 @@ const handleRegistration = () => {
 
            </View>
            <View style={styles.textInputContainer}>
-           <Input
-            control={control}
+           <TextInput
+            style={styles.input}
             value={complete_phone_number}
             name="phoneNumber"
-            rules={rules.phoneNumber}
-            error={errors.phoneNumber}
             keyboardType="number-pad"
             placeholder="7063164212"
             autoCapitalize="none"
@@ -147,6 +203,7 @@ const handleRegistration = () => {
         
         </View>
         </View>
+        )}/>
         
 
 
@@ -157,41 +214,74 @@ const handleRegistration = () => {
       <View style={styles.labelContainer}>
       <Text style={styles.inputLabel}>Email Address</Text>
      </View>
+     <Controller
+        name="email"
+        control={control}
+        rules={rules.email}
+        render={({ field,fieldState}) => (
+      <View style={[styles.inputContainer,  {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
 
-      <View style={styles.inputContainer}>
-
-         <Input
-          control={control}
-          name="email"
-          rules={rules.email}
-          error={errors.email}
+         <TextInput
+         style={styles.input}
+          value={field.value}
+          onChangeText={field.onChange}
+          onBlur={field.onBlur}
           keyboardType="email-address"
           placeholder="e.g pastorbimbo@nccnigeria.org"
           autoCapitalize="none"
         />
       
       </View>
+        )}/>
       </View>
 
        
-        <View style={styles.inputParentContainer}>
-       <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
-         <Text style={styles.otp}>Request for OTP</Text>
-         {loading && <ActivityIndicator size={24} color="#6200ee"/>}
-          </TouchableOpacity>
-          
-        <View style={styles.inputContainer}>
-        <Input
-               control={control}
+        <View style={styles.otpParentContainer}>
+          {otpButtonText === "Request for OTP" ? (
+             <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
+             <View style={{display:"flex",flexDirection:"column",width:"95%",height:"75%"}}>
+             <View style={styles.otpContainer}>
+              <Text style={styles.otp}>{otpButtonText}</Text>
+              {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{`${timer}s`}</Text> }
+              </View>
+              {statusText && <Text style={{color:"green",width:'100%',fontSize:10}}>{statusText}</Text>}
+              </View>
+               </TouchableOpacity>
+          ): <TouchableOpacity onPress={resendOtp} style={{display:'flex'}}>
+          <View style={{display:"flex",flexDirection:"column",width:"95%",height:"75%"}}>
+          <View style={styles.otpContainer}>
+           <Text style={styles.otp}>{otpButtonText}</Text>
+           {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{ `${timer}s`}</Text>}  
+           </View>
+           {statusText && <Text style={{color:"green",width:'100%',fontSize:10}}>{statusText}</Text>}
+           </View>
+            </TouchableOpacity> }
+      
+            </View>
+            <View style={styles.inputParentContainer}>
+      
+      <View style={styles.labelContainer}>
+      <Text style={styles.inputLabel}>Otp</Text>
+     </View>
+     <Controller
+        name="otp"
+        control={control}
+        rules={rules.otp}
+        render={({ field,fieldState}) => (
+        <View style={[styles.inputContainer,  {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
+        <TextInput
+              style={styles.input}
                name="otp"
-               rules={rules.otp}
-               error={errors.otp}
+               value={field.value}
+               onChangeText={field.onChange}
+               placeholder="Provide your otp "
+               onBlur={field.onBlur}
                keyboardType="number-pad"
                autoCapitalize="none"
               />
         </View>
-            </View>
-      
+        )}/>
+      </View>
         <Button
           mode="contained"
           onPress={handleSubmit(handleRegistration)}
@@ -204,7 +294,7 @@ const handleRegistration = () => {
         >
           Next
         </Button>
-          <View style={styles.footerContainer}>
+          <View>
           <PageFooter/>
           </View>
      
@@ -222,121 +312,73 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: "space-between",
-    padding: 5,
-    // gap:30,
+    padding:"2%",
+     gap:20,
+    flexDirection:"column"
   },
   arrowDown:{
     marginBottom:2
   },
 
-  logoContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    alignContent: "center",
-    justifyContent: "flex-end", // Center the logo and text horizontally
-    width: "100%", // Ensure it takes the full width to center the content
-  },
-  logo: {
-    width: 70,
-    height: 70,
-  },
-  logoText: {
-    width: 65,
-    height: 75,
-    marginTop: 20,
-  },
-  welcomeText: {
-    fontSize: 20,
-
-    textAlign: "left",
-  },
   pageHeaderContainer:{
     marginBottom:20
   },
-  loginText: {
-    fontSize: 16,
-    textAlign: "left",
-    marginBottom: 30,
-    color: "#000",
-  },
+ 
   inputParentContainer:{
-    width: 312,
-    height: 108,
-    //top: 111,
-    left: 24,
-    paddingTop: '0', 
-    paddingRight:'0',
-    paddingBottom: '10', 
-    paddingLeft:'0',
-    gap: 10,
-    marginBottom:20
+    display:"flex",
+    flexDirection:"column",
+    width: wp('89%'),
+    height:hp('15.5%'),
+    top:'237',
+    left:"8%",
+    gap:8,
+    //borderWidth:1
   } ,
 
-  // inputParentContainerContent:{
-  //   width: '318,
-  //   height: 108
-
-  // },
-
+otpParentContainer:{
+    alignSelf:'center',
+    display:"flex",
+    flexDirection:"column",
+    width: wp('89%'),
+    height:hp('10%'),
+    top:'237',
+    left:"8%",
+    //borderWidth:1
+},
   labelContainer:{
-    width: '105',
-    height: '28',
+    display:"flex",
+    flexDirection:"row",
+    width: '50%',
+    height: '30%',
     padding: '10',
-    gap: 10
+    gap: 10,
+    //borderWidth:1
 
   },
-  inputLabel: {
-    width:'85',
-    height:'15',
-    fontSize: 16,
-    color: "#000",
-    marginBottom: 5,
-  },
-  // inputContainer: {
-  //   alignSelf: "stretch",
-  //   flex:1,
-  //   flexDirection:'row',
-  //   alignItems:'center',
-  //   justifyContent:'flex-start',
-  //   height:70,
-  //   borderWidth:1,
-  //   borderRadius: 10,
-  //   borderColor: "#ddd",
-  // },
-
+  
   inputContainer: {
     display:"flex",
     flexDirection:"row",
     alignItems: 'center',
     justifyContent: 'space-around',
-    width:290,
-    height:40,
+    width:"95%",
+    height:"40%",
     borderRadius:7,
     borderWidth:1,
     background: "#CAC3C3",
-    borderColor:"#CAC3C3"
+    borderColor:"#CAC3C3",
+    borderWidth:1,
+    // borderColor:"red"
   },
-  emailAddressInput:{
-   
-      display:"flex",
-      flexDirection:"row",
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      width:189,
-      height:15,
-      borderRadius:7,
-      borderWidth:1,
-      background: "#CAC3C3",
-      borderColor:"#CAC3C3"
-  },
+
   inputAccessory:{
     display:"flex",
     flexDirection:"row",
     alignItems:"center",
     justifyContent:'space-between',
     right:10,
-    width:101,
-    height:36
+    width:"35%",
+    height:"100%",
   },
   phoneNumberIcon:{
     width: 35,
@@ -369,18 +411,23 @@ const styles = StyleSheet.create({
 
   },
 
-  
   input: {
-     borderColor: "#ddd",
-    flex:1,
-    backgroundColor: "transparent",
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    fontSize: 16,
-    height: 60,
-    padding:10,
-    borderColor:'#fff',
-  },
+    borderColor: "#ddd",
+   backgroundColor: "transparent",
+   paddingHorizontal: 5,
+   paddingVertical: 5,
+   fontSize: 16,
+   height: 60,
+   padding:10,
+   width:240,
+   height:'15',
+   paddingRight:'10',
+   paddingBottom:'10',
+   paddingLeft:'26',
+   
+ },
+  
+  
   inputError:{
     borderColor:"red"
   },
@@ -390,11 +437,7 @@ const styles = StyleSheet.create({
   marginLeft: 10,
   marginRight:5,
   },
-  emailAddressContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    // marginBottom: 10,
-  },
+
   countryCodeSelector: {
    
     width:'37',
@@ -411,45 +454,27 @@ const styles = StyleSheet.create({
     color: "#000",
     height: 30,
   },
-  emailAddressInput: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-
-    fontSize: 16,
-    borderColor: "transparent",
-    height: 60,
-    borderTopRightRadius: 7,
-    borderBottomRightRadius: 7,
-  },
+ 
   button:{
-    marginTop:20,
-    width:290,
-    height:'40',
-    padding:'10',
-    gap:10,
-    borderRadius:10,
-    left:32,
+    alignSelf:"center",
+      marginTop:"10%",
+      width:wp("89%"),
+      height:hp('7%'),
+      borderRadius:10,
+      left:"2%",
+    //left:32,
   },
-  signUpContainer: {
-    marginBottom: 80,
-    alignItems: "center",
+
+  otpContainer:{
+    display:'flex',
+    flexDirection:"row",
+    justifyContent:'space-between',
+    width:"98%",
+    height:"70%",
+    //borderWidth:1
+
   },
-  signUpText: {
-    color: "#000",
-    marginVertical: 10,
-    fontSize: 13,
-  },
-  sign: {
-    color: "#0000FF",
-    marginVertical: 10,
-    fontSize: 15,
-  },
-  visitorText: {
-    color: "#000",
-    marginVertical: 10,
-  },
+  
   otp: {
     color: "#06447C",
     fontSize: 16,

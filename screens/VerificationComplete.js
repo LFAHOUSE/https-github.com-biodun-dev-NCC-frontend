@@ -15,11 +15,21 @@ import {
 import { Button } from "react-native-paper";
 import PageHeader from "./components/PageHeader";
 import PageFooter from "./components/PageFooter";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const VerificationComplete = ({route,navigation}) => {
-
+   const {phoneNumber,email,otp,password} = route.params
   const goBack = () => {
     navigation.goBack()
+  }
+  const handleNavigate = () => {
+    console.log("Phone number in Verification complete: "+ phoneNumber)
+    navigation.navigate("LetsMeet",{
+      phoneNumber:phoneNumber,
+      email:email,
+      otp:otp,
+      password:password
+    })
   }
 
     return (
@@ -39,7 +49,7 @@ const VerificationComplete = ({route,navigation}) => {
            
         <Button
           mode="contained"
-          onPress={() => navigation.navigate("LetsMeet")} 
+          onPress={handleNavigate} 
           style={[
             styles.button,
             { backgroundColor:"#06447C"},
@@ -68,22 +78,25 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     justifyContent: "space-between",
-    padding: 5,
-    // gap:30,
+    padding:"2%",
+     gap:20,
+    flexDirection:"column"
   },
-  // pageHeaderContainer:{
-  //   marginBottom:20
-  // },
+  pageHeaderContainer:{
+    marginBottom:20
+  },
 
   successTextContainer:{
     display:'flex',
     flexDirection:"column",
-    width: '202',
-    height: '17.45',
-    top: '212',
-    left: '79',
+    alignContent:"space-around",
+    alignItems:"center",
+    width: wp('100%'),
+    height: hp('17%'),
+    top: '2%',
     gap:10,
-    alignSelf:"center"
+    alignSelf:"center",
+    //borderWidth:1
     
   },
 
@@ -95,26 +108,25 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     lineHeight: 18,
     letterSpacing: 2,
-    textAlign:"left"
+    alignSelf:'center',
+ 
 
   },
   successImage:{
     alignSelf:"center",
-    width: 50,
-    height: 50,
-    top: '258px',
-    //left: 155,
+    width: "20%",
+    height: "60%",
+    top: '8%',
     
   },
 
   button:{
-    alignSelf:'center',
-    marginTop:20,
-    width:290,
-    height:'40',
-    padding:'10',
-    gap:10,
+    alignSelf:"center",
+    marginTop:"10%",
+    width:wp("89%"),
+    height:hp('7%'),
     borderRadius:10,
+    left:"2%",
     //left:32,
   },
 
