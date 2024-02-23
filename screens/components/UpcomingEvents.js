@@ -50,25 +50,32 @@ const UpcomingEvents = () => {
   const scrollViewRef = React.useRef(null);
 
   // Define a function to scroll forward
-  const scrollForward = () => {
-    // Get the current scroll position
-    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
-      .nativeEvent.contentOffset.x;
-    // Calculate the next scroll position by adding 320 (the width of the event component plus the margin)
-    const nextPosition = currentPosition + 320;
-    // Scroll to the next position with animation
-    scrollViewRef.current.scrollTo({ x: nextPosition, y: 0, animated: true });
-  };
+  const scrollforward = () => {
+    // Get the current x and y coordinates of the content
+    const currentX = scrollViewRef.current.contentOffset.x;
+    const currentY = scrollViewRef.current.contentOffset.y;
 
+    // Calculate the new x and y coordinates for scrollforward
+    // You can adjust the values according to your item width and height
+    const newX = currentX + 300;
+    const newY = currentY;
+
+    // Scroll the content to the new position
+    scrollViewRef.current.scrollTo({ x: newX, y: newY });
+  };
   // Define a function to scroll backward
-  const scrollBackward = () => {
-    // Get the current scroll position
-    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
-      .nativeEvent.contentOffset.x;
-    // Calculate the previous scroll position by subtracting 320 (the width of the event component plus the margin)
-    const previousPosition = currentPosition - 320;
-    // Scroll to the previous position with animation
-    scrollViewRef.current.scrollTo({ x: previousPosition, y: 0, animated: true });
+  const scrollbackward = () => {
+    // Get the current x and y coordinates of the content
+    const currentX = scrollViewRef.current.contentOffset.x;
+    const currentY = scrollViewRef.current.contentOffset.y;
+
+    // Calculate the new x and y coordinates for scrollbackward
+    // You can adjust the values according to your item width and height
+    const newX = currentX - 300;
+    const newY = currentY;
+
+    // Scroll the content to the new position
+    scrollViewRef.current.scrollTo({ x: newX, y: newY });
   };
 
       
@@ -82,13 +89,23 @@ const UpcomingEvents = () => {
       <ScrollView
         ref={scrollViewRef}
         horizontal={true}
-        showsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator={true}
         contentContainerStyle={styles.container}
       >
         { Array.isArray(data) && data.map((event) =>(
           <Event key={event._id} event={event} />
         ))}
+       
       </ScrollView>
+      {/* <View style={styles.navButton}>
+        <TouchableOpacity onPress={scrollbackward}>
+              <Image source={require("../../assets/double-arrow-left.png")}  style={styles.arrowBackward}/>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={scrollforward} >
+              <Image source={require("../../assets/double-arrow-right.png")} style={styles.arrowBackward}/>
+              </TouchableOpacity> 
+        </View> */}
     </SafeAreaView>
     )
 
@@ -133,6 +150,16 @@ const styles = StyleSheet.create({
   color:"#06447C"
 
 
+},
+navButton:{
+    display:"flex",
+    flexDirection:"row",
+    justifyContent:"space-between",
+    width:"80%",
+    height:"5%",
+    borderWidth:1,
+    top:"-5%",
+    alignSelf:"center"
 },
 button:{
   alignSelf:"center",
