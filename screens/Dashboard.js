@@ -14,6 +14,8 @@ import {
   SafeAreaView,
 } from 'react-native';
 import PageHeader from './components/PageHeader';
+import UpcomingEvents from './components/UpcomingEvents';
+import HappeningNow from './components/HappeningNow';
 
 const Dashboard = () => {
     return (
@@ -22,6 +24,8 @@ const Dashboard = () => {
              <View style={styles.pageHeaderContainer}>
                 <PageHeader pageTitle="Dashboard"/>
              </View>
+             <UpcomingEvents/>
+             <HappeningNow/>
             </ScrollView>
         </SafeAreaView>
     )

@@ -12,7 +12,7 @@ const userSlice = createSlice({
             state.user.push(action.payload)
         },
         setToken:(state,action) => {
-            state.user.token = action.payload
+            state.token = action.payload
         },
         clearUser: (state) => {
             state = initialState;

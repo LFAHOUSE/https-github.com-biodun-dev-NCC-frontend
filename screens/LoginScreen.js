@@ -28,9 +28,9 @@ const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch()
 
     const {control,handleSubmit,formState:{errors}} = useForm()
-    const phoneNumber = useWatch({control,name:"phoneNumber"})
+    const email = useWatch({control,name:"email"})
     const password = useWatch({control, name:"password"})
-    const fullPhoneNumber =countryCode + phoneNumber
+    // const fullPhoneNumber =countryCode + phoneNumber
     const [countryCode, setCountryCode] = useState("+234");
     const [loading, setLoading] = useState(false)
     const [statusText, setStatusText] = useState("")
@@ -41,39 +41,39 @@ const LoginScreen = ({navigation}) => {
       setShowPickerModal(true)
   }
   const handleRegistration = async () => {
-    console.log(countryCode+phoneNumber)
-    console.log(password)
+    // console.log(countryCode+phoneNumber)
+   // console.log(password)
     setLoading(true);
     const data ={
-      phoneNumber: countryCode + phoneNumber,
+      email: email,
       password:password
     }
-    console.log(data)
+    //console.log(data)
     try {
       const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/login', data);
-      console.log(response.data)
+      console.log(response.data.token)
       
       if (response.status === 200 || response.status === 201 ) {
-        dispatch(setToken(response.data.token))
-        setStatusText(response.data.message)
-        setLoading(false)
-        setButtonText("Next")
-        Alert.alert("OK",response.data.message);
+        let token = response.data.token
+         dispatch(setToken(token))
+          setStatusText("Login successful")
+         setLoading(false)
+        Alert.alert("OK","Login Sucessful");
          navigation.navigate("Dashboard")
       }
     } catch (error) {
      setLoading(false)
-     setStatusText(error.response.data.message)
-      console.log(error.response.data.message)
+     setStatusText("Error login in, check credentials")
+      //console.log(error.response.data?.message)
        setButtonText("Try Again")
-      Alert.alert('Login failed', error.response.data.message);
+      Alert.alert('Login failed', "Invalid Credentials");
     }
   // To be removed in production
-    setLoading(false);
-    navigation.navigate("Dashboard")
+    // setLoading(false);
+    // navigation.navigate("Dashboard")
     };
     // Determine if the phone number is 11 digits for enabling the button
-    const isButtonActive = phoneNumber?.length === 10 && password?.length >= 8;
+    const isButtonActive = password?.length === 10 ;
 
     return(
         loading ? (<Loader/>) : (
@@ -99,15 +99,15 @@ const LoginScreen = ({navigation}) => {
           <View style={styles.phoneNumberInputParentContainer}>
 
           <View style={styles.inputLabelContainer}>
-            <Text style={styles.label}>Phone Number</Text>
+            <Text style={styles.label}>Email</Text>
           </View>
           <Controller
-        name="phoneNumber"
+        name="email"
         control={control}
         rules={{ required: "Phone number is required"}}
         render={({ field,fieldState}) => (
           <View style={[styles.inputContainier, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
-           <View style={styles.inputAccessory}>
+           {/* <View style={styles.inputAccessory}>
          <View style={styles.phoneIconContainer}> 
               <Image style={styles.phoneIcon} source={require("../assets/phone.png")}/>
             </View>
@@ -125,18 +125,18 @@ const LoginScreen = ({navigation}) => {
             <TouchableOpacity style={styles.phoneIconContainer} onPress={openCodePicker}> 
               <Image style={styles.angleDown} source={require("../assets/arrow-down.png")}/>
             </TouchableOpacity>
-            </View>
+            </View> */}
         
           <TouchableOpacity style={styles.inputFieldContainer}>
             <TextInput
             style={styles.input}
-              placeholder="7063164212"
+              placeholder="omoniyibankole@gmail.com"
               onChangeText={field.onChange}
               value={field.value}
               onBlur={field.onBlur}
               // onFocus={field.onFocus}
-              maxLength={10}
-              keyboardType="number-pad"
+              //maxLength={10}
+              keyboardType="name-phone-pad"
             />   
             
          </TouchableOpacity>
@@ -192,7 +192,7 @@ render={({ field,fieldState}) => (
 
           <Button
           mode="contained"
-          onPress={handleSubmit(handleRegistration)}
+          onPress={handleRegistration}
           style={[
             styles.button,
             { backgroundColor: isButtonActive ? "#06447C" : "#EFEFF0" },

@@ -81,6 +81,7 @@ const LetsMeet= ({route,navigation}) => {
     if (selectedDate) {
       setDate(selectedDate)
         const formattedDate = moment (selectedDate).format('YYYY-MM-DD');
+      
         setDatSelected(formattedDate)
         setShow(false)
       } else {
