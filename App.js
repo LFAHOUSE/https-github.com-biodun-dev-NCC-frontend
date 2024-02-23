@@ -1,27 +1,61 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider as PaperProvider } from 'react-native-paper';
-import StartupScreen from './screens/StartupScreen'; // Ensure this is correctly imported
-import Loader from './screens/components/Loader.js';
-import LoginScreen from './screens/LoginScreen.js';// Ensure this is correctly imported
-import SignUp from './screens/SignUp';
-import Verify from './screens/Verify';
-import LetsMeet from './screens/LetsMeet';
-import Setpasssword from './screens/SetpasswordScreen';
-import VerificationComplete from './screens/VerificationComplete';
-import Dashboard from './screens/Dashboard.js';
-import MyCalendar from './screens/components/MyCalendar.js';
-import UpcomingEvents from './screens/components/UpcomingEvents.js';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Provider as PaperProvider } from "react-native-paper";
+import StartupScreen from "./screens/StartupScreen"; // Ensure this is correctly imported
+import Loader from "./screens/components/Loader.js";
+import LoginScreen from "./screens/LoginScreen.js"; // Ensure this is correctly imported
+import SignUp from "./screens/SignUp";
+import Verify from "./screens/Verify";
+import LetsMeet from "./screens/LetsMeet";
+import Setpasssword from "./screens/SetpasswordScreen";
+import VerificationComplete from "./screens/VerificationComplete";
+import MyCalendar from "./screens/components/MyCalendar.js";
+import UpcomingEvents from "./screens/components/UpcomingEvents.js";
+import Search from "./screens/Dashboard/Search.js";
+import Library from "./screens/Dashboard/Library.js";
+import Home from "./screens/Dashboard/Home.js";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import DashboardHeader from "./screens/components/DashboardHeader.js";
+import DashboardFooter from "./screens/components/DashboardFooter.js";
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator initialRouteName="Home">
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          header: () => <DashboardHeader />,
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={Search}
+        options={{
+          header: () => <DashboardHeader />,
+        }}
+      />
+      <Tab.Screen
+        name="Library"
+        component={Library}
+        options={{
+          header: () => <DashboardHeader />,
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator headerMode="none">
-           {/* Hide the header for the StartupScreen */}
+          {/* Hide the header for the StartupScreen */}
           {/* <Stack.Screen
             name="Startup"
             component={StartupScreen}
@@ -32,20 +66,46 @@ export default function App() {
           {/* <Stack.Screen name="Login" component={LoginScreen}
                    options={{ headerShown: false }} // This hides the header
            /> */}
-            {/* <Stack.Screen name="SignUp" component={SignUp}
+          {/* <Stack.Screen name="SignUp" component={SignUp}
                    options={{ headerShown: false }} // This hides the header
            /> */}
-           {/* <Stack.Screen name="Verify" component={Verify}
+          {/* <Stack.Screen name="Verify" component={Verify}
                    options={{ headerShown: false}} // This hides the header
            /> */}
-            {/* <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/> */}
-            {/* <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/> */}
-           {/* <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/> */}
-           <Stack.Screen name="Calendar" component={MyCalendar} options={{headerShown:false}}/>
-           <Stack.Screen name="Upcoming Events" component={UpcomingEvents} options={{headerShown:false}}/>
-           <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
-
-
+          {/* <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/> */}
+          {/* <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/> */}
+          {/* <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/> */}
+          {/* <Stack.Screen name="Calendar" component={MyCalendar} options={{headerShown:false}}/>
+           <Stack.Screen name="Upcoming Events" component={UpcomingEvents} options={{headerShown:false}}/> */}
+          {/* <Stack.Screen
+            name="Home"
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          >
+            {() => <Home />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Search"
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          >
+            {() => <Search />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Library"
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          >
+            {() => <Library />}
+          </Stack.Screen> */}
+          <Stack.Screen
+            name="Main"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

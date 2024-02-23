@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
     alignItems: "baseline",
     paddingTop: 40,
     paddingBottom: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 25,
+    paddingRight: 25,
   },
   notifImg: {
     width: "100%",
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   notifImgFlex: {
     display: "flex",
     flexDirection: "row",
-    gap: 15
+    gap: 25,
   },
   userName: {
     fontSize: 24,

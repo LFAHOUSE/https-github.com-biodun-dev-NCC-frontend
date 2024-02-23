@@ -23,7 +23,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 
 
 const Verify = ({ route, navigation }) => {
-  
+
   const {
     control,
     handleSubmit,
@@ -51,28 +51,28 @@ const Verify = ({ route, navigation }) => {
   const email = useWatch({control, name:"email"})
   const otp = useWatch({control, name:"otp"})
 
-  
+
   const [loading,setLoading] = useState(false)
   const [statusText,setStatusText] = useState("")
  const goBack = () => {
   navigation.goBack()
  }
-  
+
   const {countryCode,phoneNumber} =route.params
-  
+
   console.log("Phone Number: " + countryCode + phoneNumber)
   const complete_phone_number = countryCode+phoneNumber
   const [timer,setTimer] = useState(90)
   const [otpButtonText,setOtpButtonText] = useState("Request for OTP")
   const [sent,setSent] = useState(false)
- 
+
 
 // define the requestOtp function
 const requestOtp = async () => {
   console.log("emailAddress: ", email)
   setLoading(true)
   // create a data object with email and phone
-  const data = { 
+  const data = {
     phoneNumber:complete_phone_number,
     email:email
    };
@@ -95,7 +95,7 @@ const requestOtp = async () => {
     setOtpButtonText("Resend OTP")
     setStatusText(error.response.data.message)
     setLoading(false)
-    
+
   }
 };
 
@@ -103,7 +103,7 @@ const resendOtp = async () => {
   console.log("emailAddress: ", email)
   setLoading(true)
   // create a data object with email and phone
-  const data = { 
+  const data = {
     email:email
    };
 
@@ -125,7 +125,7 @@ const resendOtp = async () => {
     setOtpButtonText("Resend OTP")
     setStatusText(error.response.data.message)
     setLoading(false)
-    
+
   }
 };
 
@@ -155,17 +155,17 @@ const handleRegistration = () => {
 }
   // Determine if the phone number is 11 digits for enabling the button
   const isButtonActive = otp?.length === 6
- 
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        
+
         <View style={styles.pageHeaderContainer}>
         <PageHeader pageTitle="Let us verify you" onBack={goBack}/>
         </View>
-       
+
         <View style={styles.inputParentContainer}>
-      
+
         <View style={styles.labelContainer}>
         <Text style={styles.inputLabel}>Phone number</Text>
        </View>
@@ -180,7 +180,7 @@ const handleRegistration = () => {
            <View style={styles.phoneNumberIcon}>
            <Image source={require("../assets/phone.png")} style={styles.phoneIconLogo}/>
            </View>
-            
+
             <View style={styles.countryCodeSelector} >
              <Text style={styles.countryCodeText}>{countryCode}</Text>
             </View>
@@ -198,19 +198,19 @@ const handleRegistration = () => {
             keyboardType="number-pad"
             placeholder="7063164212"
             autoCapitalize="none"
-            
+
           />
-        
+
         </View>
         </View>
         )}/>
-        
+
 
 
         </View>
 {/* second input */}
 <View style={styles.inputParentContainer}>
-      
+
       <View style={styles.labelContainer}>
       <Text style={styles.inputLabel}>Email Address</Text>
      </View>
@@ -230,12 +230,12 @@ const handleRegistration = () => {
           placeholder="e.g pastorbimbo@nccnigeria.org"
           autoCapitalize="none"
         />
-      
+
       </View>
         )}/>
       </View>
 
-       
+
         <View style={styles.otpParentContainer}>
           {otpButtonText === "Request for OTP" ? (
              <TouchableOpacity onPress={requestOtp} style={{display:'flex'}}>
@@ -251,15 +251,15 @@ const handleRegistration = () => {
           <View style={{display:"flex",flexDirection:"column",width:"95%",height:"75%"}}>
           <View style={styles.otpContainer}>
            <Text style={styles.otp}>{otpButtonText}</Text>
-           {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{ `${timer}s`}</Text>}  
+           {loading ? <ActivityIndicator size={24} color="#6200ee"/> : <Text style={{color:"red"}}>{ `${timer}s`}</Text>}
            </View>
            {statusText && <Text style={{color:"green",width:'100%',fontSize:10}}>{statusText}</Text>}
            </View>
             </TouchableOpacity> }
-      
+
             </View>
             <View style={styles.inputParentContainer}>
-      
+
       <View style={styles.labelContainer}>
       <Text style={styles.inputLabel}>Otp</Text>
      </View>
@@ -297,7 +297,7 @@ const handleRegistration = () => {
           <View>
           <PageFooter/>
           </View>
-     
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
   pageHeaderContainer:{
     marginBottom:20
   },
- 
+
   inputParentContainer:{
     display:"flex",
     flexDirection:"column",
@@ -355,7 +355,7 @@ otpParentContainer:{
     //borderWidth:1
 
   },
-  
+
   inputContainer: {
     display:"flex",
     flexDirection:"row",
@@ -393,16 +393,16 @@ otpParentContainer:{
 
   phoneIconLogo:{
       width:'15',
-      
-      
+
+
   },
 
   textInputContainer:{
     width: 124,
     height: 43,
-    paddingTop: '10', 
+    paddingTop: '10',
     paddingRight:'10',
-    paddingBottom: '10', 
+    paddingBottom: '10',
     paddingLeft:'26',
     borderRadius: 7,
     gap: 10,
@@ -424,10 +424,10 @@ otpParentContainer:{
    paddingRight:'10',
    paddingBottom:'10',
    paddingLeft:'26',
-   
+
  },
-  
-  
+
+
   inputError:{
     borderColor:"red"
   },
@@ -439,7 +439,7 @@ otpParentContainer:{
   },
 
   countryCodeSelector: {
-   
+
     width:'37',
     height:'35',
     padding: '10',
@@ -454,7 +454,7 @@ otpParentContainer:{
     color: "#000",
     height: 30,
   },
- 
+
   button:{
     alignSelf:"center",
       marginTop:"10%",
@@ -474,7 +474,7 @@ otpParentContainer:{
     //borderWidth:1
 
   },
-  
+
   otp: {
     color: "#06447C",
     fontSize: 16,
