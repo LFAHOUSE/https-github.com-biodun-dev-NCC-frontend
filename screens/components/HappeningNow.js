@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -17,58 +17,52 @@ import {
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { useFonts, Sacramento_400Regular } from '@expo-google-fonts/sacramento';
 import AppLoading from 'expo-app-loading'
-
-
+import Live from './Live';
+import axiosInstance from '../../axios_services/axios';
 
 const HappeningNow = () => {
 
-    let [fontsLoaded] = useFonts({
-        Sacramento_400Regular,
-      });
-      if (!fontsLoaded) {
-        return <AppLoading />;
-      } else {
+  const [data, setData] = useState([])
+
+  const fetchLiveEvents = async () => {
+    try {
+      const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/live');
+     if (Array.isArray(response.data)) {
+      setData(response.data)
+     }else {
+      console.log("data is not an array")
+     }
+     
+    } catch (error) {
+      // Handle the error or display a message
+      console.error(error);
+    }
+  };
+
+ // Use useEffect to call the fetchEvents function when the component mounts
+  useEffect(() => {
+    fetchLiveEvents();
+   
+  },[]);
+
+  const scrollViewRef = React.useRef(null);
+    
     return (
         <SafeAreaView style={styles.safeArea}>
-             <View style={styles.upcomingEventsContainer} >
-             <View style={styles.eventLabel}>
-            <Text style={[styles.eventText,{fontWeight:"800"}]}>Live - <Text style={{fontWeight:"400"}}>happening right now!</Text></Text>
-            </View>
-      <View style = {styles.eventsContainer}>
-
-            <View style={styles.imageContainer}>
-                <Image source={require("../../assets/fadedlogo.png")} style={styles.eventBanner}/>
-            </View>
-        </View>
-
-        <View style={styles.eventDetails}>
-            <View style={styles.joinAndSocialIcons}>
-                <View style={styles.joinTextContainer}>
-                    <Text style={styles.joinText}>Join now</Text>
-                </View>
-
-                <View style={styles.socialIcons}>
-                    <TouchableOpacity style={styles.socialIconContainer}>
-                    <Image style={styles.socialIcon} source={require("../../assets/zoom.png")}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialIconContainer}>
-                    <Image style={styles.socialIcon} source={require("../../assets/spaces.png")}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialIconContainer}>
-                    <Image style={styles.socialIcon} source={require("../../assets/facebook.png")}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialIconContainer}>
-                    <Image style={styles.socialIcon} source={require("../../assets/youtube.png")}/>
-                    </TouchableOpacity>
-                    
-                </View>
-            </View>
-        </View>
-        </View>
+             <ScrollView
+              ref={scrollViewRef}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.container}
+              >
+             { Array.isArray(data) && data.map((event) =>(
+          <Live key={event._id} event={event} />
+        ))}
+             </ScrollView>
         </SafeAreaView>
     )
     
-}}
+}
 
 const styles = StyleSheet.create({
     safeArea: {

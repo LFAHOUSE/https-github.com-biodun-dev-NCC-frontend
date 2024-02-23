@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import moment from "moment";
 import {
     View,
@@ -16,6 +16,29 @@ const Event = ({ event }) => {
    let [fontsLoaded] = useFonts({
       ShareTechMono_400Regular,
     });
+    const scrollViewRef = React.useRef(null);
+
+  // Define a function to scroll forward
+  const scrollForward = () => {
+    // Get the current scroll position
+    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
+      .nativeEvent.contentOffset.x;
+    // Calculate the next scroll position by adding 320 (the width of the event component plus the margin)
+    const nextPosition = currentPosition + 320;
+    // Scroll to the next position with animation
+    scrollViewRef.current.scrollTo({ x: nextPosition, y: 0, animated: true });
+  };
+
+  // Define a function to scroll backward
+  const scrollBackward = () => {
+    // Get the current scroll position
+    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
+      .nativeEvent.contentOffset.x;
+    // Calculate the previous scroll position by subtracting 320 (the width of the event component plus the margin)
+    const previousPosition = currentPosition - 320;
+    // Scroll to the previous position with animation
+    scrollViewRef.current.scrollTo({ x: previousPosition, y: 0, animated: true });
+  };
     // Use state to store the remaining time
     const [remainingTime, setRemainingTime] = useState("");
    const imageUrl = event?.imageUrl
@@ -92,7 +115,7 @@ const Event = ({ event }) => {
   
               </View>
               
-              <TouchableOpacity>
+              <TouchableOpacity >
               <Image source={require("../../assets/double-arrow-right.png")} style={styles.arrowBackward}/>
               </TouchableOpacity>
           </View>

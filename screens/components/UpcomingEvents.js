@@ -13,6 +13,7 @@ import {
 import axiosInstance from '../../axios_services/axios'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import Event from './Event'
+import { Button } from 'react-native-paper'
 
 
 const UpcomingEvents = () => {
@@ -132,6 +133,15 @@ const styles = StyleSheet.create({
   color:"#06447C"
 
 
+},
+button:{
+  alignSelf:"center",
+  marginTop:"10%",
+  width:wp("89%"),
+  height:hp('7%'),
+  borderRadius:10,
+  left:"2%",
+  marginTop:"15%"
 },
    
 
