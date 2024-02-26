@@ -9,49 +9,30 @@ import {
 } from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { useFonts, Sacramento_400Regular } from '@expo-google-fonts/sacramento';
-import AppLoading from 'expo-app-loading'
+
 
 const Live = ({ event }) => {
-    const eventtimestamps = Date.parse(event.startDate)
-    const now = Date.now()
-   let [fontsLoaded] = useFonts({
+    const [appIsReady] =  useFonts({
       Sacramento_400Regular,
-    });
-    const scrollViewRef = React.useRef(null);
-
-  // Define a function to scroll forward
-  const scrollForward = () => {
-    // Get the current scroll position
-    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
-      .nativeEvent.contentOffset.x;
-    // Calculate the next scroll position by adding 320 (the width of the event component plus the margin)
-    const nextPosition = currentPosition + 320;
-    // Scroll to the next position with animation
-    scrollViewRef.current.scrollTo({ x: nextPosition, y: 0, animated: true });
-  };
-
-  // Define a function to scroll backward
-  const scrollBackward = () => {
-    // Get the current scroll position
-    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
-      .nativeEvent.contentOffset.x;
-    // Calculate the previous scroll position by subtracting 320 (the width of the event component plus the margin)
-    const previousPosition = currentPosition - 320;
-    // Scroll to the previous position with animation
-    scrollViewRef.current.scrollTo({ x: previousPosition, y: 0, animated: true });
-  };
-    // Use state to store the remaining tim
+  });
   
-    // Return the JSX element
-    if (!fontsLoaded) {
-      return <AppLoading />;
+  
+  
+    const onLayoutRootView = useCallback(async () => {
+      if (appIsReady) {
+        await SplashScreen.hideAsync()
+      }
+    },[appIsReady])
+  
+    if (!appIsReady) {
+      return null;
     } else {
     return (
-        <View style={styles.upcomingEventsContainer} >
+        <View style={styles.upcomingEventsContainer} onLayout={onLayoutRootView} >
         <View style={styles.eventLabel}>
       <View style={styles.roundedContainer}><Text style={styles.rounded}></Text></View><Text style={[styles.eventText,{fontWeight:"800"}]}>Live - <Text style={{fontWeight:"400"}}>happening right now!</Text></Text>
        </View>
- <View style = {styles.eventsContainer}>
+     <View style = {styles.eventsContainer}>
 
        <View style={styles.imageContainer}>
            <Image source={{uri:event.imageUrl}} style={styles.eventBanner}/>
