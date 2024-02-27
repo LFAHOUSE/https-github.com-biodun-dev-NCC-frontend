@@ -1,237 +1,206 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-    View,
-    TextInput,
-    Text,
-    Image,
-    TouchableOpacity,
-    ScrollView,
-    SafeAreaView,
-    StyleSheet
-    
-} from 'react-native'
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import {Calendar} from 'react-native-calendars'
-
+  View,
+  TextInput,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+  StyleSheet,
+} from "react-native";
+import { Calendar } from "react-native-calendars";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import axios from "axios";
 
 const MyCalendar = ({}) => {
+  const onDayPress = (day) => {
+    console.log("selected day", day);
+  };
 
-    const onDayPress = (day) => {
-        console.log('selected day', day);
-      };
+  const [eventData, setEventData] = useState([]);
+  const [error, setError] = useState();
+  const [formattedData, setFormattedData] = useState({});
+  const [colorMap, setColorMap] = useState({});
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
 
-    return (
-        <View style={styles.container}>
-          <View style={styles.pageTitle}>
-            <Text style={styles.pageText}>My Calendar</Text>
-            </View>  
+  useEffect(() => {
+    getEvents();
+  }, []);
 
-            <View style={styles.calendarContainer}>
-            <Calendar
-            style={styles.calendar}
-            current={'2024-01-01'}
-            minDate={'2023-12-01'}
-            maxDate={'2024-12-31'}
-            onDayPress={onDayPress}
-            monthFormat={'MMMM yyyy '}
-            onMonthChange={(month) => {console.log('month changed', month)}}
-            hideExtraDays={true}
-            hideArrows={false}
-            enableSwipeMonths={true}
-            />
-            </View>
+  const getEvents = async () => {
+    try {
+      const response = await axios.get("http://20.84.147.6:8080/api/events");
+      console.log("Response data", response.data);
+      const { formattedData, colorMap } = formatEventData(response.data); // Update formattedData and colorMap
+      setEventData(response.data);
+      setFormattedData(formattedData); // Set formattedData state to the formatted data
+      setColorMap(colorMap); // Set colorMap state to the color map
+      setError(false);
+    } catch (error) {
+      setError(true);
+    }
+  };
 
-            <View style={styles.calendarDetails}>
-            <View style={styles.roundedContainer}>
-                    <View style={styles.rounded}></View>
-                </View>
+  const formatEventData = (events) => {
+    const formattedData = {};
+    const colorMap = {};
+    events.forEach((event) => {
+      const startDate = new Date(event.startDate);
+      const endDate = new Date(event.endDate);
+      const currentDate = new Date(startDate);
+      const color = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(
+        Math.random() * 256
+      )}, ${Math.floor(Math.random() * 256)})`;
+      colorMap[event._id] = color;
+      while (currentDate <= endDate) {
+        const dateString = currentDate.toISOString().split("T")[0];
+        formattedData[dateString] = {
+          marked: true,
+          selected: true,
+          selectedColor: color,
+          dotColor: color,
+        };
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    });
+    return { formattedData, colorMap };
+  };
 
-                <View style={styles.detailsContainer}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.textone}>National Fasting & Prayer (Satellite)</Text>
-                    </View>
-                    <View style={styles.texttwoContainer}>
-                        <Text style={styles.texttwo}>January 4 - 5, 2024</Text>
-                    </View>
-                </View>
-            </View>
+  const renderEventsForMonth = (currentMonth) => {
+    // Filter events that belong to the current month
+    const eventsForCurrentMonth = eventData.filter((event) => {
+      const eventMonth = new Date(event.startDate).getMonth() + 1;
+      return eventMonth === currentMonth;
+    });
 
-            <View style={styles.calendarDetails}>
-            <View style={styles.roundedContainer}>
-                    <View style={styles.roundedone}></View>
-                </View>
-
-                <View style={styles.detailsContainer}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.textone}>Regional Fasting & Prayer</Text>
-                    </View>
-                    <View style={styles.texttwoContainer}>
-                        <Text style={styles.texttwo}>January 6, 2024</Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.calendarDetails}>
-            <View style={styles.roundedContainer}>
-                    <View style={styles.roundedtwo}></View>
-                </View>
-
-                <View style={styles.detailsContainer}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.textone}>National Children and Teenagers Teachers' Retreat</Text>
-                    </View>
-                    <View style={styles.texttwoContainer}>
-                        <Text style={styles.texttwo}>January 25 - 27, 2024</Text>
-                    </View>
-                </View>
-            </View>
-           
-             
+    // Render events for the current month
+    return eventsForCurrentMonth.map((event, index) => (
+      <View key={index} style={styles.eventContainer}>
+        <View
+          style={[styles.eventDot, { backgroundColor: colorMap[event._id] }]}
+        />
+        <View style={styles.eventDetails}>
+          <Text style={styles.eventTitle}>{event.title}</Text>
+          <Text style={styles.eventDate}>
+            {formatEventDate(event.startDate, event.endDate)}
+          </Text>
         </View>
-    )
-}
+      </View>
+    ));
+  };
+
+  const formatEventDate = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const startMonth = start.toLocaleString("default", { month: "long" });
+    const startDay = start.getDate();
+    const endDay = end.getDate();
+    const year = start.getFullYear();
+
+    if (
+      startMonth ===
+      new Date(endDate).toLocaleString("default", { month: "long" })
+    ) {
+      return `${startMonth} ${startDay} - ${endDay}, ${year}`;
+    } else {
+      return `${startMonth} ${startDay} - ${end.toLocaleString("default", {
+        month: "long",
+      })} ${endDay}, ${year}`;
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text style={styles.subText}>My Calendar</Text>
+      </View>
+
+      <View style={styles.calendarContainer}>
+        <Calendar
+          minDate={"2023-12-01"}
+          maxDate={"2024-12-31"}
+          onDayPress={onDayPress}
+          monthFormat={"MMMM yyyy "}
+          onMonthChange={(month) => {
+            console.log("month changed", month);
+            setCurrentMonth(new Date(month.dateString).getMonth() + 1);
+          }}
+          hideExtraDays={true}
+          hideArrows={false}
+          enableSwipeMonths={true}
+          style={styles.calendar}
+          markedDates={formattedData}
+        />
+      </View>
+
+      <View>
+        {renderEventsForMonth(currentMonth)}
+      </View>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
-    container:{
-        gap:5
-    },
-    pageTitle:{
-        display:"flex",
-        flexDirection:"row",
-        width: wp("30%"),
-        height:hp("5%"),
-        top: "20%",
-        left: "4%",
-        padding:"1%",
-        //borderWidth:1,
-       
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    columnGap: 10,
+    padding: 20,
+  },
 
+  calendarContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+    paddingTop: 10,
+  },
 
-    },
-    pageText:{
-        width:wp("50%"),
-        fontFamily: "Roboto",
-        fontSize: 13,
-        fontWeight: '500',
-        lineHeight: 15,
-        letterSpacing: 0.5,
-        textAlign: 'left',
-       // borderWidth:1
-    },
+  calendar: {
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#A6BB22",
+  },
 
-    calendarContainer:{
-        display:"flex",
-        alignItems:"center",
-        alighItems:"center",
-        width: wp("85%"),
-        height: hp("45%"),
-        top: "15%",
-        left: "7.5%",
-        borderRadius: 7,
-        border: 1,
-        //padding:10,
-        borderColor:"#6EB1E1",
-        borderWidth:2,
-        borderRadius:2,
-        borderRadius:5
-    },
-    calendar:{
-        width: wp("84%"),
-        height: hp("40%"),
-        alignSelf:"center",
+  subText: {
+    color: "#06447C",
+    fontSize: 17,
+    fontWeight: "800",
+  },
 
-    },
-    calendarDetails: {
-        displa:"flex",
-        flexDirection:"row",
-        width:wp("85%"),
-        height: hp("10.5%"),
-        top: "35%",
-        alignSelf:"center",
-        borderWidth:1,
-        borderColor:"red",
-        borderColor:"#ddd",
-        gap:10,
+  eventContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 5,
+  },
 
-    },
-    roundedContainer:{
-        width: wp("12%"),
-        height: hp("6%"),
-        padding: "1%",
-        gap: 10,
-       // borderWidth:1
+  eventDot: {
+    width: 20,
+    height: 20,
+    borderRadius: 100,
+  },
 
-    },
-    rounded:{
-        width: wp("8%"),
-        height: hp("4%"),
-        opacity: 0.9,
-        borderRadius:100,
-        backgroundColor:"#A6BB22"
+  eventDetails: {
+    display: "flex",
+    flexDirection: "column",
+    fontFamily: "Roboto",
+    fontSize: 13,
+  },
 
-    },
-    roundedone:{
-        width: wp("8%"),
-        height: hp("4%"),
-        opacity: 0.9,
-        borderRadius:100,
-        backgroundColor:"#489DEC"
-    },
+  eventTitle: {
+    fontWeight: "700",
+    textAlign: "left",
+  },
 
-    roundedtwo:{
-        width: wp("8%"),
-        height: hp("4%"),
-        opacity: 0.9,
-        borderRadius:100,
-        backgroundColor:"#FBCF33"
-    },
-
-    detailsContainer:{
-        display:'flex',
-        flexDirection:"column",
-        width: wp("70%"),
-        height: hp("10%"),
-        //borderWidth:1
-
-    },
-    textContainer:{
-        width: "100%",
-        height: "60%",
-        padding: "1%",
-        gap: 10,
-        //borderWidth:1
-
-    },
-    textone:{
-        flex:1,
-        height: 14,
-        fontFamily: "Roboto",
-        fontSize: 12,
-        fontWeight: "700",
-        lineHeight: 14,
-       letterSpacing: 1,
-        textAlign: "left",
-    },
-    texttwoContainer:{
-        width: wp("40%"),
-        height: hp("4%"),
-        padding: "1%",
-        gap: 10,
-       // borderWidth:1
-
-    },
-    texttwo:{
-        width: wp("50%"),
-        height: hp("4%"),
-        fontFamily: "Roboto",
-        fontSize: 12,
-        fontWeight: "400",
-        lineHeight: 14,
-        letterSpacing: 1,
-        textAlign: "left",
-
-
-    }
-})
+  eventDate: {},
+});
 
 export default MyCalendar;

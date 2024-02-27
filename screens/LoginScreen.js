@@ -20,12 +20,12 @@ import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios";
 import Loader from "./components/Loader";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import {setToken} from '../redux/userReducer.js'
+// import {setToken} from '../redux/userReducer.js'
 import {useDispatch} from 'react-redux'
 
 const LoginScreen = ({navigation}) => {
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
     const {control,handleSubmit,formState:{errors}} = useForm()
     const email = useWatch({control,name:"email"})
@@ -36,7 +36,7 @@ const LoginScreen = ({navigation}) => {
     const [statusText, setStatusText] = useState("")
 
     const [showPickerModal,setShowPickerModal] = useState(false)
-  
+
     const openCodePicker = () => {
       setShowPickerModal(true)
   }
@@ -52,10 +52,10 @@ const LoginScreen = ({navigation}) => {
     try {
       const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/login', data);
       console.log(response.data.token)
-      
+
       if (response.status === 200 || response.status === 201 ) {
         let token = response.data.token
-         dispatch(setToken(token))
+        //  dispatch(setToken(token))
           setStatusText("Login successful")
          setLoading(false)
         Alert.alert("OK","Login Sucessful");
@@ -83,7 +83,7 @@ const LoginScreen = ({navigation}) => {
           <PageHeader pageTitle="Welcome"/>
          </View>
 
-   
+
          <View style={styles.loginTextContainer}>
           <View style={styles.loginContainer}>
             <Text style={styles.loginText}>Login</Text>
@@ -94,7 +94,7 @@ const LoginScreen = ({navigation}) => {
           </View>
 
          </View>
-         
+
           {/* Phone Number Input */}
           <View style={styles.phoneNumberInputParentContainer}>
 
@@ -108,25 +108,25 @@ const LoginScreen = ({navigation}) => {
         render={({ field,fieldState}) => (
           <View style={[styles.inputContainier, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
            {/* <View style={styles.inputAccessory}>
-         <View style={styles.phoneIconContainer}> 
+         <View style={styles.phoneIconContainer}>
               <Image style={styles.phoneIcon} source={require("../assets/phone.png")}/>
             </View>
 
-            <View style={styles.countryCodeContainer}> 
+            <View style={styles.countryCodeContainer}>
               <Text style={styles.countryCode}>{countryCode}</Text>
             </View>
             <CountryPicker
           style={styles.picker}
           show={showPickerModal}
           pickerButtonOnPress={(item) =>{setCountryCode(item.dial_code),setShowPickerModal(false)}}
-          
+
         />
 
-            <TouchableOpacity style={styles.phoneIconContainer} onPress={openCodePicker}> 
+            <TouchableOpacity style={styles.phoneIconContainer} onPress={openCodePicker}>
               <Image style={styles.angleDown} source={require("../assets/arrow-down.png")}/>
             </TouchableOpacity>
             </View> */}
-        
+
           <TouchableOpacity style={styles.inputFieldContainer}>
             <TextInput
             style={styles.input}
@@ -137,13 +137,13 @@ const LoginScreen = ({navigation}) => {
               // onFocus={field.onFocus}
               //maxLength={10}
               keyboardType="name-phone-pad"
-            />   
-            
+            />
+
          </TouchableOpacity>
-       
+
           </View>
            )}
-        
+
            />
           {errors.phoneNumber && (
             <View style={styles.inputStatusContainer}>
@@ -251,10 +251,10 @@ const styles = StyleSheet.create({
           height:hp("12%"),
           //top: "8%",
           left: '8%',
-         
-    
+
+
       },
-    
+
       loginContainer:{
         width: wp("30%"),
         height: hp("7%"),
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         gap: 10,
         //borderWidth:1
-    
+
       },
       loginText:{
         width:70,
@@ -277,9 +277,9 @@ const styles = StyleSheet.create({
         lineHeight: 28,
         letterSpacing: 0.1,
         textAlign: 'left',
-    
+
       },
-     
+
       loginDesc: {
         flex:1,
         width:wp("80%"),
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         gap: 10,
         //borderWidth:1
-        
+
       },
 
       desc:{
@@ -335,13 +335,13 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         gap: 10,
        // borderWidth:1
-        
+
       },
       label: {
         flex:1,
         color:"#000000"
  },
- 
+
  inputContainier:{
   display:"flex",
   flexDirection:"row",
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   alignItems:"center",
   //borderWidth:1,
 
-  
+
  },
  phoneIconContainer:{
   display:'flex',
@@ -381,12 +381,12 @@ const styles = StyleSheet.create({
  phoneIcon:{
   width: 30,
   height: 15
-  
+
  },
  angleDown:{
   width:15,
   height:18,
-  
+
  },
 
  countryCodeContainer:{
@@ -442,7 +442,7 @@ input:{
   //borderWidth:1,
  // right:"10%",
   //padding:10,
-  
+
 
 },
 passwordinput:{
@@ -516,8 +516,8 @@ visitorTextContainer:{
   gap: 10,
   //borderWidth:1,
   alignSelf:"center"
-  
-  
+
+
 },
 visitorText: {
   width: "100%",

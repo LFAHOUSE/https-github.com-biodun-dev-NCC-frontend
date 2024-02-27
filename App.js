@@ -10,33 +10,46 @@ import Verify from './screens/Verify';
 import LetsMeet from './screens/LetsMeet';
 import Setpasssword from './screens/SetpasswordScreen';
 import VerificationComplete from './screens/VerificationComplete';
-import Dashboard from './screens//Dashboard.js';
-import MyLibrary from './screens/MyLibrary.js'
-import Library from './screens/Library.js'
+import Dashboard from './screens/Dashboard.js';
+import MyLibrary from './screens/MyLibrary.js';
+import UpcomingEvents from './screens/components/UpcomingEvents.js';
+import HappeningNow from './screens/components/HappeningNow.js';
 
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const TabNavigator = () => {
+  return (
+    <ImageBackground
+      source={require("./assets/banner.png")}
+      style={style.container}
+    >
+
+    </ImageBackground>
+  );
+};
 
 export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          {/* Hide the header for the StartupScreen */}
-          {/* <Stack.Screen 
-            name="Startup" 
-            component={StartupScreen} 
+        {/* <Stack.Navigator headerMode="none">
+          Hide the header for the StartupScreen
+          <Stack.Screen
+            name="Startup"
+            component={StartupScreen}
             options={{ headerShown: false }} // This hides the header
-          /> */}
-  
-          {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
-          {/* <Stack.Screen name="Login" component={LoginScreen}
+          />
+
+          For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here
+          <Stack.Screen name="Login" component={LoginScreen}
                    options={{ headerShown: false }} // This hides the header
-           /> */}
-            {/* <Stack.Screen name="SignUp" component={SignUp}
+           />
+            <Stack.Screen name="SignUp" component={SignUp}
                    options={{ headerShown: false }} // This hides the header
-           /> */}
-           {/* <Stack.Screen name="Verify" component={Verify}
+           />
+           <Stack.Screen name="Verify" component={Verify}
                    options={{ headerShown: false}} // This hides the header
            /> */}
             {/* <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/> */}
@@ -44,7 +57,7 @@ export default function App() {
            {/* <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/> */}
            {/* <Stack.Screen name="Events" component={UpcomingEvents} options={{headerShown:false}}/> */}
             {/* <Stack.Screen name="Live" component={HappeningNow} options={{headerShown:false}}/> */}
-            {/* <Stack.Screen name="My Library" component={Library} options={{headerShown:false}}/>  */}
+            {/* <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>  */}
            <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
           
         </Stack.Navigator>
@@ -52,3 +65,26 @@ export default function App() {
     </PaperProvider>
   );
 }
+
+const style = StyleSheet.create({
+  container: {
+   flex: 1,
+   display: "flex",
+   backgroundColor: "transparent",
+  },
+
+  view: {
+    alignItems: "center",
+    gap: 5,
+  },
+
+  Icon: {
+    width: 24,
+    height: 24,
+  },
+
+  text: {
+    fontSize: 14,
+    fontWeight: "700",
+  },
+});
