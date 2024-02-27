@@ -71,7 +71,7 @@ export default function App() {
             tabBarStyle: {
               height: 80,
               paddingVertical: 0,
-              backgroundColor: "#C8e8f7",
+              backgroundColor: "#e6f3f8",
             },
             tabBarIcon: ({ focused }) => {
               let srcName;
