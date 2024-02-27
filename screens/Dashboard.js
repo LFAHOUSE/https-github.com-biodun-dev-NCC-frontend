@@ -25,7 +25,7 @@ const Dashboard = () => {
                 <PageHeader pageTitle="Dashboard"/>
              </View>
              <UpcomingEvents/>
-             {/* <HappeningNow/> */}
+             <HappeningNow/>
             </ScrollView>
         </SafeAreaView>
     )

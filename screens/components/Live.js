@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect ,useCallback} from "react";
 import moment from "moment";
 import {
     View,
@@ -16,7 +16,11 @@ const Live = ({ event }) => {
       Sacramento_400Regular,
   });
   
-  
+  const [showDetails, setShowDetails] = useState(false)
+
+  const toggleShowDetails = () => {
+    setShowDetails(!showDetails)
+  }
   
     const onLayoutRootView = useCallback(async () => {
       if (appIsReady) {
@@ -28,17 +32,29 @@ const Live = ({ event }) => {
       return null;
     } else {
     return (
-        <View style={styles.upcomingEventsContainer} onLayout={onLayoutRootView} >
+        <View style={[styles.upcomingEventsContainer, {height: showDetails ? hp("65%") : hp("50%") }]} onLayout={onLayoutRootView} >
         <View style={styles.eventLabel}>
       <View style={styles.roundedContainer}><Text style={styles.rounded}></Text></View><Text style={[styles.eventText,{fontWeight:"800"}]}>Live - <Text style={{fontWeight:"400"}}>happening right now!</Text></Text>
        </View>
      <View style = {styles.eventsContainer}>
 
-       <View style={styles.imageContainer}>
+       <TouchableOpacity style={styles.imageContainer} onPress={toggleShowDetails}>
            <Image source={{uri:event.imageUrl}} style={styles.eventBanner}/>
-       </View>
+       </TouchableOpacity>
    </View>
-
+   {showDetails && 
+        <View style={styles.titleAndDesc}>
+        <View style={styles.titletextcontainer}>
+        <Text style={styles.titleText}>{event.title}</Text>
+        </View>
+         
+         <View style={styles.desctextContainer}>
+         <Text style={styles.descText}>{event.description}</Text>
+         </View>
+        
+      </View>
+       }
+         
    <View style={styles.eventDetails}>
        <View style={styles.joinAndSocialIcons}>
            <View style={styles.joinTextContainer}>
@@ -71,11 +87,7 @@ const Live = ({ event }) => {
         display:"flex",
         flexDirection:"column",
         width:wp("100%"),
-        height: hp("50%"),
-       // padding:"2%",
-        //alignSelf:"center",
-        //left:"2.5%"
-       // borderWidth:1,
+        alignSelf:"center"
       
         
     },
@@ -129,6 +141,49 @@ const Live = ({ event }) => {
         resizeMode:"cover"
  
      },
+     titleAndDesc:{
+      display:"flex",
+      flexDirection:"column",
+      //gap:2,
+      top:"-10%",
+      width:"100%",
+      height:"28%",
+      padding:"2%",
+      // borderWidth:1,
+      // borderColor:"red"
+    },
+    
+    titletextcontainer:{
+    height:"35%",
+    width:"100%",
+    alignSelf:"center",
+    //borderWidth:1
+    },
+    titleText:{
+      width: "100%",
+     height: "100%",
+     fontFamily: "Roboto",
+     fontSize: 15,
+     fontWeight:"800",
+     lineHeight: 18,
+     letterSpacing: 1,
+     textAlign: "left",
+    },
+    desctextContainer:{
+      width:"100%",
+      height:"60%"
+    },
+    descText:{
+      width: "100%",
+     height: "100%",
+     fontFamily: "Roboto",
+     fontSize: 13,
+     fontWeight: "400",
+     lineHeight: 14,
+     letterSpacing:1,
+     textAlign: "left",
+     color:"#000000",
+    },
      eventDetails:{
        top:"-12%",
         display:"flex",

@@ -73,7 +73,7 @@ SplashScreen.preventAutoHideAsync()
       const interval = setInterval(calculateRemainingTime, 1000);
       // Return a cleanup function to clear the interval
       return () => clearInterval(interval);
-    });
+    },[]);
   
     // Return the JSX element
     if (!appIsReady) {
