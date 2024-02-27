@@ -8,9 +8,9 @@ import {
     TouchableOpacity,
     Image,
     StyleSheet,
+    ScrollView,
   
 } from 'react-native'
-import { Button } from 'react-native-paper';
 import Tooltip from 'react-native-walkthrough-tooltip'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
@@ -25,7 +25,7 @@ const MyLibrary = () => {
     return (
        <SafeAreaView style={styles.safeArea}>
         <View>
-
+        
             <View style={styles.searchContainer}>
                <View style={styles.searchInputContainer}>
                     <TouchableOpacity style={styles.searchIconContainer}>
@@ -41,6 +41,7 @@ const MyLibrary = () => {
                         keyboardType='name-phone-pad'
                         />
                     </TouchableOpacity>
+                    <Text>Hello...</Text>
                 </View>
             
             </View>
@@ -63,11 +64,11 @@ const MyLibrary = () => {
     
             </View>
 
-            <Tooltip
+        <Tooltip
         isVisible={toolTipVisible}
         content={<Text>Here is some content inside the tooltip!</Text>}
         //placement="bottom"
-        onClose={() => setToolTipVisible(false)}
+        onClose={() => setToolTipVisible(true)}
       >
       </Tooltip>
             </View>
@@ -111,7 +112,8 @@ const styles = StyleSheet.create({
         left: "8%",
         borderRadius: 10,
         borderWidth:0.5,
-        borderColor:"#000000"
+        borderColor:"#000000",
+       // backgroundColor:"red"
 
       },
       searchInputContainer:{

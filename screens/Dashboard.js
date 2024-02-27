@@ -17,6 +17,7 @@ import PageHeader from './components/PageHeader';
 import UpcomingEvents from './components/UpcomingEvents';
 import HappeningNow from './components/HappeningNow';
 
+
 const Dashboard = () => {
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -25,7 +26,8 @@ const Dashboard = () => {
                 <PageHeader pageTitle="Dashboard"/>
              </View>
              <UpcomingEvents/>
-             <HappeningNow/>
+             <HappeningNow/> 
+           
             </ScrollView>
         </SafeAreaView>
     )

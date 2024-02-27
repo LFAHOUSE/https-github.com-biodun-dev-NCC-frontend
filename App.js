@@ -10,10 +10,9 @@ import Verify from './screens/Verify';
 import LetsMeet from './screens/LetsMeet';
 import Setpasssword from './screens/SetpasswordScreen';
 import VerificationComplete from './screens/VerificationComplete';
-import Dashboard from './screens/Dashboard.js';
-import MyLibrary from './screens/MyLibrary.js';
-import UpcomingEvents from './screens/components/UpcomingEvents.js';
-import HappeningNow from './screens/components/HappeningNow.js';
+import Dashboard from './screens//Dashboard.js';
+import MyLibrary from './screens/MyLibrary.js'
+import Library from './screens/Library.js'
 
 
 const Stack = createNativeStackNavigator();
@@ -45,7 +44,7 @@ export default function App() {
            {/* <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/> */}
            {/* <Stack.Screen name="Events" component={UpcomingEvents} options={{headerShown:false}}/> */}
             {/* <Stack.Screen name="Live" component={HappeningNow} options={{headerShown:false}}/> */}
-            {/* <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>  */}
+            {/* <Stack.Screen name="My Library" component={Library} options={{headerShown:false}}/>  */}
            <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
           
         </Stack.Navigator>
