@@ -16,12 +16,16 @@ import {
 import MyCalendar from "../components/MyCalendar";
 import DashboardHeader from "../components/DashboardHeader";
 import DashboardFooter from "../components/DashboardFooter";
+import UpcomingEvents from "../components/UpcomingEvents";
+import HappeningNow from "../components/HappeningNow";
 
 const Home = () => {
   return (
     <SafeAreaView style={styles.body}>
       <ScrollView>
         <MyCalendar />
+        <UpcomingEvents/>
+        <HappeningNow/>
       </ScrollView>
     </SafeAreaView>
   );

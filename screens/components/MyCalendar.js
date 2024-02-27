@@ -14,7 +14,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import EventCalendar from "react-native-events-calendar";
 import axios from "axios";
 
 const MyCalendar = ({}) => {
