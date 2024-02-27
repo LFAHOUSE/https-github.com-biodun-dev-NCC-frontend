@@ -29,64 +29,7 @@ const TabNavigator = () => {
       source={require("./assets/banner.png")}
       style={style.container}
     >
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={({ route }) => ({
-          tabBarShowLabel: false,
-          tabBarStyle: {
-            height: 80,
-            paddingVertical: 0,
-            backgroundColor: "#C8e8f7",
-          },
-          tabBarIcon: ({ focused }) => {
-            let srcName;
-            let label;
 
-            if (route.name === "Home") {
-              srcName = require("./assets/home.png");
-              label = "Home";
-            } else if (route.name === "Search") {
-              srcName = require("./assets/search.png");
-              label = "Search";
-            } else if (route.name === "Library") {
-              srcName = require("./assets/library.png");
-              label = "Library";
-            }
-
-            return (
-              <View style={[style.view, { opacity: focused ? 1 : 0.6 }]}>
-                <Image
-                  source={srcName}
-                  style= {style.Icon}
-                />
-                <Text style={style.text}>{label}</Text>
-              </View>
-            );
-          },
-        })}
-      >
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            header: () => <DashboardHeader />,
-          }}
-        />
-        <Tab.Screen
-          name="Search"
-          component={Search}
-          options={{
-            header: () => <DashboardHeader />,
-          }}
-        />
-        <Tab.Screen
-          name="Library"
-          component={Library}
-          options={{
-            header: () => <DashboardHeader />,
-          }}
-        />
-      </Tab.Navigator>
     </ImageBackground>
   );
 };
@@ -95,15 +38,15 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          {/* Hide the header for the StartupScreen */}
-          {/* <Stack.Screen
+        {/* <Stack.Navigator headerMode="none">
+          Hide the header for the StartupScreen
+          <Stack.Screen
             name="Startup"
             component={StartupScreen}
             options={{ headerShown: false }} // This hides the header
-          /> */}
+          />
 
-          {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
+          For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here
           <Stack.Screen name="Login" component={LoginScreen}
                    options={{ headerShown: false }} // This hides the header
            />
@@ -118,10 +61,64 @@ export default function App() {
            <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/>
            <Stack.Screen name="Events" component={UpcomingEvents} options={{headerShown:false}}/>
             <Stack.Screen name="Live" component={HappeningNow} options={{headerShown:false}}/>
-            {/* <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>  */}
-           <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
+          <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>
+          <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
+        </Stack.Navigator> */}
+        <Tab.Navigator
+          initialRouteName="Home"
+          screenOptions={({ route }) => ({
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              height: 80,
+              paddingVertical: 0,
+              backgroundColor: "#C8e8f7",
+            },
+            tabBarIcon: ({ focused }) => {
+              let srcName;
+              let label;
 
-        </Stack.Navigator>
+              if (route.name === "Home") {
+                srcName = require("./assets/home.png");
+                label = "Home";
+              } else if (route.name === "Search") {
+                srcName = require("./assets/search.png");
+                label = "Search";
+              } else if (route.name === "Library") {
+                srcName = require("./assets/library.png");
+                label = "Library";
+              }
+
+              return (
+                <View style={[style.view, { opacity: focused ? 1 : 0.6 }]}>
+                  <Image source={srcName} style={style.Icon} />
+                  <Text style={style.text}>{label}</Text>
+                </View>
+              );
+            },
+          })}
+        >
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          />
+          <Tab.Screen
+            name="Search"
+            component={Search}
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          />
+          <Tab.Screen
+            name="Library"
+            component={Library}
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          />
+        </Tab.Navigator>
       </NavigationContainer>
     </PaperProvider>
   );
