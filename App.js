@@ -51,16 +51,70 @@ export default function App() {
            />
            <Stack.Screen name="Verify" component={Verify}
                    options={{ headerShown: false}} // This hides the header
-           /> */}
-            {/* <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/> */}
-            {/* <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/> */}
-           {/* <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/> */}
-           {/* <Stack.Screen name="Events" component={UpcomingEvents} options={{headerShown:false}}/> */}
-            {/* <Stack.Screen name="Live" component={HappeningNow} options={{headerShown:false}}/> */}
-            {/* <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>  */}
-           <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
-          
-        </Stack.Navigator>
+           />
+            <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/>
+            <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/>
+           <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/>
+           <Stack.Screen name="Events" component={UpcomingEvents} options={{headerShown:false}}/>
+            <Stack.Screen name="Live" component={HappeningNow} options={{headerShown:false}}/>
+          <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>
+          <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
+        </Stack.Navigator> */}
+        <Tab.Navigator
+          initialRouteName="Home"
+          screenOptions={({ route }) => ({
+            tabBarShowLabel: false,
+            tabBarStyle: {
+              height: 80,
+              paddingVertical: 0,
+              backgroundColor: "#e6f3f8",
+            },
+            tabBarIcon: ({ focused }) => {
+              let srcName;
+              let label;
+
+              if (route.name === "Home") {
+                srcName = require("./assets/home.png");
+                label = "Home";
+              } else if (route.name === "Search") {
+                srcName = require("./assets/search.png");
+                label = "Search";
+              } else if (route.name === "Library") {
+                srcName = require("./assets/library.png");
+                label = "Library";
+              }
+
+              return (
+                <View style={[style.view, { opacity: focused ? 1 : 0.6 }]}>
+                  <Image source={srcName} style={style.Icon} />
+                  <Text style={style.text}>{label}</Text>
+                </View>
+              );
+            },
+          })}
+        >
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          />
+          <Tab.Screen
+            name="Search"
+            component={Search}
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          />
+          <Tab.Screen
+            name="Library"
+            component={Library}
+            options={{
+              header: () => <DashboardHeader />,
+            }}
+          />
+        </Tab.Navigator>
       </NavigationContainer>
     </PaperProvider>
   );

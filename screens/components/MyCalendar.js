@@ -16,6 +16,21 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 
+// Override default styles using theme prop
+const calendarTheme = {
+  // Customize background color for calendar
+  backgroundColor: "#FFFFFF",
+
+  // Customize text color for various elements
+  calendarBackground: "#FFFFFF",
+  textSectionTitleColor: "#06447C",
+  todayTextColor: "#A6BB22",
+  dayTextColor: "#000000",
+  arrowColor: "#000000",
+  monthTextColor: "#C39C0E",
+  indicatorColor: "#06447C",
+};
+
 const MyCalendar = ({}) => {
   const onDayPress = (day) => {
     console.log("selected day", day);
@@ -77,6 +92,15 @@ const MyCalendar = ({}) => {
       return eventMonth === currentMonth;
     });
 
+    // If there are no events for the current month, render a text indicating so
+    if (eventsForCurrentMonth.length === 0) {
+      return (
+        <View >
+          <Text style={styles.noEventsText}>No events for this month</Text>
+        </View>
+      );
+    }
+
     // Render events for the current month
     return eventsForCurrentMonth.map((event, index) => (
       <View key={index} style={styles.eventContainer}>
@@ -134,6 +158,7 @@ const MyCalendar = ({}) => {
           enableSwipeMonths={true}
           style={styles.calendar}
           markedDates={formattedData}
+          theme={calendarTheme}
         />
       </View>
 
@@ -150,6 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     columnGap: 10,
     padding: 20,
+    backgroundColor: "white",
   },
 
   calendarContainer: {
@@ -201,6 +227,12 @@ const styles = StyleSheet.create({
   },
 
   eventDate: {},
+
+  noEventsText: {
+    fontSize: 15,
+    fontWeight: "700",
+    paddingTop: 20,
+  },
 });
 
 export default MyCalendar;
