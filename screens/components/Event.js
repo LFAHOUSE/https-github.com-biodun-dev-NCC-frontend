@@ -5,40 +5,56 @@ import {
     Image,
     TouchableOpacity,
     StyleSheet,
-    Text
+    Text,
+    ScrollView
 } from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { useFonts, ShareTechMono_400Regular } from '@expo-google-fonts/share-tech-mono';
 import AppLoading from "expo-app-loading";
 
 
-const Event = ({ event }) => {
+const Event = ({ event,index }) => {
    let [fontsLoaded] = useFonts({
       ShareTechMono_400Regular,
     });
+    const [showDetails, setShowDetails] = useState(false)
+
+    const toggleShowDetails = () => {
+      setShowDetails(!showDetails)
+    }
+
     const scrollViewRef = React.useRef(null);
 
   // Define a function to scroll forward
-  const scrollForward = () => {
-    // Get the current scroll position
-    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
-      .nativeEvent.contentOffset.x;
-    // Calculate the next scroll position by adding 320 (the width of the event component plus the margin)
-    const nextPosition = currentPosition + 320;
-    // Scroll to the next position with animation
-    scrollViewRef.current.scrollTo({ x: nextPosition, y: 0, animated: true });
-  };
+  const scrollforward = () => {
+    // Get the current x and y coordinates of the content
+    const currentX = scrollViewRef.current.contentOffset.x;
+    const currentY = scrollViewRef.current.contentOffset.y;
 
-  // Define a function to scroll backward
-  const scrollBackward = () => {
-    // Get the current scroll position
-    const currentPosition = scrollViewRef.current.getScrollResponder().scrollResponderHandleScrollEnd
-      .nativeEvent.contentOffset.x;
-    // Calculate the previous scroll position by subtracting 320 (the width of the event component plus the margin)
-    const previousPosition = currentPosition - 320;
-    // Scroll to the previous position with animation
-    scrollViewRef.current.scrollTo({ x: previousPosition, y: 0, animated: true });
+    // Calculate the new x and y coordinates for scrollforward
+    // You can adjust the values according to your item width and height
+    const newX = currentX + 300;
+    const newY = currentY;
+
+    // Scroll the content to the new position
+    scrollViewRef.current.scrollTo({ x: newX, y: newY });
   };
+  // Define a function to scroll backward
+  const scrollbackward = () => {
+    // Get the current x and y coordinates of the content
+    const currentX = scrollViewRef.current.contentOffset.x;
+    const currentY = scrollViewRef.current.contentOffset.y;
+
+    // Calculate the new x and y coordinates for scrollbackward
+    // You can adjust the values according to your item width and height
+    const newX = currentX - 300;
+    const newY = currentY;
+
+    // Scroll the content to the new position
+    scrollViewRef.current.scrollTo({ x: newX, y: newY });
+  };
+  
+
     // Use state to store the remaining time
     const [remainingTime, setRemainingTime] = useState("");
    const imageUrl = event?.imageUrl
@@ -78,15 +94,23 @@ const Event = ({ event }) => {
       return <AppLoading />;
     } else {
     return (
-      <View style={styles.upcomingEventsContainer} >
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal={true}
+        showsHorizontalScrollIndicator={true}
+        contentContainerStyle={styles.container}
+        >
+
+      
+      <View style={[styles.upcomingEventsContainer, {height: showDetails ? hp("60%") : hp("50%") }]} >
         <View style = {styles.eventsContainer}>
   
-              <View style={styles.imageContainer}>
+              <TouchableOpacity style={styles.imageContainer} onPress={toggleShowDetails}>
                   <Image source={{uri:event.imageUrl}}  style={styles.eventBanner}/>
-              </View>
+              </TouchableOpacity>
           </View>
-
-          <View style={styles.titleAndDesc}>
+       {showDetails && 
+        <View style={styles.titleAndDesc}>
         <View style={styles.titletextcontainer}>
         <Text style={styles.titleText}>{event.title}</Text>
         </View>
@@ -96,9 +120,11 @@ const Event = ({ event }) => {
          </View>
         
       </View>
+       }
+         
   
           <View style={styles.eventDetails}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={scrollbackward}>
               <Image source={require("../../assets/double-arrow-left.png")}  style={styles.arrowBackward}/>
               </TouchableOpacity>
               <View style={styles.countDownContainer}>
@@ -115,25 +141,31 @@ const Event = ({ event }) => {
   
               </View>
               
-              <TouchableOpacity >
+              <TouchableOpacity onPress={scrollforward}>
               <Image source={require("../../assets/double-arrow-right.png")} style={styles.arrowBackward}/>
               </TouchableOpacity>
           </View>
   
   
           </View>
+          </ScrollView>
     );
  } };
 
   const styles = StyleSheet.create({
+    container: {
+      // flexGrow: 1,
+       justifyContent: "space-between",
+       padding:"2%",
+       // gap:5,
+       flexDirection:"row"
+     },
     upcomingEventsContainer:{
-        display:"flex",
+       display:"flex",
        flexDirection:"column",
        width:wp("95%"),
-       height: hp("60%"),
-       //top:"10%",
+       //height: hp("60%"),
        alignSelf:"center",
-       //left:"2.5%"
        //borderWidth:1
        
    },
@@ -179,6 +211,7 @@ const Event = ({ event }) => {
     titletextcontainer:{
     height:"35%",
     width:"100%",
+    alignSelf:"center",
     //borderWidth:1
     },
     titleText:{
@@ -207,13 +240,13 @@ const Event = ({ event }) => {
      color:"#000000",
     },
     eventDetails:{
-      top:"-12%",
+       top:"-12%",
        display:"flex",
        flexDirection:"row",
        justifyContent:"space-between",
        width:"95%",
        height:"22%",
-       alignSelf:"center",
+       //alignSelf:"center",
       // borderWidth:1,
 
     },

@@ -89,12 +89,13 @@ const Live = ({ event }) => {
     upcomingEventsContainer:{
         display:"flex",
         flexDirection:"column",
-        width:wp("95%"),
-        height: hp("60%"),
-        padding:"2%",
+        width:wp("100%"),
+        height: hp("50%"),
+       // padding:"2%",
         //alignSelf:"center",
         //left:"2.5%"
-        //borderWidth:1
+       // borderWidth:1,
+      
         
     },
     eventsContainer:{
@@ -110,12 +111,10 @@ const Live = ({ event }) => {
      eventLabel:{
         display:"flex",
         flexDirection:"row",
-        //justifyContent:"center",
-        //alignItems:"center",
-        width: wp("85%"),
-        height:  "14%",
+        width: "100%",
+        height:  "10%",
         padding: "2%",
-        right:40,
+       // right:"90%",
         //borderWidth:1
  
      },
@@ -180,13 +179,15 @@ const Live = ({ event }) => {
     justifyContent:"center",
     width: "11%",
     height: "60%",
+   // borderWidth:1
   },
   rounded:{
-    width: "50%",
-    height: "70%",
+    width: "30%",
+    height: "100%",
     opacity: 0.9,
     borderRadius:100,
-    backgroundColor:"red"
+    backgroundColor:"red",
+    top:"10%"
   },
   joinText:{
      width: "100%",
