@@ -104,52 +104,23 @@ export default function App() {
           /> */}
 
           {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
-          {/* <Stack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{ headerShown: false }} // This hides the header
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ headerShown: false }} // This hides the header
-          />
-          <Stack.Screen
-            name="Verify"
-            component={Verify}
-            options={{ headerShown: false }} // This hides the header
-          />
-          <Stack.Screen
-            name="Setpassword"
-            component={Setpasssword}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="VerificationComplete"
-            component={VerificationComplete}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="LetsMeet"
-            component={LetsMeet}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Events"
-            component={UpcomingEvents}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Live"
-            component={HappeningNow}
-            options={{ headerShown: false }}
-          /> */}
-          {/* <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>  */}
-          <Stack.Screen
-            name="Main"
-            component={TabNavigator}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name="Login" component={LoginScreen}
+                   options={{ headerShown: false }} // This hides the header
+           />
+            <Stack.Screen name="SignUp" component={SignUp}
+                   options={{ headerShown: false }} // This hides the header
+           />
+           <Stack.Screen name="Verify" component={Verify}
+                   options={{ headerShown: false}} // This hides the header
+           />
+            <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/>
+            <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/>
+           <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/>
+           <Stack.Screen name="Events" component={UpcomingEvents} options={{headerShown:false}}/>
+            <Stack.Screen name="Live" component={HappeningNow} options={{headerShown:false}}/>
+            {/* <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>  */}
+           <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
+
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

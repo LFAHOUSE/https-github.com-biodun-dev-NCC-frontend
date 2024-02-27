@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useCallback } from "react";
 import moment from "moment";
 import {
     View,
@@ -10,75 +10,61 @@ import {
 } from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { useFonts, ShareTechMono_400Regular } from '@expo-google-fonts/share-tech-mono';
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from 'expo-splash-screen'
+
+SplashScreen.preventAutoHideAsync()
 
 
-const Event = ({ event,index }) => {
-   let [fontsLoaded] = useFonts({
-      ShareTechMono_400Regular,
-    });
+ const Event = ({ event,scrollbackward,scrollforward  }) => {
+  const [appIsReady] =  useFonts({
+    ShareTechMono_400Regular,
+});
+
+
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync()
+    }
+  },[appIsReady])
+
+ 
     const [showDetails, setShowDetails] = useState(false)
 
     const toggleShowDetails = () => {
       setShowDetails(!showDetails)
     }
 
-    const scrollViewRef = React.useRef(null);
-
-  // Define a function to scroll forward
-  const scrollforward = () => {
-    // Get the current x and y coordinates of the content
-    const currentX = scrollViewRef.current.contentOffset.x;
-    const currentY = scrollViewRef.current.contentOffset.y;
-
-    // Calculate the new x and y coordinates for scrollforward
-    // You can adjust the values according to your item width and height
-    const newX = currentX + 300;
-    const newY = currentY;
-
-    // Scroll the content to the new position
-    scrollViewRef.current.scrollTo({ x: newX, y: newY });
-  };
-  // Define a function to scroll backward
-  const scrollbackward = () => {
-    // Get the current x and y coordinates of the content
-    const currentX = scrollViewRef.current.contentOffset.x;
-    const currentY = scrollViewRef.current.contentOffset.y;
-
-    // Calculate the new x and y coordinates for scrollbackward
-    // You can adjust the values according to your item width and height
-    const newX = currentX - 300;
-    const newY = currentY;
-
-    // Scroll the content to the new position
-    scrollViewRef.current.scrollTo({ x: newX, y: newY });
-  };
-  
 
     // Use state to store the remaining time
-    const [remainingTime, setRemainingTime] = useState("");
-   const imageUrl = event?.imageUrl
+   const [remainingTime, setRemainingTime] = useState("");
+ 
     // Use effect to update the remaining time every second
     useEffect(() => {
       // Define a function to calculate the remaining time
       const calculateRemainingTime = () => {
-        // Get the current time
-        const now = moment();
-        // Get the event time
-        const eventTime = moment(event?.startDate);
-        // Get the difference in milliseconds
-        const diff = eventTime.diff(now);
+        const eventTime = moment(event.startDate);
+
+          var now = new Date().getTime();
+    
+          // Find the distance between now and the event down date
+          var diff = eventTime - now;
+        
+          // Time calculations for days, hours, minutes and seconds
+          var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+         let formattedTime = `${days}:${hours}:${minutes}:${seconds}`
+         setRemainingTime(formattedTime)
+         
         // Check if the event has passed
         if (diff <= 0) {
           // Set the remaining time to "Event has passed"
           setRemainingTime("Event has passed");
-        } else {
-          // Format the remaining time as "DD days HH hours MM minutes"
-          const duration = moment.duration(diff);
-          const formattedTime= moment(duration).format("DD:HH:MM:SS")
-          // Set the remaining time to the formatted time
-          setRemainingTime(formattedTime);
-        }
+          
+        } 
+       
       };
   
       // Call the function once
@@ -87,22 +73,14 @@ const Event = ({ event,index }) => {
       const interval = setInterval(calculateRemainingTime, 1000);
       // Return a cleanup function to clear the interval
       return () => clearInterval(interval);
-    }, [event?.startDate]);
+    },[]);
   
     // Return the JSX element
-    if (!fontsLoaded) {
-      return <AppLoading />;
+    if (!appIsReady) {
+      return null;
     } else {
     return (
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal={true}
-        showsHorizontalScrollIndicator={true}
-        contentContainerStyle={styles.container}
-        >
-
-      
-      <View style={[styles.upcomingEventsContainer, {height: showDetails ? hp("60%") : hp("50%") }]} >
+      <View style={[styles.upcomingEventsContainer, {height: showDetails ? hp("60%") : hp("50%") }]} onLayout={onLayoutRootView}>
         <View style = {styles.eventsContainer}>
   
               <TouchableOpacity style={styles.imageContainer} onPress={toggleShowDetails}>
@@ -148,7 +126,7 @@ const Event = ({ event,index }) => {
   
   
           </View>
-          </ScrollView>
+         
     );
  } };
 
@@ -166,7 +144,7 @@ const Event = ({ event,index }) => {
        width:wp("95%"),
        //height: hp("60%"),
        alignSelf:"center",
-       //borderWidth:1
+      // borderWidth:1
        
    },
    eventsContainer:{
@@ -176,7 +154,7 @@ const Event = ({ event,index }) => {
        height: hp("38%"),
        alignSelf:"center",
        //top:"10%"
-      // borderWidth:1,
+       //borderWidth:1,
     },
 
     

@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
+    FlatList,
     SafeAreaView,
     StatusBar
 } from 'react-native'
@@ -13,16 +14,59 @@ import {
 import axiosInstance from '../../axios_services/axios'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import Event from './Event'
-import { Button } from 'react-native-paper'
+
 
 
 const UpcomingEvents = () => {
   
   const [data, setData] = useState([])
+  const dummyData = [
+    {
+      "_id": "65d74755a9995c8d7471c58f",
+      "title": "Tech Conference 2024",
+      "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+      "startDate": "2024-03-15T09:00:00.000Z",
+      "endDate": "2024-03-16T17:00:00.000Z",
+      "isLive": true,
+      "imageUrl": "../../assets/event.png",
+      "__v": 0
+    },
+    {
+      "_id": "65d74755a9995c8d7471c58b",
+      "title": "Tech Conference 2024",
+      "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+      "startDate": "2024-03-15T09:00:00.000Z",
+      "endDate": "2024-03-16T17:00:00.000Z",
+      "isLive": true,
+      "imageUrl": "../../assets/event.png",
+      "__v": 0
+    },
+    {
+      "_id": "65d74755a9995c8d7471c58a",
+      "title": "Tech Conference 2024",
+      "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+      "startDate": "2024-03-15T09:00:00.000Z",
+      "endDate": "2024-03-16T17:00:00.000Z",
+      "isLive": true,
+      "imageUrl": "../../assets/event.png",
+      "__v": 0
+    },
+    {
+      "_id": "65d74755a9995c8d7471c58y",
+      "title": "Tech Conference 2024",
+      "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+      "startDate": "2024-03-15T09:00:00.000Z",
+      "endDate": "2024-03-16T17:00:00.000Z",
+      "isLive": true,
+      "imageUrl": "../../assets/event.png",
+      "__v": 0
+    },
+  ]
 
   const fetchEvents = async () => {
     try {
       const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/upcoming');
+      console.log(response.data)
      if (Array.isArray(response.data)) {
       setData(response.data)
      }else {
@@ -30,12 +74,12 @@ const UpcomingEvents = () => {
      }
      
     } catch (error) {
-      // Handle the error or display a message
-      console.error(error);
+//       // Handle the error or display a message
+      console.error(error.response.data.message);
     }
   };
 
- // Use useEffect to call the fetchEvents function when the component mounts
+ //Use useEffect to call the fetchEvents function when the component mounts
   useEffect(() => {
     fetchEvents();
    
@@ -47,65 +91,51 @@ const UpcomingEvents = () => {
 
   
    // Use a ref to access the scroll view
-  const scrollViewRef = React.useRef(null);
+  const flatListRef = React.useRef(null);
+  const [scrollPosition,setScrollPosition] = useState(0)
 
   // Define a function to scroll forward
   const scrollforward = () => {
-    // Get the current x and y coordinates of the content
-    const currentX = scrollViewRef.current.contentOffset.x;
-    const currentY = scrollViewRef.current.contentOffset.y;
-
-    // Calculate the new x and y coordinates for scrollforward
-    // You can adjust the values according to your item width and height
-    const newX = currentX + 300;
-    const newY = currentY;
-
-    // Scroll the content to the new position
-    scrollViewRef.current.scrollTo({ x: newX, y: newY });
+   setScrollPosition(scrollPosition + 340)
+   flatListRef.current.scrollToOffset({offset:scrollPosition + 340})
   };
   // Define a function to scroll backward
   const scrollbackward = () => {
     // Get the current x and y coordinates of the content
-    const currentX = scrollViewRef.current.contentOffset.x;
-    const currentY = scrollViewRef.current.contentOffset.y;
-
-    // Calculate the new x and y coordinates for scrollbackward
-    // You can adjust the values according to your item width and height
-    const newX = currentX - 300;
-    const newY = currentY;
-
-    // Scroll the content to the new position
-    scrollViewRef.current.scrollTo({ x: newX, y: newY });
+    setScrollPosition(scrollPosition - 340)
+    flatListRef.current.scrollToOffset({offset:scrollPosition -340})
+ 
   };
 
-      
+  const handleScroll = (event) => {
+    const currentScrollPosition = event.nativeEvent.contentOffset.x
+    setScrollPosition(currentScrollPosition)
+  }
+ 
+      //renderItem
+  
+      const renderItem = ({ item,index }) => {
+         return (
+        <Event event={item} scrollbackward={scrollbackward} scrollforward={scrollforward}/>
+       );
+      } ;
 
     return (
       
       <SafeAreaView style={styles.safeArea}>
+       
         <View style={styles.eventLabel}>
             <Text style={styles.eventText}>Upcoming events </Text>
             </View>
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal={true}
-        showsHorizontalScrollIndicator={true}
-        contentContainerStyle={styles.container}
-      >
-        { Array.isArray(data) && data.map((event) =>(
-          <Event key={event._id} event={event} />
-        ))}
-       
-      </ScrollView>
-      {/* <View style={styles.navButton}>
-        <TouchableOpacity onPress={scrollbackward}>
-              <Image source={require("../../assets/double-arrow-left.png")}  style={styles.arrowBackward}/>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={scrollforward} >
-              <Image source={require("../../assets/double-arrow-right.png")} style={styles.arrowBackward}/>
-              </TouchableOpacity> 
-        </View> */}
+            <FlatList
+            ref={flatListRef}
+            data={data}
+            horizontal={true}
+            renderItem={renderItem}
+            keyExtractor={(item,index) => item._id.toString()}
+            onScroll={handleScroll}
+            />
+          
     </SafeAreaView>
     )
 
@@ -132,8 +162,8 @@ const styles = StyleSheet.create({
     width: "50%",
     height:  "9%",
     padding: "2%",
-   // top:"-10%",
-    left:"2%",
+    top:"15%",
+    //left:"2%",
     //gap: 10,
   //borderWidth:1
 
@@ -151,26 +181,6 @@ const styles = StyleSheet.create({
 
 
 },
-navButton:{
-    display:"flex",
-    flexDirection:"row",
-    justifyContent:"space-between",
-    width:"80%",
-    height:"5%",
-    borderWidth:1,
-    top:"-5%",
-    alignSelf:"center"
-},
-button:{
-  alignSelf:"center",
-  marginTop:"10%",
-  width:wp("89%"),
-  height:hp('7%'),
-  borderRadius:10,
-  left:"2%",
-  marginTop:"15%"
-},
-   
 
 })
 export default UpcomingEvents
