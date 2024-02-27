@@ -18,35 +18,76 @@ import Library from "./screens/Dashboard/Library.js";
 import Home from "./screens/Dashboard/Home.js";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DashboardHeader from "./screens/components/DashboardHeader.js";
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          header: () => <DashboardHeader />,
-        }}
-      />
-      <Tab.Screen
-        name="Search"
-        component={Search}
-        options={{
-          header: () => <DashboardHeader />,
-        }}
-      />
-      <Tab.Screen
-        name="Library"
-        component={Library}
-        options={{
-          header: () => <DashboardHeader />,
-        }}
-      />
-    </Tab.Navigator>
+    <ImageBackground
+      source={require("./assets/banner.png")}
+      style={style.container}
+    >
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            height: 80,
+            paddingVertical: 0,
+            backgroundColor: "#C8e8f7",
+          },
+          tabBarIcon: ({ focused }) => {
+            let srcName;
+            let label;
+
+            if (route.name === "Home") {
+              srcName = require("./assets/home.png");
+              label = "Home";
+            } else if (route.name === "Search") {
+              srcName = require("./assets/search.png");
+              label = "Search";
+            } else if (route.name === "Library") {
+              srcName = require("./assets/library.png");
+              label = "Library";
+            }
+
+            return (
+              <View style={[style.view, { opacity: focused ? 1 : 0.6 }]}>
+                <Image
+                  source={srcName}
+                  style= {style.Icon}
+                />
+                <Text style={style.text}>{label}</Text>
+              </View>
+            );
+          },
+        })}
+      >
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            header: () => <DashboardHeader />,
+          }}
+        />
+        <Tab.Screen
+          name="Search"
+          component={Search}
+          options={{
+            header: () => <DashboardHeader />,
+          }}
+        />
+        <Tab.Screen
+          name="Library"
+          component={Library}
+          options={{
+            header: () => <DashboardHeader />,
+          }}
+        />
+      </Tab.Navigator>
+    </ImageBackground>
   );
 };
 
@@ -63,7 +104,7 @@ export default function App() {
           /> */}
 
           {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ headerShown: false }} // This hides the header
@@ -102,7 +143,7 @@ export default function App() {
             name="Live"
             component={HappeningNow}
             options={{ headerShown: false }}
-          />
+          /> */}
           {/* <Stack.Screen name="My Library" component={MyLibrary} options={{headerShown:false}}/>  */}
           <Stack.Screen
             name="Main"
@@ -114,3 +155,26 @@ export default function App() {
     </PaperProvider>
   );
 }
+
+const style = StyleSheet.create({
+  container: {
+   flex: 1,
+   display: "flex",
+   backgroundColor: "transparent",
+  },
+
+  view: {
+    alignItems: "center",
+    gap: 5,
+  },
+
+  Icon: {
+    width: 24,
+    height: 24,
+  },
+
+  text: {
+    fontSize: 14,
+    fontWeight: "700",
+  },
+});

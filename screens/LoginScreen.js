@@ -20,12 +20,12 @@ import { CountryPicker,CountryList } from 'react-native-country-codes-picker';
 import axiosInstance from "../axios_services/axios";
 import Loader from "./components/Loader";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import {setToken} from '../redux/userReducer.js'
+// import {setToken} from '../redux/userReducer.js'
 import {useDispatch} from 'react-redux'
 
 const LoginScreen = ({navigation}) => {
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
     const {control,handleSubmit,formState:{errors}} = useForm()
     const email = useWatch({control,name:"email"})
@@ -55,7 +55,7 @@ const LoginScreen = ({navigation}) => {
 
       if (response.status === 200 || response.status === 201 ) {
         let token = response.data.token
-         dispatch(setToken(token))
+        //  dispatch(setToken(token))
           setStatusText("Login successful")
          setLoading(false)
         Alert.alert("OK","Login Sucessful");
