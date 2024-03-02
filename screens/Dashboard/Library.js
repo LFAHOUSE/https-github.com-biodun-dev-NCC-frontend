@@ -18,8 +18,7 @@ import DashboardHeader from "../components/DashboardHeader";
 import DashboardFooter from "../components/DashboardFooter";
 import MyCalendar from "../components/MyCalendar";
 import {formatEvents, groupEventsByMonth} from '../../utils/formatLibEvents.js'
-import { Link } from '@react-navigation/native';
-import RenderLibEvents from '../components/RenderLibEvents.js';
+
 
 const dummyData = [
 	{
@@ -265,17 +264,16 @@ useEffect(() => {
   
 },[])
 
-//const groupedEvents = groupEventsByMonth(eventsByMonth)
 
 const [groupedEvents, setGroupedEvent] = useState([])
 const [searchText, setSearchText] = useState("")
 
 const [collapsed, setCollapsed] = useState(
-  // initialize it with an array of true values
+ 
   groupedEvents?.map(() => true)
 );
 
-const toggleSection = (index) => {
+function toggleSection(index) {
   const newCollapsed = [...collapsed];
   newCollapsed[index] = !newCollapsed[index];
   setCollapsed(newCollapsed);
@@ -284,7 +282,7 @@ const toggleSection = (index) => {
 
 console.log("groupedEvents: "+ JSON.stringify(groupedEvents,null, 2))
 
-  const renderItem = ({ item,index}) => {
+  function renderItem ({ item,index}) {
   let {month,events} = item
     return (
 
@@ -353,13 +351,16 @@ console.log("groupedEvents: "+ JSON.stringify(groupedEvents,null, 2))
             </View>
       </ScrollView>
       <FlatList
-          data={Object.values(groupedEvents)}
-          renderItem={renderItem}
+           data={groupedEvents}
+           renderItem={renderItem}
            keyExtractor={(event) => event.month}
-           contentContainerStyle={{gap:20}}
+           contentContainerStyle={{gap:20,paddingBottom:20}}
            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-           //collapsable={true}
+           updateCellsBatchingPeriod={50}
+           maxToRenderPerBatch={5}
+           windowSize={11}
           /> 
+         
     </SafeAreaView>
   );
 };
