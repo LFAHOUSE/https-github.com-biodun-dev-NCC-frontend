@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer,Linking} from '@react-navigation/native';
 import { createNativeStackNavigator,} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -17,7 +17,7 @@ import DashboardHeader from "./screens/components/DashboardHeader.js";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 
 
-
+// const prefix = Linking.createURL('/');
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -83,69 +83,11 @@ function Dashboard () {
 }
 
 export default function App() {
-  function Dashboard () {
-    return (
-      <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={({ route }) => ({
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          height: 80,
-          paddingVertical: 0,
-          backgroundColor: "#e6f3f8",
-        },
-        tabBarIcon: ({ focused }) => {
-          let srcName;
-          let label;
-  
-          if (route.name === "Home") {
-            srcName = require("./assets/home.png");
-            label = "Home";
-          } else if (route.name === "Search") {
-            srcName = require("./assets/search.png");
-            label = "Search";
-          } else if (route.name === "Library") {
-            srcName = require("./assets/library.png");
-            label = "Library";
-          }
-  
-          return (
-            <View style={[style.view, { opacity: focused ? 1 : 0.6 }]}>
-              <Image source={srcName} style={style.Icon} />
-              <Text style={style.text}>{label}</Text>
-            </View>
-          );
-        },
-      })}
-    >
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          //header: () => <DashboardHeader />,
-        }}
-      />
-      <Tab.Screen
-        name="Search"
-        component={Search}
-        options={{
-         // header: () => <DashboardHeader />,
-        }}
-      />
-      <Tab.Screen
-        name="Library"
-        component={Library}
-        options={{
-         // header: () => <DashboardHeader />,
-        }}
-      />
-    </Tab.Navigator>
-    )
-  }
+
   
   return (
     <PaperProvider>
-      <NavigationContainer>
+      <NavigationContainer >
         <Stack.Navigator headerMode="none">
            {/* Hide the header for the StartupScreen  */}
           {/* <Stack.Screen
