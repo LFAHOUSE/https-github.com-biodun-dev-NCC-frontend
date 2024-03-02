@@ -80,11 +80,14 @@ SplashScreen.preventAutoHideAsync()
       return null;
     } else {
     return (
-      <View style={[styles.upcomingEventsContainer, {height: showDetails ? hp("60%") : hp("50%") }]} onLayout={onLayoutRootView}>
+      <View style={[styles.upcomingEventsContainer, {height: showDetails ? hp("70%") : hp("50%") }]} onLayout={onLayoutRootView}>
+        <View style={[styles.eventLabel,{height:showDetails? "9%" :"10%"}]}>
+            <Text style={styles.eventText}>Upcoming Events </Text>
+            </View>
         <View style = {styles.eventsContainer}>
   
               <TouchableOpacity style={styles.imageContainer} onPress={toggleShowDetails}>
-                  <Image source={{uri:event.imageUrl}}  style={styles.eventBanner}/>
+                  <Image source={require("../../assets/event.png")}  style={styles.eventBanner}/>
               </TouchableOpacity>
           </View>
        {showDetails && 
@@ -142,9 +145,10 @@ SplashScreen.preventAutoHideAsync()
        display:"flex",
        flexDirection:"column",
        width:wp("95%"),
+       left:"2%",
        //height: hp("60%"),
        alignSelf:"center",
-      // borderWidth:1
+      //borderWidth:1
        
    },
    eventsContainer:{
@@ -203,19 +207,26 @@ SplashScreen.preventAutoHideAsync()
      textAlign: "left",
     },
     desctextContainer:{
+      flex:1,
+      display:"flex",
+      flexDirection:"row",
       width:"100%",
-      height:"60%"
+      height:"60%",
+      alignSelf:'center',
+      justifyContent:"center",
+      alignItems:"center",
+      //borderWidth:1
     },
     descText:{
       width: "100%",
      height: "100%",
      fontFamily: "Roboto",
-     fontSize: 13,
-     fontWeight: "400",
+     fontSize: 11,
+     fontWeight: "700",
      lineHeight: 14,
-     letterSpacing:1,
-     textAlign: "left",
-     color:"#000000",
+     letterSpacing:0.5,
+     //textAlign: "left",
+     color:"#06447C",
     },
     eventDetails:{
        top:"-12%",
@@ -337,6 +348,32 @@ SplashScreen.preventAutoHideAsync()
 
        
 
-    }
+    },
+    eventLabel:{
+      display:"flex",
+      flexDirection:"row",
+      flexWrap: "nowrap",
+      width: "100%",
+      height:  "10%",
+      padding: "2%",
+     // top:"15%",
+      left:"2%",
+      //gap: 10,
+   // borderWidth:1
+  
+   },
+   eventText:{
+    width: "100%",
+    height: "100%",
+    fontFamily: "Roboto",
+    fontSize: 18,
+    fontWeight: "700",
+    lineHeight: 18,
+    letterSpacing: 1,
+    textAlign: "left",
+    color:"#06447C"
+  
+  
+  },
   })
   export default Event;

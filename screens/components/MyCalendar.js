@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     columnGap: 10,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#f5f5f5",
   },
 
   calendarContainer: {

@@ -1,4 +1,5 @@
 import React, { useState,useEffect ,useCallback} from "react";
+import * as SplashScreen from 'expo-splash-screen'
 import moment from "moment";
 import {
     View,
@@ -39,7 +40,7 @@ const Live = ({ event }) => {
      <View style = {styles.eventsContainer}>
 
        <TouchableOpacity style={styles.imageContainer} onPress={toggleShowDetails}>
-           <Image source={{uri:event.imageUrl}} style={styles.eventBanner}/>
+           <Image source={require("../../assets/event.png")} style={styles.eventBanner}/>
        </TouchableOpacity>
    </View>
    {showDetails && 
@@ -87,7 +88,9 @@ const Live = ({ event }) => {
         display:"flex",
         flexDirection:"column",
         width:wp("100%"),
-        alignSelf:"center"
+        alignSelf:"center",
+        left:"2%",
+        //borderWidth:1,
       
         
     },
@@ -96,9 +99,7 @@ const Live = ({ event }) => {
         flexDirection:"column",
         width:wp("95%"),
         height: hp("38%"),
-        alignSelf:"center",
-        //top:"10%"
-       //borderWidth:1,
+        
      },
  
      eventLabel:{
@@ -170,19 +171,26 @@ const Live = ({ event }) => {
      textAlign: "left",
     },
     desctextContainer:{
+      flex:1,
+      display:"flex",
+      flexDirection:"row",
       width:"100%",
-      height:"60%"
+      height:"60%",
+      alignSelf:'center',
+      justifyContent:"center",
+      alignItems:"center",
+      //borderWidth:1
     },
     descText:{
       width: "100%",
      height: "100%",
      fontFamily: "Roboto",
-     fontSize: 13,
-     fontWeight: "400",
+     fontSize: 11,
+     fontWeight: "700",
      lineHeight: 14,
-     letterSpacing:1,
-     textAlign: "left",
-     color:"#000000",
+     letterSpacing:0.5,
+     //textAlign: "left",
+     color:"#06447C",
     },
      eventDetails:{
        top:"-12%",
@@ -213,17 +221,20 @@ const Live = ({ event }) => {
     flexDirection:"row",
     alignItems:'center',
     justifyContent:"center",
-    width: "11%",
-    height: "60%",
-   // borderWidth:1
+    width: 20,
+    height: 20,
+   // borderWidth:1,
+    padding:10,
+    marginHorizontal:5
   },
   rounded:{
-    width: "30%",
-    height: "100%",
+    width: 15,
+    height: 15,
     opacity: 0.9,
     borderRadius:100,
     backgroundColor:"red",
-    top:"10%"
+   // top:5,
+  //  borderWidth:1
   },
   joinText:{
      width: "100%",
@@ -248,16 +259,16 @@ const Live = ({ event }) => {
  
   },
   socialIconContainer:{
-     width: "25%",
-     height: "99%",
+     width: 50,
+     height: 40,
      padding: 10,
      gap: 10,
-     //borderWidth:1
+    // borderWidth:1
  
   },
   socialIcon:{
-     width: "80%",
-     height: "80%",
+     width:25,
+     height: 25,
      borderRadius: 5,
      resizeMode:"cover"
      

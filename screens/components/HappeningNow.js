@@ -14,30 +14,70 @@ import {
 import Live from './Live';
 import axiosInstance from '../../axios_services/axios';
 
+const dummyData = [
+  {
+    "_id": "65d74755a9995c8d7471c58f",
+    "title": "Tech Conference 2024",
+    "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+    "startDate": "2024-03-15T09:00:00.000Z",
+    "endDate": "2024-03-16T17:00:00.000Z",
+    "isLive": true,
+    "imageUrl": "../../assets/event.png",
+    "__v": 0
+  },
+  {
+    "_id": "65d74755a9995c8d7471c58b",
+    "title": "Tech Conference 2024",
+    "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+    "startDate": "2024-03-15T09:00:00.000Z",
+    "endDate": "2024-03-16T17:00:00.000Z",
+    "isLive": true,
+    "imageUrl": "../../assets/event.png",
+    "__v": 0
+  },
+  {
+    "_id": "65d74755a9995c8d7471c58a",
+    "title": "Tech Conference 2024",
+    "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+    "startDate": "2024-03-15T09:00:00.000Z",
+    "endDate": "2024-03-16T17:00:00.000Z",
+    "isLive": true,
+    "imageUrl": "../../assets/event.png",
+    "__v": 0
+  },
+  {
+    "_id": "65d74755a9995c8d7471c58y",
+    "title": "Tech Conference 2024",
+    "description": "An engaging two-day event filled with workshops, panels, and networking opportunities for tech enthusiasts.",
+    "startDate": "2024-03-15T09:00:00.000Z",
+    "endDate": "2024-03-16T17:00:00.000Z",
+    "isLive": true,
+    "imageUrl": "../../assets/event.png",
+    "__v": 0
+  },
+]
+
+
 const HappeningNow = () => {
 
   const [data, setData] = useState([])
 
-  const fetchLiveEvents = async () => {
-    try {
-      const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/live');
-     if (Array.isArray(response.data)) {
-      setData(response.data)
-     }else {
-      console.log("data is not an array")
-     }
-     
-    } catch (error) {
-      // Handle the error or display a message
-      console.error(error);
-    }
-  };
-
- // Use useEffect to call the fetchEvents function when the component mounts
-  useEffect(() => {
-    fetchLiveEvents();
+  // const fetchLiveEvents = async () => {
+  //   try {
+  //     const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/live');
+  //     setData(response.data) 
    
-  },[]);
+  //   } catch (error) {
+  //     // Handle the error or display a message
+  //     console.error(error);
+  //   }
+  // };
+
+ //Use useEffect to call the fetchEvents function when the component mounts
+  // useEffect(() => {
+  //   fetchLiveEvents();
+   
+  // });
 
   const scrollViewRef = React.useRef(null);
     
@@ -49,7 +89,7 @@ const HappeningNow = () => {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.container}
               >
-             { Array.isArray(data) && data.map((event) =>(
+             { Array.isArray(dummyData) && dummyData.map((event) =>(
           <Live key={event._id} event={event} />
         ))}
              </ScrollView>
@@ -66,11 +106,7 @@ const styles = StyleSheet.create({
       },
       
       container: {
-        // flexGrow: 1,
-         justifyContent: "space-between",
-         padding:"2%",
-         // gap:5,
-         flexDirection:"row"
+        paddingTop:25
        },
    
 })

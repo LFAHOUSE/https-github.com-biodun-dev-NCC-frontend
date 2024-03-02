@@ -23,7 +23,7 @@ const Home = () => {
   return (
     <SafeAreaView style={styles.body}>
       <ScrollView>
-        <MyCalendar />
+        {/* <MyCalendar /> */}
         <UpcomingEvents/>
         <HappeningNow/>
       </ScrollView>

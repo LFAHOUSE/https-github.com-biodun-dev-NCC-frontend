@@ -63,29 +63,27 @@ const UpcomingEvents = () => {
     },
   ]
 
-  const fetchEvents = async () => {
-    try {
-      const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/upcoming');
-      console.log(response.data)
-     if (Array.isArray(response.data)) {
-      setData(response.data)
-     }else {
-      console.log("data is not an array")
-     }
-     
-    } catch (error) {
-//       // Handle the error or display a message
-      console.error(error.response.data.message);
-    }
-  };
+  
 
  //Use useEffect to call the fetchEvents function when the component mounts
-  useEffect(() => {
-    fetchEvents();
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     try {
+  //       const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/upcoming');
+  //      setData(response.data)
+  //      }
+       
+  //     catch (error) {
+  // //       // Handle the error or display a message
+  //       console.error(error.response.data.message);
+  //     }
+  //   };
+
+  //   fetchEvents()
    
-  },[]);
+  // });
   
-  console.log("Upcoming events: "+  data)
+
 
   
 
@@ -124,12 +122,12 @@ const UpcomingEvents = () => {
       
       <SafeAreaView style={styles.safeArea}>
        
-        <View style={styles.eventLabel}>
+        {/* <View style={styles.eventLabel}>
             <Text style={styles.eventText}>Upcoming events </Text>
-            </View>
+            </View> */}
             <FlatList
             ref={flatListRef}
-            data={data}
+            data={dummyData}
             horizontal={true}
             renderItem={renderItem}
             keyExtractor={(item,index) => item._id.toString()}
@@ -159,11 +157,11 @@ const styles = StyleSheet.create({
     display:"flex",
     flexDirection:"row",
     flexWrap: "nowrap",
-    width: "50%",
+    width: "100%",
     height:  "9%",
     padding: "2%",
-    top:"15%",
-    //left:"2%",
+   // top:"15%",
+    left:"2%",
     //gap: 10,
   //borderWidth:1
 
@@ -172,8 +170,8 @@ const styles = StyleSheet.create({
   width: "100%",
   height: "100%",
   fontFamily: "Roboto",
-  fontSize: 15,
-  fontWeight: "500",
+  fontSize: 18,
+  fontWeight: "700",
   lineHeight: 18,
   letterSpacing: 1,
   textAlign: "left",
