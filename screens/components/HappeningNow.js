@@ -62,22 +62,22 @@ const HappeningNow = () => {
 
   const [data, setData] = useState([])
 
-  // const fetchLiveEvents = async () => {
-  //   try {
-  //     const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/live');
-  //     setData(response.data) 
+  const fetchLiveEvents = async () => {
+    try {
+      const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/live');
+      setData(response.data) 
    
-  //   } catch (error) {
-  //     // Handle the error or display a message
-  //     console.error(error);
-  //   }
-  // };
+    } catch (error) {
+      // Handle the error or display a message
+      console.error(error);
+    }
+  };
 
- //Use useEffect to call the fetchEvents function when the component mounts
-  // useEffect(() => {
-  //   fetchLiveEvents();
+
+  useEffect(() => {
+    fetchLiveEvents();
    
-  // });
+  },[]);
 
   const scrollViewRef = React.useRef(null);
     
@@ -89,7 +89,7 @@ const HappeningNow = () => {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.container}
               >
-             { Array.isArray(dummyData) && dummyData.map((event) =>(
+             { Array.isArray(data) && data.map((event) =>(
           <Live key={event._id} event={event} />
         ))}
              </ScrollView>

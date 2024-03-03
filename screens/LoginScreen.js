@@ -54,9 +54,8 @@ const LoginScreen = ({navigation}) => {
       console.log(response.data.token)
 
       if (response.status === 200 || response.status === 201 ) {
-        let token = response.data.token
+        //let token = response.data.token
         //  dispatch(setToken(token))
-          setStatusText("Login successful")
          setLoading(false)
         Alert.alert("OK","Login Sucessful");
          navigation.navigate("Dashboard")
@@ -65,7 +64,6 @@ const LoginScreen = ({navigation}) => {
      setLoading(false)
      setStatusText("Error login in, check credentials")
       //console.log(error.response.data?.message)
-       setButtonText("Try Again")
       Alert.alert('Login failed', "Invalid Credentials");
     }
   // To be removed in production
@@ -107,30 +105,11 @@ const LoginScreen = ({navigation}) => {
         rules={{ required: "Phone number is required"}}
         render={({ field,fieldState}) => (
           <View style={[styles.inputContainier, {borderColor: fieldState.isTouched ? 'green' : 'red',borderWidth:1}]}>
-           {/* <View style={styles.inputAccessory}>
-         <View style={styles.phoneIconContainer}>
-              <Image style={styles.phoneIcon} source={require("../assets/phone.png")}/>
-            </View>
-
-            <View style={styles.countryCodeContainer}>
-              <Text style={styles.countryCode}>{countryCode}</Text>
-            </View>
-            <CountryPicker
-          style={styles.picker}
-          show={showPickerModal}
-          pickerButtonOnPress={(item) =>{setCountryCode(item.dial_code),setShowPickerModal(false)}}
-
-        />
-
-            <TouchableOpacity style={styles.phoneIconContainer} onPress={openCodePicker}>
-              <Image style={styles.angleDown} source={require("../assets/arrow-down.png")}/>
-            </TouchableOpacity>
-            </View> */}
 
           <TouchableOpacity style={styles.inputFieldContainer}>
             <TextInput
             style={styles.input}
-              placeholder="omoniyibankole@gmail.com"
+              placeholder="omoniyi.bankole@gmail.com"
               onChangeText={field.onChange}
               value={field.value}
               onBlur={field.onBlur}
@@ -313,7 +292,8 @@ const styles = StyleSheet.create({
         padding:10,
         width:wp("89%"),
         height: hp('15.5%'),
-       alignSelf:"center"
+       alignSelf:"center",
+    
 
       },
       passwordInputParentContainer:{
@@ -322,7 +302,8 @@ const styles = StyleSheet.create({
         padding:15,
         width: wp("89%"),
         height: hp('15.5%'),
-        alignSelf:"center"
+        alignSelf:"center",
+        
       },
       inputLabelContainer:{
         display:"flex",
@@ -351,9 +332,7 @@ const styles = StyleSheet.create({
   padding:"1%",
   borderRadius: 7,
   borderWidth: 1,
-  borderColor:"purple",
-  //marginVertical:"-2%"
-   //borderWidth:1
+  alignSelf:'center'
 
  },
  inputAccessory:{
@@ -424,8 +403,7 @@ inputFieldContainer:{
   paddingLeft: 26,
   borderRadius: 7,
   gap: 10,
-  // borderWidth:1,
-  // borderColor:"purple",
+
   alignItems:'center',
   justifyContent:'center'
 
@@ -436,12 +414,8 @@ input:{
    width: "100%",
   height: 40,
   alignItems:'center',
-  //backgroundColor:"#ddd",
- // borderColor:"red",
   borderRadius:7,
-  //borderWidth:1,
- // right:"10%",
-  //padding:10,
+  
 
 
 },
@@ -453,7 +427,8 @@ passwordinput:{
   alignSelf:'center',
   justifyContent:'center',
   alignContent:"center",
-  alignItems:"center"
+  alignItems:"center",
+
 },
 
 inputStatusContainer:{
@@ -471,8 +446,7 @@ button:{
   width:wp("89%"),
   height:hp('7%'),
   borderRadius:10,
-  left:"2%",
-  //borderWidth:1,
+
 
 },
 

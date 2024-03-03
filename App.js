@@ -1,9 +1,10 @@
 import React from 'react';
-import { NavigationContainer,Linking} from '@react-navigation/native';
-import { createNativeStackNavigator,} from '@react-navigation/native-stack';
+import { NavigationContainer,DrawerActions} from '@react-navigation/native';
+import { createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createStackNavigator } from "@react-navigation/stack";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import { Provider as PaperProvider } from 'react-native-paper';
-import StartupScreen from './screens/StartupScreen';
+import StartupScreen from './screens/StartupScreen.js';
 import LoginScreen from './screens/LoginScreen.js';
 import SignUp from './screens/SignUp';
 import Verify from './screens/Verify';
@@ -15,9 +16,9 @@ import Search from './screens/Dashboard/Search.js'
 import Library from './screens/Dashboard/Library.js'
 import DashboardHeader from "./screens/components/DashboardHeader.js";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 
-// const prefix = Linking.createURL('/');
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +26,6 @@ const Tab = createBottomTabNavigator();
 function Dashboard () {
   return (
     <Tab.Navigator
-    initialRouteName="Home"
     screenOptions={({ route }) => ({
       tabBarShowLabel: false,
       tabBarStyle: {
@@ -57,6 +57,7 @@ function Dashboard () {
       },
     })}
   >
+
     <Tab.Screen
       name="Home"
       component={Home}
@@ -82,36 +83,79 @@ function Dashboard () {
   )
 }
 
+const AuthScreenStack = () => {
+  return (
+    <Stack.Navigator>
+    {/* <Stack.Screen
+      name="Startup"
+      component={StartupScreen}
+      options={{ headerShown: false }} 
+    /> */}
+    {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
+    {/* <Stack.Screen name="Login" component={LoginScreen}
+             options={{ headerShown: false,}}
+            
+     /> */}
+      {/* <Stack.Screen 
+      name="SignUp" 
+      component={SignUp}
+      options={{ headerShown: false,   }}
+     /> */}
+      {/* <Stack.Screen 
+      name="Verify"
+      component={Verify}
+      options={{ headerShown: false,  }}
+      /> */}
+       {/* <Stack.Screen 
+          name='Setpassword'
+          component={Setpasssword} 
+          options={{headerShown:false, 
+           
+          }}
+        />  */}
+      {/* <Stack.Screen 
+      name="VerificationComplete"
+      component={VerificationComplete}
+      options={{headerShown:false,  }}
+      /> */}
+    {/* <Stack.Screen
+     name="LetsMeet"
+     component={LetsMeet}
+     options={{headerShown:false,  }}
+     />  */}
+     {/* <Stack.Screen
+      name="Dashboard"
+      component={Dashboard}
+      options={{headerShown:false,  }}
+      />  */}
+  </Stack.Navigator>
+  )
+}
+
+
 export default function App() {
 
   
   return (
     <PaperProvider>
+
       <NavigationContainer >
-        <Stack.Navigator headerMode="none">
-           {/* Hide the header for the StartupScreen  */}
-          {/* <Stack.Screen
-            name="Startup"
-            component={StartupScreen}
-            options={{ headerShown: false }} // This hides the header
+        <Stack.Navigator>
+
+        {/* <Stack.Screen
+          name='auth'
+          component={AuthScreenStack}
+          options={{headerShown:false}}
           /> */}
-          {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
-          <Stack.Screen name="Login" component={LoginScreen}
-                   options={{ headerShown: false }}
-           />
-            <Stack.Screen name="SignUp" component={SignUp}
-                   options={{ headerShown: false }}
-           />
-            <Stack.Screen name="Verify" component={Verify}
-                    options={{ headerShown: false}}
-            />
-            <Stack.Screen name='Setpassword' component={Setpasssword} options={{headerShown:false}}/>
-            <Stack.Screen name="VerificationComplete" component={VerificationComplete} options={{headerShown:false}}/>
-           <Stack.Screen name="LetsMeet" component={LetsMeet} options={{headerShown:false}}/>
-          <Stack.Screen name="Dashboard" component={Dashboard} options={{headerShown:false}}/>
+          
+          <Stack.Screen
+          name='Dashboard'
+          component={Dashboard}
+          options={{headerShown:false}}
+          />
         </Stack.Navigator>
-       
       </NavigationContainer>
+   
     </PaperProvider>
   );
 }
@@ -136,5 +180,31 @@ const style = StyleSheet.create({
   text: {
     fontSize: 14,
     fontWeight: "700",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "#222222",
+    minHeight: 40,
+  },
+  headerLeft: {
+    flexDirection: "row",
+  },
+  leftButton: {
+    marginLeft: 10,
+  },
+  header: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingRight: 40,
+  },
+  buttonTxt: {
+    color: "#ddd",
+    fontWeight: "bold",
+  },
+  headerTxt: {
+    color: "#ddd",
   },
 });

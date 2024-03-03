@@ -30,7 +30,7 @@ function StartupScreen({ navigation }) {
                         Welcome to My App
                     </Text>
                 </Animated.View>
-                <Button onPress={() => navigation.navigate('Register')} mode="contained" style={{ marginTop: 20 }}>
+                <Button onPress={() => navigation.navigate('Login')} mode="contained" style={{ marginTop: 20 }}>
                     Get Started
                 </Button>
             </View>

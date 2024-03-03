@@ -66,22 +66,22 @@ const UpcomingEvents = () => {
   
 
  //Use useEffect to call the fetchEvents function when the component mounts
-  // useEffect(() => {
-  //   const fetchEvents = async () => {
-  //     try {
-  //       const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/upcoming');
-  //      setData(response.data)
-  //      }
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/upcoming');
+       setData(response.data)
+       }
        
-  //     catch (error) {
-  // //       // Handle the error or display a message
-  //       console.error(error.response.data.message);
-  //     }
-  //   };
+      catch (error) {
+  //       // Handle the error or display a message
+        console.error(error.response.data.message);
+      }
+    };
 
-  //   fetchEvents()
+    fetchEvents()
    
-  // });
+  },[]);
   
 
 
@@ -112,7 +112,7 @@ const UpcomingEvents = () => {
  
       //renderItem
   
-      const renderItem = ({ item,index }) => {
+      function renderItem ({ item,index }) {
          return (
         <Event event={item} scrollbackward={scrollbackward} scrollforward={scrollforward}/>
        );
@@ -121,13 +121,10 @@ const UpcomingEvents = () => {
     return (
       
       <SafeAreaView style={styles.safeArea}>
-       
-        {/* <View style={styles.eventLabel}>
-            <Text style={styles.eventText}>Upcoming events </Text>
-            </View> */}
+
             <FlatList
             ref={flatListRef}
-            data={dummyData}
+            data={data}
             horizontal={true}
             renderItem={renderItem}
             keyExtractor={(item,index) => item._id.toString()}

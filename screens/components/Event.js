@@ -82,12 +82,12 @@ SplashScreen.preventAutoHideAsync()
     return (
       <View style={[styles.upcomingEventsContainer, {height: showDetails ? hp("70%") : hp("50%") }]} onLayout={onLayoutRootView}>
         <View style={[styles.eventLabel,{height:showDetails? "9%" :"10%"}]}>
-            <Text style={styles.eventText}>Upcoming Events </Text>
+            <Text style={styles.eventText}>Upcoming Event</Text>
             </View>
         <View style = {styles.eventsContainer}>
   
               <TouchableOpacity style={styles.imageContainer} onPress={toggleShowDetails}>
-                  <Image source={require("../../assets/event.png")}  style={styles.eventBanner}/>
+                  <Image source={{uri:event.imageUrl}}  style={styles.eventBanner}/>
               </TouchableOpacity>
           </View>
        {showDetails && 

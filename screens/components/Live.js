@@ -40,7 +40,7 @@ const Live = ({ event }) => {
      <View style = {styles.eventsContainer}>
 
        <TouchableOpacity style={styles.imageContainer} onPress={toggleShowDetails}>
-           <Image source={require("../../assets/event.png")} style={styles.eventBanner}/>
+           <Image source={{uri:event.imageUrl}} style={styles.eventBanner}/>
        </TouchableOpacity>
    </View>
    {showDetails && 
