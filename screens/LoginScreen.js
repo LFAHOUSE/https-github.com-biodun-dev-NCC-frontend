@@ -78,7 +78,7 @@ const LoginScreen = ({navigation}) => {
         <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.container}>
          <View>
-          <PageHeader pageTitle="Welcome"/>
+          <PageHeader pageTitle="Welcome" onBack={()=>navigation.goBack()}/>
          </View>
 
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer,DrawerActions} from '@react-navigation/native';
+import { NavigationContainer,useNavigation, useRoute, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import { createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createStackNavigator } from "@react-navigation/stack";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
@@ -128,6 +128,18 @@ const AuthScreenStack = () => {
   )
 }
 
+function getHeaderTitle(route) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+
+  switch (routeName) {
+    case 'Home':
+      return 'Home';
+    case 'Search':
+      return 'Search';
+    case 'Library':
+      return 'Library';
+  }
+}
 
 export default function App() {
 
@@ -147,7 +159,10 @@ export default function App() {
           <Stack.Screen
           name='Dashboard'
           component={Dashboard}
-          options={{headerShown:false}}
+          options={({ route }) => ({
+            headerShown: true,
+            headerTitle: getHeaderTitle(route),
+          })}
           />
         </Stack.Navigator>
       </NavigationContainer>
