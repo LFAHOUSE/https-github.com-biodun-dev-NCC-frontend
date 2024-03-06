@@ -85,7 +85,7 @@ function Dashboard () {
 
 const AuthScreenStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName='Startup'>
     <Stack.Screen
       name="Startup"
       component={StartupScreen}
@@ -148,7 +148,7 @@ export default function App() {
     <PaperProvider>
 
       <NavigationContainer >
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='auth'>
 
         <Stack.Screen
           name='auth'
