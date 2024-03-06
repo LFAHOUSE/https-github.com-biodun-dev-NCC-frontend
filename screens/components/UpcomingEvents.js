@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect,PureComponent} from 'react'
 import {
     View,
     Text,
@@ -8,7 +8,8 @@ import {
     ScrollView,
     FlatList,
     SafeAreaView,
-    StatusBar
+    StatusBar,
+    ActivityIndicator
 } from 'react-native'
 
 import axiosInstance from '../../axios_services/axios'
@@ -20,6 +21,7 @@ import Event from './Event'
 const UpcomingEvents = () => {
   
   const [data, setData] = useState([])
+  const [loading, setLoading] = useState(false)
   const dummyData = [
     {
       "_id": "65d74755a9995c8d7471c58f",
@@ -63,32 +65,32 @@ const UpcomingEvents = () => {
     },
   ]
 
+  const fetchEvents = async () => {
+    try {
+      const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/upcoming');
+     return response.data
+     }
+     
+    catch (error) {
+
+      console.error(error.response.data.message);
+    }
+  };
+
+
+  useEffect(() => {
+    setLoading(true);
+    fetchEvents().then(data => {
+      setData(data);
+      setLoading(false);
+    });
+  }, []);
   
 
  //Use useEffect to call the fetchEvents function when the component mounts
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/upcoming');
-       setData(response.data)
-       }
-       
-      catch (error) {
-  //       // Handle the error or display a message
-        console.error(error.response.data.message);
-      }
-    };
-
-    fetchEvents()
-   
-  },[]);
-  
 
 
   
-
-  
-   // Use a ref to access the scroll view
   const flatListRef = React.useRef(null);
   const [scrollPosition,setScrollPosition] = useState(0)
 
@@ -110,28 +112,29 @@ const UpcomingEvents = () => {
     setScrollPosition(currentScrollPosition)
   }
  
-      //renderItem
   
-      function renderItem ({ item,index }) {
-         return (
-        <Event event={item} scrollbackward={scrollbackward} scrollforward={scrollforward}/>
-       );
-      } ;
-
     return (
       
       <SafeAreaView style={styles.safeArea}>
-
+            {loading ? (
+      <ActivityIndicator size="large" color="#0000ff" />
+    ) : data?.length > 0 ? (
             <FlatList
             ref={flatListRef}
             data={data}
             horizontal={true}
-            renderItem={renderItem}
-            keyExtractor={(item,index) => item._id.toString()}
+            renderItem={({item}) => <Event event={item} scrollbackward={scrollbackward} scrollforward={scrollforward} />}
+            keyExtractor={(item,index) => item._id}
             onScroll={handleScroll}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={5}
+            initialNumToRender={2}
+            windowSize={5}
             />
-          
-    </SafeAreaView>
+            ) : (
+              <Text style={styles.error}>No data found</Text>
+            )}
+      </SafeAreaView>
     )
 
     

@@ -1,15 +1,11 @@
 import React, {useState,useEffect} from 'react';
 import {
   StyleSheet,
-  ImageBackground,
-  Image,
   Text,
   View,
- 
-  ScrollView,
-  
+  ActivityIndicator,
   StatusBar,
-  SafeAreaView,
+ FlatList
 } from 'react-native';
 import Live from './Live';
 import axiosInstance from '../../axios_services/axios';
@@ -61,11 +57,12 @@ const dummyData = [
 const HappeningNow = () => {
 
   const [data, setData] = useState([])
+  const [loading,setLoading] = useState(false)
 
   const fetchLiveEvents = async () => {
     try {
       const response = await axiosInstance.get('http://20.84.147.6:8080/api/events/live');
-      setData(response.data) 
+      return response.data
    
     } catch (error) {
       // Handle the error or display a message
@@ -75,24 +72,36 @@ const HappeningNow = () => {
 
 
   useEffect(() => {
-    fetchLiveEvents();
-   
-  },[]);
+    setLoading(true);
+    fetchLiveEvents().then(data => {
+      setData(data);
+      setLoading(false);
+    });
+  }, []);
+
 
   const scrollViewRef = React.useRef(null);
     
     return (
 
-             <ScrollView
-              ref={scrollViewRef}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.container}
-              >
-             { Array.isArray(data) && data.map((event) =>(
-          <Live key={event._id} event={event} />
-        ))}
-             </ScrollView>
+      <View>
+      {loading ? (
+<ActivityIndicator size="large" color="#0000ff" />
+) : data?.length > 0 ? (
+      <FlatList
+      data={data}
+      horizontal={true}
+      renderItem={({item}) => <Live event={item}/>}
+      keyExtractor={(item,index) => item._id}
+      removeClippedSubviews={true}
+      maxToRenderPerBatch={5}
+      initialNumToRender={2}
+      windowSize={5}
+      />
+      ) : (
+        <Text style={styles.error}>No data found</Text>
+      )}
+</View>
    
     )
     

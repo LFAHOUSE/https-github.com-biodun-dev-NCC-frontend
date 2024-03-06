@@ -12,7 +12,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import { useFonts, Sacramento_400Regular } from '@expo-google-fonts/sacramento';
 
 
-const Live = ({ event }) => {
+const Live = React.memo(({ event }) => {
     const [appIsReady] =  useFonts({
       Sacramento_400Regular,
   });
@@ -81,7 +81,7 @@ const Live = ({ event }) => {
    </View>
    </View>
     );
- } };
+ }});
 
   const styles = StyleSheet.create({
     upcomingEventsContainer:{

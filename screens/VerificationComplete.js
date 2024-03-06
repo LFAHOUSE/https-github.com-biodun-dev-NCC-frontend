@@ -23,7 +23,7 @@ const VerificationComplete = ({route,navigation}) => {
     navigation.goBack()
   }
   const handleNavigate = () => {
-    console.log("Phone number in Verification complete: "+ phoneNumber)
+    
     navigation.navigate("LetsMeet",{
       phoneNumber:phoneNumber,
       email:email,

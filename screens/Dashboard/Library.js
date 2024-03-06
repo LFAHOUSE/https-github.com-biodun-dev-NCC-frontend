@@ -9,7 +9,8 @@ import {
     Image,
     StyleSheet,
     ScrollView,
-    FlatList
+    FlatList,
+    ActivityIndicator
   
 } from 'react-native'
 import Collapsible from 'react-native-collapsible';
@@ -18,6 +19,7 @@ import DashboardHeader from "../components/DashboardHeader";
 import DashboardFooter from "../components/DashboardFooter";
 import MyCalendar from "../components/MyCalendar";
 import {formatEvents, groupEventsByMonth} from '../../utils/formatLibEvents.js'
+import axiosInstance from '../../axios_services/axios.js';
 
 
 
@@ -227,6 +229,12 @@ const dummyData = [
 const Library = () => {
 
   const eventsByMonth = formatEvents(dummyData)
+  const [loading, setLoading] = useState(false)
+  const [groupedEvents, setGroupedEvent] = useState([])
+  const [searchText, setSearchText] = useState("")
+  const [collapsed, setCollapsed] = useState(
+    groupedEvents?.map(() => true)
+  );
 
  
   const getYear = () => {
@@ -238,11 +246,39 @@ const Library = () => {
 
 
 
-useEffect(() => {
+// useEffect(() => {
  
-  try {
-    const newEvents = groupEventsByMonth(eventsByMonth)
+//   try {
+//     const newEvents = groupEventsByMonth(eventsByMonth)
 
+//     const parsedData = newEvents.map(month => {
+//       return {
+//         ...month,
+//         events: month.events.map(event => {
+//           return {
+//             ...event,
+//             startDate: event.startDate.toString(),
+//             endDate: event.endDate.toString()
+//           }
+//         })
+//       }
+//     });
+  
+//     // Set the state with the parsed data
+//     setGroupedEvent(parsedData)
+   
+//   }catch(error){
+//      console.log(error)
+//   }
+  
+// },[])
+
+
+  const fetchAllEvents = async () => {
+  try {
+    const response = await axiosInstance.get('http://20.84.147.6:8080/api/events')
+    const eventsByMonth = formatEvents(response.data)
+    const newEvents = groupEventsByMonth(eventsByMonth)
     const parsedData = newEvents.map(month => {
       return {
         ...month,
@@ -255,24 +291,24 @@ useEffect(() => {
         })
       }
     });
-  
-    // Set the state with the parsed data
-    setGroupedEvent(parsedData)
+
+    return parsedData
    
   }catch(error){
      console.log(error)
   }
-  
-},[])
+}
 
 
-const [groupedEvents, setGroupedEvent] = useState([])
-const [searchText, setSearchText] = useState("")
 
-const [collapsed, setCollapsed] = useState(
- 
-  groupedEvents?.map(() => true)
-);
+useEffect(() => {
+    setLoading(true);
+    fetchAllEvents().then(data => {
+      setGroupedEvent(data);
+      setLoading(false);
+    });
+  }, []);
+
 
 function toggleSection(index) {
   const newCollapsed = [...collapsed];
@@ -281,9 +317,9 @@ function toggleSection(index) {
 
 };
 
-console.log("groupedEvents: "+ JSON.stringify(groupedEvents,null, 2))
+//console.log("groupedEvents: "+ JSON.stringify(groupedEvents,null, 2))
 
-  function renderItem ({ item,index}) {
+function renderItem ({ item,index})  {
   let {month,events} = item
     return (
 
@@ -351,17 +387,23 @@ console.log("groupedEvents: "+ JSON.stringify(groupedEvents,null, 2))
                 <Text style={styles.labelText}>{getYear()}</Text>
             </View>
       </ScrollView>
+      {loading ? (
+      <ActivityIndicator size="large" color="#0000ff" />
+    ) : groupedEvents?.length > 0 ? (
       <FlatList
            data={groupedEvents}
            renderItem={renderItem}
            keyExtractor={(event) => event.month}
            contentContainerStyle={{gap:20,paddingBottom:20}}
            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-           updateCellsBatchingPeriod={50}
+           removeClippedSubviews={true}
            maxToRenderPerBatch={5}
-           windowSize={11}
-          /> 
-         
+           initialNumToRender={5}
+           windowSize={5}
+          />) 
+          : (
+            <Text style={styles.error}>No data found</Text>
+          )}
     </SafeAreaView>
   );
 };
@@ -382,8 +424,7 @@ const styles = StyleSheet.create({
   searchContainer:{
     width: wp("82%"),
     height: hp("7.5%") ,
-    //top: 115,
-    left: "8%",
+    alignSelf:'center',
     borderRadius: 10,
     borderWidth:0.5,
     borderColor:"#000000",

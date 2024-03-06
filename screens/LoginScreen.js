@@ -51,7 +51,7 @@ const LoginScreen = ({navigation}) => {
     //console.log(data)
     try {
       const response = await axiosInstance.post('http://20.84.147.6:8080/api/users/login', data);
-      console.log(response.data.token)
+      console.log(response.data)
 
       if (response.status === 200 || response.status === 201 ) {
         //let token = response.data.token

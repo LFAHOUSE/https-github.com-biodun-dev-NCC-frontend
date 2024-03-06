@@ -36,7 +36,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
 } = useForm();
   const password = useWatch({control,name:"password"})
   const confirmPassword = useWatch({control,name:"confirmPassword"})
-  console.log("Password insside setpassword: "+ password)
+
   //To navigate backward on the pageHeader component
     const goBack = () => {
         navigation.goBack()
@@ -56,7 +56,7 @@ console.log("PhoneNumber in password: "+ phoneNumber)
       },
     };
   const handleRegistration =  async () => {
-    console.log("PhoneNumber: " + phoneNumber)
+  
     setLoading(true)
 
     const data = { 

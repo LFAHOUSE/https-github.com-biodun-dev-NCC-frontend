@@ -15,7 +15,7 @@ import * as SplashScreen from 'expo-splash-screen'
 SplashScreen.preventAutoHideAsync()
 
 
- const Event = ({ event,scrollbackward,scrollforward  }) => {
+ const Event = React.memo(({ event,scrollbackward,scrollforward  }) => {
   const [appIsReady] =  useFonts({
     ShareTechMono_400Regular,
 });
@@ -47,10 +47,8 @@ SplashScreen.preventAutoHideAsync()
 
           var now = new Date().getTime();
     
-          // Find the distance between now and the event down date
+     
           var diff = eventTime - now;
-        
-          // Time calculations for days, hours, minutes and seconds
           var days = Math.floor(diff / (1000 * 60 * 60 * 24));
           var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -58,11 +56,8 @@ SplashScreen.preventAutoHideAsync()
          let formattedTime = `${days}:${hours}:${minutes}:${seconds}`
          setRemainingTime(formattedTime)
          
-        // Check if the event has passed
         if (diff <= 0) {
-          // Set the remaining time to "Event has passed"
-          setRemainingTime("Event has passed");
-          
+          setRemainingTime("Event has passed");      
         } 
        
       };
@@ -131,7 +126,7 @@ SplashScreen.preventAutoHideAsync()
           </View>
          
     );
- } };
+ } });
 
   const styles = StyleSheet.create({
     container: {

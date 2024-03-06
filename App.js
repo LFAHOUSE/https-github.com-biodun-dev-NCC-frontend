@@ -86,48 +86,44 @@ function Dashboard () {
 const AuthScreenStack = () => {
   return (
     <Stack.Navigator>
-    {/* <Stack.Screen
+    <Stack.Screen
       name="Startup"
       component={StartupScreen}
       options={{ headerShown: false }} 
-    /> */}
+    />
     {/* For the RegistrationScreen, you might want to show the header, but if not, you can apply the same options here */}
-    {/* <Stack.Screen name="Login" component={LoginScreen}
+    <Stack.Screen name="Login" component={LoginScreen}
              options={{ headerShown: false,}}
             
-     /> */}
-      {/* <Stack.Screen 
+     />
+      <Stack.Screen 
       name="SignUp" 
       component={SignUp}
       options={{ headerShown: false,   }}
-     /> */}
-      {/* <Stack.Screen 
+     />
+      <Stack.Screen 
       name="Verify"
       component={Verify}
       options={{ headerShown: false,  }}
-      /> */}
-       {/* <Stack.Screen 
+      />
+       <Stack.Screen 
           name='Setpassword'
           component={Setpasssword} 
           options={{headerShown:false, 
            
           }}
-        />  */}
-      {/* <Stack.Screen 
+        /> 
+      <Stack.Screen 
       name="VerificationComplete"
       component={VerificationComplete}
       options={{headerShown:false,  }}
-      /> */}
-    {/* <Stack.Screen
+      />
+    <Stack.Screen
      name="LetsMeet"
      component={LetsMeet}
      options={{headerShown:false,  }}
-     />  */}
-     {/* <Stack.Screen
-      name="Dashboard"
-      component={Dashboard}
-      options={{headerShown:false,  }}
-      />  */}
+     /> 
+    
   </Stack.Navigator>
   )
 }
@@ -142,11 +138,11 @@ export default function App() {
       <NavigationContainer >
         <Stack.Navigator>
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name='auth'
           component={AuthScreenStack}
           options={{headerShown:false}}
-          /> */}
+          />
           
           <Stack.Screen
           name='Dashboard'

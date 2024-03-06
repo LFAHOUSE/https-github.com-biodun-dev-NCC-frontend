@@ -24,16 +24,16 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { setUser } from "../redux/userReducer.js";
+//import { setUser } from "../redux/userReducer.js";
 import axiosInstance from "../axios_services/axios";
-import { useDispatch } from "react-redux";
+//import { useDispatch } from "react-redux";
 
 const LetsMeet = ({ route, navigation }) => {
   const { phoneNumber, otp, password, email } = route.params;
   const goBack = () => {
     navigation.goBack();
   };
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const [nccCenter, setNccCentre] = useState([
     "Lekki",
@@ -74,18 +74,11 @@ const LetsMeet = ({ route, navigation }) => {
 
   const firstname = useWatch({ control, name: "firstname" });
   const lastname = useWatch({ control, name: "lastname" });
-  console.log("Firstname: " + firstname);
-  console.log("Lastname: " + lastname);
-  console.log("sex: " + selectedSex);
-  console.log("nccCenter: " + selectedCenter);
-  console.log("dob: " + dateSelected);
-  console.log("phoneNumber inside reg: " + phoneNumber);
-  console.log("otp inside reg: " + otp);
-  console.log("email inside reg: " + email);
-  console.log("password inside reg: " + password);
+
+
 
   const onChange = (event, selectedDate) => {
-    console.log("selectedDate: " + selectedDate);
+
     if (selectedDate) {
       setDate(selectedDate);
       const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
@@ -120,11 +113,10 @@ const LetsMeet = ({ route, navigation }) => {
         "http://20.84.147.6:8080/api/users/complete-profile-registration",
         data
       );
-      console.log(response.data);
       setStatusText(response.data?.message);
       if (response.status === 200 || response.status === 201) {
-        dispatch(setUser(data));
-        // return the response data
+        //dispatch(setUser(data));
+   
         setLoading(false);
         Alert.alert("OK", response.data?.message);
         setStatusText(response.data?.message);
@@ -133,7 +125,7 @@ const LetsMeet = ({ route, navigation }) => {
         });
       }
     } catch (error) {
-      // handle the error
+
       Alert.alert("Error", error.response.data?.message);
       setStatusText(error.response.data?.message);
       setLoading(false);
@@ -142,7 +134,7 @@ const LetsMeet = ({ route, navigation }) => {
     navigation.navigate("Dashboard");
   };
 
-  console.log(Array.isArray(nccCenter));
+
   // Determine if all input fields are touched for enabling the button
   const isButtonActive = dateSelected;
   return loading ? (

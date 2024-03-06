@@ -1,16 +1,7 @@
 import React from "react";
 import {
   StyleSheet,
-  ImageBackground,
-  Text,
-  View,
-  Dimensions,
-  PixelRatio,
-  KeyboardAvoidingView,
   ScrollView,
-  TouchableOpacity,
-  Alert,
-  StatusBar,
   SafeAreaView,
 } from "react-native";
 import MyCalendar from "../components/MyCalendar";
